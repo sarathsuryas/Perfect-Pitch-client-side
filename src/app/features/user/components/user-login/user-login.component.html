@@ -1,0 +1,65 @@
+
+
+<!-- toaster -->
+<p-toast />
+
+<!-- spinner -->
+ 
+    <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-scale-multiple"
+  >
+    <p style="font-size: 20px; color: white">Loading...</p>
+  </ngx-spinner>
+
+<section style="background-color:#f8f4f4">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <a href="#" class="flex  items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-black">
+            <button class="w-10 h-10  rounded-3xl bg-red-800 focus:outline-none "><i class="fa fa-play w-4  text-white"
+                    id="play-btn"></i></button>
+            &nbsp;&nbsp;Perfect Pitch
+        </a>
+        <div
+            class="w-[350px] h-[340px] bg-white/85  shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-wh dark:border-gray-700">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <form class="space-y-4 md:space-y-6" [formGroup]="loginForm" (ngSubmit)="submit()">
+                    <div>
+                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Your
+                            email</label>
+                        <input type="email" name="email" id="email"
+                            class="bg-gray-50 border border-gray-300 text-black  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            formControlName="email">
+                        <span style="color: red;" *ngIf="loginForm.controls['email'].invalid && submitted">
+                            email is not Valid
+                        </span>
+
+                    </div>
+                    <div>
+                        <label for="password"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Password</label>
+                        <input type="password" name="password" id="password"
+                            class="bg-gray-50 border border-gray-300 text-gray-900  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            formControlName="password">
+                        <span style="color: red;" *ngIf="loginForm.controls['password'].invalid && submitted">
+                            password is not Valid
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start">
+
+                            <div class="ml-3 text-sm mb-">
+                                <a routerLink="/register"
+                                    class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">Create
+                                    Account</a>
+                            </div>
+                        </div>
+                        <button type="submit"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium  text-sm px-4 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-[70px] h-[30px]">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,61 @@
+/* Layout container: positions the sidebar and content */
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Navbar styling */
+.navbar {
+  width: 100%;
+  background-color: #f8f9fa; /* Light background for navbar */
+  border-bottom: 1px solid #dee2e6; /* Light border */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 56px; /* Adjust height if needed */
+}
+
+/* Sidebar styling */
+.sidebar {
+  width: 16rem; /* 64 (4*4) tailwind spacing unit */
+  background-color: #343a40; /* Dark background for sidebar */
+  color: white;
+  position: fixed;
+  top: 56px; /* Position it just below the navbar */
+  left: 0;
+  bottom: 0; /* Extend to the bottom of the viewport */
+  overflow-y: auto; /* Scrollable content if it exceeds the height */
+}
+
+/* Main content area styling */
+.content {
+  margin-left: 16rem; /* Adjust to match the width of the sidebar */
+  margin-top: 56px; /* Height of the navbar */
+  padding: 16px; /* Padding around the content */
+  height: calc(100vh - 56px); /* Full height minus the navbar height */
+  overflow: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar {
+    position: static;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    top: 56px; /* Adjust to fit below the navbar */
+    position: static;
+    margin-top: 56px; /* Adjust to fit below the navbar */
+  }
+
+  .content {
+    margin-left: 0;
+    margin-top: 0;
+    height: auto; /* Remove fixed height */
+  }
+}

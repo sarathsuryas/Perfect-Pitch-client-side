@@ -1,0 +1,56 @@
+
+
+
+<!-- toaster -->
+<p-toast />
+
+<!-- spinner -->
+ 
+    <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-scale-multiple"
+  >
+    <p style="font-size: 20px; color: white">Loading...</p>
+  </ngx-spinner>
+
+
+
+
+<div class="flex h-screen bg-red-950">
+  <div class="w-full max-w-xs m-auto bg-indigo-100 rounded p-5">   
+        <header>
+          <a href="#" class="flex  items-center mb-6 ml-8 text-2xl font-semibold text-gray-900 dark:text-black">
+            <button class="w-10 h-10  rounded-3xl bg-red-800 focus:outline-none "><i class="fa fa-play w-4  text-white"
+                    id="play-btn"></i></button>
+            &nbsp;&nbsp;Perfect Pitch
+        </a>
+        </header>   
+        <form [formGroup]="loginForm" (ngSubmit)="submit()">
+          <div>
+            <label class="block mb-2 text-black-500" for="username">Email</label>
+            <input class="w-full p-2 mb-1 text-black-700 border-b-2 border-black-500 outline-none focus:bg-gray-300" type="text" name="email"  formControlName="email">
+            <span style="color: red;" *ngIf="loginForm.controls['email'].invalid && submitted">
+              email is not Valid
+          </span>
+          </div>
+          <div>
+            <label class="block mb-2 text-black-500" for="password">Password</label>
+            <input class="w-full p-2 mb-1 text-black-700 border-b-2 border-black-500 outline-none focus:bg-gray-300" type="password" name="password"  formControlName="password">
+            <span style="color: red; margin-top: 4px;" *ngIf="loginForm.controls['password'].invalid && submitted">
+              password is not Valid
+            </span>
+            
+          </div>
+          <div>          
+            <input class="w-full mt-5 bg-red-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-6 rounded" type="submit">
+           
+          </div>       
+        </form>  
+        <footer>
+          <a class="text-indigo-700 hover:text-pink-700 text-sm float-left" href="#">Forgot Password?</a>
+          <a class="text-indigo-700 hover:text-pink-700 text-sm float-right" href="#">Create Account</a>
+        </footer>   
+      </div>
+  </div>

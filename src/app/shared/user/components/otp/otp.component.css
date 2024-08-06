@@ -1,0 +1,4 @@
+.center-otp-input ::ng-deep .otp-container {
+  display: flex;
+  justify-content: center;
+}
