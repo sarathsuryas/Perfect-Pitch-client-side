@@ -24,14 +24,16 @@ export class AdminEffects {
      tap(() =>this._spinner.show()),
      exhaustMap(action=>
        this._adminService.login(action.email,action.password).pipe(
-         tap(data=> this._cookieService.set('adminToken',data.token,{path:'/admin'})),
-         map((admin)=>adminLoginSuccess({adminData:admin.adminData,token:admin.token})),
+         tap(data=>  {this._cookieService.set('adminToken',data.accessToken)
+         
+         }),
+         map((admin)=>adminLoginSuccess({adminData:admin.adminData,token:admin.accessToken})),
          tap((data)=>{
            
             if(data) {
                this._spinner.hide()
               
-               this._router.navigateByUrl('/admin/home/user-management')
+               this._router.navigate(['/admin/home'])
             }
            }),
          catchError(error=>of(adminLoginFail({error:error.error.message})).pipe(
@@ -53,7 +55,7 @@ export class AdminEffects {
       ofType(adminLogout),
       tap(() =>this._spinner.show()),
       tap(() => {
-        this._cookieService.delete("adminToken", "/admin");
+        this._cookieService.delete("adminToken");
       }),
       map(() => removeToken()),
       tap(() => {

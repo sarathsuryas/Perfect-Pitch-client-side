@@ -6,6 +6,6 @@ export interface IAdminData {
     isAdmin: boolean
     isBlocked: boolean
 };
-  token:string;
+  accessToken:string;
 }
 

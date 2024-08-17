@@ -4,15 +4,10 @@ import { AdminLoginComponent } from 'src/app/features/admin/components/admin-log
 import { AdminNavBarComponent } from '../admin/static-components/admin-nav-bar/admin-nav-bar.component';
 import { AdminMainComponent } from 'src/app/features/admin/components/admin-main/admin-main.component';
 import { UserManagementComponent } from 'src/app/features/admin/components/user-management/user-management.component';
-import { adminGuard } from '../admin/guards/admin.guard';
+import { AdminAuthGuard } from '../admin/guards/admin-auth.guard';
 
 const routes: Routes = [
-  {path:'admin',component:AdminLoginComponent},
-  {path:'admin/home',component:AdminMainComponent,canActivate:[adminGuard],
-  children:[
-    {path:'user-management',component:UserManagementComponent}
-  ]
-  }
+
 ];
 
 @NgModule({

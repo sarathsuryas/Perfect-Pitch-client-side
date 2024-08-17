@@ -33,12 +33,16 @@
         <label class="text-gray-800 text-sm mb-2 block">Full Name</label>
         <input name="fName" type="text"
           class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-          placeholder="Enter name"  formControlName="fullName"/>
+          placeholder="Enter name"  formControlName="fullName" FullNameValidator/>
           <span style="color: red;"
-          *ngIf="registerForm.controls['fullName'].invalid && submitted">
+          *ngIf="registerForm.controls['fullName'].invalid && registerForm.controls['fullName'].touched">
           Full Name is not Valid
       </span>
-     
+    
+  <span style="color: red;"
+  *ngIf="registerForm.controls['fullName'].value.length === 0 && submitted && !registerForm.controls['fullName'].touched">
+  Full name required
+</span>
       </div>
 
      
@@ -47,9 +51,13 @@
         <label class="text-gray-800 text-sm mb-2 block">Email Id</label>
         <input name="email" type="text"
           class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-          placeholder="Enter email" formControlName="email"/>
+          placeholder="Enter email" formControlName="email" EmailValidation/>
           <span style="color: red;"
-          *ngIf="registerForm.controls['email'].invalid && submitted">
+          *ngIf="registerForm.controls['email'].value.length === 0&& submitted">
+          email is required
+      </span>
+          <span style="color: red;"
+          *ngIf="registerForm.controls['email'].invalid && registerForm.controls['email'].value.length > 0 && submitted">
           email is not Valid
       </span>
       </div>
@@ -58,9 +66,13 @@
         <label class="text-gray-800 text-sm mb-2 block">Mobile No.</label>
         <input name="phone" type="phone"
           class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-          placeholder="Enter mobile number" formControlName="phone"/>
+          placeholder="Enter mobile number" formControlName="phone" PhoneNumberValidator/>
           <span style="color: red;"
-          *ngIf="registerForm.controls['phone'].invalid && submitted">
+          *ngIf="registerForm.controls['phone'].value.length === 0 && !registerForm.controls['phone'].touched && submitted">
+          phone number is required
+      </span>
+      <span style="color: red;"
+          *ngIf="registerForm.controls['phone'].invalid && registerForm.controls['phone'].touched">
           phone is not Valid
       </span>
       </div>
@@ -69,11 +81,17 @@
         <label class="text-gray-800 text-sm mb-2 block">Password</label>
         <input name="password" type="password"
           class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-          placeholder="Enter password" formControlName="password"/>  
+          placeholder="Enter password" formControlName="password" PasswordValidator/>  
           <span style="color: red;"
-          *ngIf="registerForm.controls['password'].invalid && submitted">
-          password is not Valid
+          *ngIf="registerForm.controls['password'].value.length === 0 && !registerForm.controls['password'].touched && submitted">
+          password is required
       </span>
+          <span style="color: red;"
+          *ngIf="registerForm.controls['password'].invalid && registerForm.controls['password'].touched">
+          <p>
+            Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character</p>
+      </span>
+     
       </div>
 
       <div>
@@ -82,7 +100,11 @@
           class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
           placeholder="Enter confirm password" formControlName="confirmPassword" />
           <span style="color: red;"
-          *ngIf="registerForm.controls['confirmPassword'].invalid && submitted">
+          *ngIf="registerForm.controls['confirmPassword'].value.length === 0 && !registerForm.controls['confirmPassword'].touched && submitted">
+          confirm password is required
+      </span>
+          <span style="color: red;"
+          *ngIf="registerForm.controls['confirmPassword'].invalid && registerForm.controls['confirmPassword'].touched">
           confirm password is not Valid
       </span>
     </div> <div class="!mt-7 h-fit min-h-[20px] flex justify-self-auto ">

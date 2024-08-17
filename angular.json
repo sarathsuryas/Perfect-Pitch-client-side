@@ -49,7 +49,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
+              "buildOptimizer": false, 
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,

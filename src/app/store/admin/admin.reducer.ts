@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { initialState } from "./admin.state";
-import { adminLogin, adminLoginFail, adminLoginSuccess, adminLogout, setTokenAdmin } from "./admin.action";
+import { adminLogin, adminLoginFail, adminLoginSuccess, adminLogout, removeToken, setTokenAdmin } from "./admin.action";
 
 
 export const adminReducer = createReducer(
@@ -31,5 +31,9 @@ export const adminReducer = createReducer(
   on(setTokenAdmin,(state,action)=>({
     ...state,
     token:action.token
+  })),
+  on(removeToken,(state)=>({
+    ...state,
+    token:null
   }))
 )

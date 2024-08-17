@@ -8,12 +8,12 @@ import { SideNavBarComponent } from './core/user/static-components/side-nav-bar/
 import { UserLoginComponent } from './features/user/components/user-login/user-login.component';
 import { UserRegisterComponent } from './features/user/components/user-register/user-register.component';
 import { UserHomeComponent } from './features/user/components/user-home/user-home.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { UserEffects } from './store/user/user.effects';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from './store/user/user.reducer';
-import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { UserRoutingModule } from './core/routes/user-routing.module';
 import { AdminRoutingModule } from './core/routes/admin-routing.module';
@@ -42,6 +42,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { EditUserComponent } from './features/admin/components/edit-user/edit-user.component';
 import { UserMainComponent } from './features/user/components/user-main/user-main.component';
+import { AdminAuthInterceptor } from './core/interceptors/admin-auth-interceptor/admin-auth.interceptor';
+import { UserProfileComponent } from './features/user/components/user-profile/user-profile.component';
+import {  EmailValidationDirective } from './shared/directives/email/email-valdation.directive';
+import { FullNameValidatorDirective } from './shared/directives/fullName/full-name-validator.directive';
+import { PhoneNumberValidatorDirective } from './shared/directives/phoneNumber/phone-number-validator.directive';
+import { PasswordValidatorDirective } from './shared/directives/password/password-validator.directive';
+import { CountdownModule } from 'ngx-countdown';
+import { UserAuthInterceptor } from './core/interceptors/user-auth-interceptor/user-auth.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -60,6 +69,11 @@ import { UserMainComponent } from './features/user/components/user-main/user-mai
     AddUserComponent,
     EditUserComponent,
     UserMainComponent,
+    UserProfileComponent,
+    EmailValidationDirective,
+    FullNameValidatorDirective,
+    PhoneNumberValidatorDirective,
+    PasswordValidatorDirective,
   ],
   imports: [
     BrowserModule,
@@ -68,6 +82,7 @@ import { UserMainComponent } from './features/user/components/user-main/user-mai
     UserRoutingModule,
     AdminRoutingModule,
     ReactiveFormsModule,
+    CountdownModule,
     HttpClientModule,
     FormsModule,
     RouterModule,
@@ -79,6 +94,7 @@ import { UserMainComponent } from './features/user/components/user-main/user-mai
     MatDialogModule,
     MatButtonModule,
     MatInputModule,
+    AppRoutingModule,
     MatSlideToggleModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     StoreModule.forRoot([]),
@@ -86,7 +102,18 @@ import { UserMainComponent } from './features/user/components/user-main/user-mai
     StoreModule.forFeature('admin',adminReducer),
     EffectsModule.forRoot([UserEffects,AdminEffects]),
   ],
-  providers: [provideHttpClient(withFetch()),CookieService,MessageService, provideAnimations()],
+  providers: [
+    provideHttpClient(withFetch())
+    ,CookieService,MessageService,
+     provideAnimations(),
+     {provide: HTTP_INTERCEPTORS, 
+      useClass: AdminAuthInterceptor,
+       multi: true},
+       {provide:HTTP_INTERCEPTORS,
+        useClass:UserAuthInterceptor,
+        multi:true
+       }
+      ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
