@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { loginUser } from 'src/app/store/user/user.action';
-import { selectLoginFail } from 'src/app/store/user/user.selector';
+import { selectIsAuthUser, selectLoginFail } from 'src/app/store/user/user.selector';
 import { UserState } from 'src/app/store/user/user.state';
 
 @Component({
@@ -17,12 +18,18 @@ export class UserLoginComponent implements OnInit {
   constructor(
     private readonly _fb: FormBuilder,
     private readonly _store: Store<UserState>,
-    private readonly _messageService: MessageService
+    private readonly _messageService: MessageService,
+    private readonly _router:Router
   ) { }
   ngOnInit(): void {
     this.loginForm = this._fb.group({
-      email: ['',Validators.compose([Validators.required, Validators.email])],
-      password: ['',Validators.compose ([Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)])]
+      email: ['',Validators.compose([Validators.required])],
+      password: ['',Validators.compose([Validators.required])]
+    })
+    this._store.select(selectIsAuthUser).subscribe(isAuthenticated=>{
+      if(isAuthenticated) {
+        this._router.navigate(['home'])
+      }
     })
   }
 

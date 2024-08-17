@@ -73,5 +73,8 @@ export const selectUsersDataError = createSelector(
   (userState)=> userState.error
 )
 
-
+export const selectIsAuthUser = createSelector(
+  selectUserState,
+  (userState) => !!userState.token
+)
 

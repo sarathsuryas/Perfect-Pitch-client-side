@@ -29,7 +29,8 @@ export const userReducer = createReducer(
  on(verifyOtpSuccess,(state,action)=>({
     ...state,
     isLoading:false,
-    token:action.token
+    user:action.userData,
+    token:action.userData.token
  })),
  on(verifyOtpFail,(state,error)=>({
     ...state,
@@ -45,6 +46,7 @@ export const userReducer = createReducer(
   ...state,
   user:user.userData,
   isLoading:false,
+  token:user.userData.token,
   error:null
  })),
  on(loginUserFail,(state,error)=>({

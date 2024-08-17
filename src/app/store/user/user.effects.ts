@@ -8,6 +8,8 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { Router } from "@angular/router";
 import { Token } from "@angular/compiler";
 import { addUser, addUserFail, addUserSuccess, blockUser, blockUserFail, blockUserSuccess, editUser, editUserFail, editUserSuccess, getUsers, getUsersFail, getUsersSuccess } from "../admin/admin.action";
+import { AdminService } from "src/app/features/admin/services/admin.service";
+import { IUserData } from "src/app/core/interfaces/IUserData";
 
 
 @Injectable({ providedIn: 'root' })
@@ -19,13 +21,10 @@ export class UserEffects {
     private _cookieService: CookieService,
     private _spinner: NgxSpinnerService,
     private _router: Router,
-    
+    private _adminService:AdminService
   ) {
    
   }
-
-
-
 
   registerUser$ = createEffect(() =>
     this._actions$.pipe(
@@ -61,26 +60,24 @@ export class UserEffects {
       tap(() =>this._spinner.show()),
       exhaustMap(action=>
         this._userService.verifyOtp(action.userData,action.otp).pipe(
-           map((token:string)=>verifyOtpSuccess({token:token})),
+          tap(data=> this._cookieService.set('token',data.token,{path:''})),
+           map((userData:IUserData)=>verifyOtpSuccess({userData})),
            tap((data)=>{
-           console.log(data,'token from effects')
             if(data) {
+              this._router.navigateByUrl('home')
+              this._cookieService.delete('userData')
                this._spinner.hide()
             }
            }),
           catchError(error=>of(verifyOtpFail({error:error.error.message})).pipe(
             tap((data)=>{
-              
               if(data) {
                  this._spinner.hide()
-                 
               }
              })
           )
-        )
-            
+        )  
           )
-         
         )
       )
     )
@@ -93,13 +90,13 @@ export class UserEffects {
     exhaustMap(action=>
       this._userService.userLogin(action.email,action.password).pipe(
         tap(data=> this._cookieService.set('token',data.token,{path:''})),
-        map((user)=>loginUserSuccess({userData:user.userData})),
+        map((userData)=>loginUserSuccess({userData})),
         tap((data)=>{
           
            if(data) {
               this._spinner.hide()
              
-              this._router.navigateByUrl('/login/home')
+              this._router.navigateByUrl('/home')
            }
           }),
         catchError(error=>of(loginUserFail(error)).pipe(
@@ -123,7 +120,7 @@ export class UserEffects {
   this._actions$.pipe(
     ofType(getUsers),
     mergeMap(()=>
-      this._userService.getUsersData().pipe(
+      this._adminService.getUsersData().pipe(
         map(user=>getUsersSuccess({users:user})),
         catchError(error=> of(getUsersFail({error})))
       )
@@ -138,7 +135,8 @@ blockUser$ = createEffect(()=>
     ofType(blockUser),
     tap(() =>this._spinner.show()),
     exhaustMap(action=>
-      this._userService.blockUser(action.email).pipe(
+      this._adminService.blockUser(action.email).pipe(
+      
         map((users)=>blockUserSuccess({users:users})),
         tap((data)=>{
           
@@ -159,7 +157,7 @@ addUser$ = createEffect(()=>
   this._actions$.pipe(
     ofType(addUser),
     mergeMap(action=>
-      this._userService.addUser(action.userData).pipe(
+      this._adminService.addUser(action.userData).pipe(
         map((users)=>addUserSuccess({users})),
         catchError(error=>of(addUserFail(error)))
       )
@@ -171,7 +169,7 @@ editUser$ = createEffect(()=>
 this._actions$.pipe(
   ofType(editUser),
   mergeMap(action=>
-    this._userService.editUser(action.userData).pipe(
+    this._adminService.editUser(action.userData).pipe(
       map(users=>editUserSuccess({users})),
       catchError(error=>of(editUserFail(error)))
     )

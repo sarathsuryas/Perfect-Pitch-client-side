@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { adminLogin } from 'src/app/store/admin/admin.action';
-import { selectAdminLoginError } from 'src/app/store/admin/admin.selector';
+import { selectAdminLoginError, selectIsAuthAdmin } from 'src/app/store/admin/admin.selector';
 import { AdminState } from 'src/app/store/admin/admin.state';
 
 @Component({
@@ -17,13 +18,20 @@ export class AdminLoginComponent {
   constructor(
     private readonly _fb: FormBuilder,
     private readonly _store: Store<AdminState>,
-    private readonly _messageService: MessageService
+    private readonly _messageService: MessageService,
+    private readonly _router:Router
   ) { }
   ngOnInit(): void {
     this.loginForm = this._fb.group({
-      email: ['',Validators.compose([Validators.required, Validators.email])],
-      password: ['',Validators.compose ([Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)])]
+      email: ['',Validators.compose([Validators.required])],
+      password: ['',Validators.compose ([Validators.required])]
     })
+    this._store.select(selectIsAuthAdmin).subscribe(isAuthenticated=> {
+      if(isAuthenticated) {
+        this._router.navigate(['admin/home']);
+      }
+    })
+
   }
 
   submit() {

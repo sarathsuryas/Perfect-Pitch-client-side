@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
@@ -26,16 +25,15 @@ export class UserRegisterComponent {
       private readonly _messageService: MessageService
     ) {
     this.error$ = this._store.select(selectUserFail)
-
   }
 
 
   ngOnInit(): void {
     this.registerForm = this._fb.group({
-      fullName: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z ]*$/), Validators.minLength(3)])],
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-      phone: ['', Validators.compose([Validators.required, Validators.pattern(/^[0-9]+$/), Validators.maxLength(10)])],
-      password: ['', Validators.compose([Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)])],
+      fullName: ['', Validators.compose([Validators.required, Validators.minLength(3)])],
+      email: ['', Validators.required],
+      phone: ['', Validators.compose([Validators.required,Validators.maxLength(10)])],
+      password: ['', Validators.compose([Validators.required])],
       confirmPassword: ['', Validators.required]
     }, {
       validators: Validation.match('password', 'confirmPassword')

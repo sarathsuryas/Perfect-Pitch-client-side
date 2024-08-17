@@ -30,15 +30,22 @@
         <form [formGroup]="loginForm" (ngSubmit)="submit()">
           <div>
             <label class="block mb-2 text-black-500" for="username">Email</label>
-            <input class="w-full p-2 mb-1 text-black-700 border-b-2 border-black-500 outline-none focus:bg-gray-300" type="text" name="email"  formControlName="email">
-            <span style="color: red;" *ngIf="loginForm.controls['email'].invalid && submitted">
+            <input class="w-full p-2 mb-1 text-black-700 border-b-2 border-black-500 outline-none focus:bg-gray-300" type="text" name="email"  formControlName="email" EmailValidation>
+            <span style="color: red;"
+            *ngIf="loginForm.controls['email'].value.length === 0 && !loginForm.controls['email'].touched && submitted">
+            email is required
+        </span>
+            <span style="color: red;" *ngIf="loginForm.controls['email'].invalid && submitted && loginForm.controls['email'].touched ">
               email is not Valid
           </span>
           </div>
           <div>
             <label class="block mb-2 text-black-500" for="password">Password</label>
-            <input class="w-full p-2 mb-1 text-black-700 border-b-2 border-black-500 outline-none focus:bg-gray-300" type="password" name="password"  formControlName="password">
-            <span style="color: red; margin-top: 4px;" *ngIf="loginForm.controls['password'].invalid && submitted">
+            <input class="w-full p-2 mb-1 text-black-700 border-b-2 border-black-500 outline-none focus:bg-gray-300" type="password" name="password"  formControlName="password" PasswordValidator>
+            <span style="color: red; margin-top: 4px;" *ngIf="loginForm.controls['password'].value.length == 0 && !loginForm.controls['password'].touched && submitted">
+              password is required
+            </span>
+            <span style="color: red; margin-top: 4px;" *ngIf="loginForm.controls['password'].invalid&& loginForm.controls['password'].touched && submitted">
               password is not Valid
             </span>
             
@@ -50,7 +57,7 @@
         </form>  
         <footer>
           <a class="text-indigo-700 hover:text-pink-700 text-sm float-left" href="#">Forgot Password?</a>
-          <a class="text-indigo-700 hover:text-pink-700 text-sm float-right" href="#">Create Account</a>
+          
         </footer>   
       </div>
   </div>
