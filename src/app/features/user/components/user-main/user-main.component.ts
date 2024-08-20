@@ -1,5 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-main',
@@ -9,13 +10,14 @@ import { Component, OnInit } from '@angular/core';
 export class UserMainComponent implements OnInit{
   sidebar:boolean = true;
 
-constructor(public breakpointObserver: BreakpointObserver) {}
+constructor(public breakpointObserver: BreakpointObserver,private _userService:UserService) {}
 ngOnInit(): void {
   this.breakpointObserver.observe(['(max-width:768px)']).subscribe((state:BreakpointState)=>{
     if(state.matches){
       this.sidebar = false
     }
   })
+  this._userService
 }
 
 }

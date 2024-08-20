@@ -1,0 +1,9 @@
+.form-row {
+  display: flex;
+  gap: 16px; /* Adjust the spacing between fields as needed */
+  margin-bottom: 16px; /* Space between rows */
+}
+
+.form-field {
+  flex: 1; /* Makes form fields take equal space */
+}

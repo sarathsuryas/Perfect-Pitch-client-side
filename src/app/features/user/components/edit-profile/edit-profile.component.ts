@@ -1,19 +1,21 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EditUserDto } from 'src/app/core/dtos/editUser.dto';
 
 @Component({
-  selector: 'app-edit-user',
-  templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.css']
+  selector: 'app-edit-profile',
+  templateUrl: './edit-profile.component.html',
+  styleUrls: ['./edit-profile.component.css']
 })
-export class EditUserComponent {
+export class EditProfileComponent {
   editForm!: FormGroup;
   submitted:boolean = false
+@Input() name!:string
+
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<EditUserComponent>,
+    private dialogRef: MatDialogRef<EditProfileComponent>,
     @Inject(MAT_DIALOG_DATA) public data:EditUserDto
   ) {}
 

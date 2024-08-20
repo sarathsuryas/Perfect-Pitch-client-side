@@ -5,4 +5,6 @@ export interface IUserData {
     isAdmin: boolean
     isBlocked: boolean
     token:string;
+    phone:number;
+    profileImage:string;
 }

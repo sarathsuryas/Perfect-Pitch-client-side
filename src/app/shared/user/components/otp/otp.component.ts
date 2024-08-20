@@ -8,7 +8,7 @@ import { MessageService } from 'primeng/api';
 import { UserService } from 'src/app/features/user/services/user.service';
 import { verifyOtp } from 'src/app/store/user/user.action';
 import { userModel } from 'src/app/store/user/user.model';
-import { selectOtpVerificationFail, selectUserSuccess } from 'src/app/store/user/user.selector';
+import { selectOtpVerificationFail, selectUserData, } from 'src/app/store/user/user.selector';
 import { UserState } from 'src/app/store/user/user.state';
 
 @Component({
@@ -30,7 +30,7 @@ export class OtpComponent implements OnInit {
     private readonly _messageService: MessageService,
     private readonly _userService:UserService
   ) {
-    _store.select(selectUserSuccess).subscribe((data) => {
+    _store.select(selectUserData).subscribe((data) => {
       if (!data) {
         _router.navigate(['/register'])
       }

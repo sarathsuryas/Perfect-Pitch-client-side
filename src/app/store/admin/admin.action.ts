@@ -39,6 +39,7 @@ export const removeToken = createAction('[Admin] remove Token')
 // set token from cookie
 export const setAdminTokenCookie = createAction("[Admin] Set Token From Cookie")
 export const setTokenAdmin = createAction('[Admin] set token',props<{token:string}>())
+export const searchUser = createAction('[Admin] search user',props<{search:string}>())
 
 
 
