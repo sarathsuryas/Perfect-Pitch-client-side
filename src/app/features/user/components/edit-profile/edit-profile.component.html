@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Edit User</h1>
+<h1 mat-dialog-title>Edit Profile</h1>
 <div mat-dialog-content>
   <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
     <div class="form-row">
@@ -10,17 +10,6 @@
         </mat-error>
         <mat-error *ngIf="editForm.controls['fullName'].invalid && editForm.controls['fullName'].touched">
           Full Name is <strong>Not Valid</strong>
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="form-field" appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" EmailValidation/>
-        <mat-error *ngIf="editForm.controls['email'].value.length === 0 && submitted">
-          Email is <strong>required</strong>
-        </mat-error>
-        <mat-error *ngIf="editForm.controls['email'].invalid && editForm.controls['email'].touched">
-          Invalid email format
         </mat-error>
       </mat-form-field>
     </div>

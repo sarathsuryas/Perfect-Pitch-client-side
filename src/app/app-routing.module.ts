@@ -13,21 +13,33 @@ import { UserHomeComponent } from './features/user/components/user-home/user-hom
 import { NavBarComponent } from './core/user/static-components/nav-bar/nav-bar.component';
 import { UserMainComponent } from './features/user/components/user-main/user-main.component';
 import { UserAuthGuard } from './core/user/guards/user-auth.guard';
+import { AdminResetPasswordComponent } from './features/admin/components/admin-reset-password/admin-reset-password.component';
+import { AdminResetPasswordFormComponent } from './features/admin/components/admin-reset-password-form/admin-reset-password-form.component';
+import { UserForgotPasswordComponent } from './features/user/components/user-forgot-password/user-forgot-password.component';
+import { UserResetPasswordFormComponent } from './features/user/components/user-reset-password-form/user-reset-password-form.component';
+import { UserProfileComponent } from './features/user/components/user-profile/user-profile.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
   {path:'login',component:UserLoginComponent},
   {path:'register',component:UserRegisterComponent},
   {path:'otp-verify',component:OtpComponent},
-  {path:'home',component:UserMainComponent,canActivate:[UserAuthGuard]},
+  {path:'home',component:UserMainComponent,
+    children:[
+      {path:'user-profile',component:UserProfileComponent}
+    ]
+  },
   {path:'admin',component:AdminLoginComponent},
+  {path:'admin/request-reset-password',component:AdminResetPasswordComponent},
+  {path:'admin/reset-password-form/:token',component:AdminResetPasswordFormComponent},
+  {path:'request-reset-password',component:UserForgotPasswordComponent},
+  {path:'reset-password-form/:token',component:UserResetPasswordFormComponent},
   {path:'admin/home',component:AdminMainComponent,canActivate:[AdminAuthGuard],
   children:[
     {path:'user-management',component:UserManagementComponent}
   ]
-  }
+  },
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

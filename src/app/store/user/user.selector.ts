@@ -10,7 +10,7 @@ export const selectUserLoading =  createSelector(
  (userState)=> userState.isLoading
 )
 
-export const selectUserSuccess = createSelector(
+export const selectUserData = createSelector(
   selectUserState,
   (userState)=> userState.user
 )

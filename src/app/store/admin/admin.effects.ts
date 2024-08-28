@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { CookieService } from "ngx-cookie-service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError, exhaustMap, map, of, tap } from "rxjs";
-import { adminLogin, adminLoginFail, adminLoginSuccess, adminLogout, removeToken, setAdminTokenCookie, setTokenAdmin } from "./admin.action";
+import { adminLogin, adminLoginFail, adminLoginSuccess, adminLogout, getUsersFail, getUsersSuccess, removeToken, searchUser, setAdminTokenCookie, setTokenAdmin } from "./admin.action";
 import { AdminService } from "src/app/features/admin/services/admin.service";
 
 @Injectable({ providedIn: 'root' })
@@ -75,5 +75,17 @@ export class AdminEffects {
         })
       )
   )
+
+ searchUser$ = createEffect(()=>
+ this._actions$.pipe(
+  ofType(searchUser),
+  exhaustMap(action=>
+    this._adminService.getUsersData(action.search).pipe(
+      map(user=>getUsersSuccess({users:user})),
+      catchError(error=>of(getUsersFail(error)))
+    )
+  )
+ )
+) 
 
 }
