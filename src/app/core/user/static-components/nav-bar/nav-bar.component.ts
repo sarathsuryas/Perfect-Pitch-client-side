@@ -12,11 +12,11 @@ export class NavBarComponent implements OnInit{
   constructor(public breakpointObserver: BreakpointObserver) {
   }
   ngOnInit(): void {
-    this.breakpointObserver.observe(['(min-width:768px)']).subscribe((state:BreakpointState)=>{
-      if(state.matches){
-        this.searchBar = false
-      }
-    })
+    // this.breakpointObserver.observe(['(min-width:768px)']).subscribe((state:BreakpointState)=>{
+    //   if(state.matches){
+    //     this.searchBar = false
+    //   }
+    // })
   }
 
   

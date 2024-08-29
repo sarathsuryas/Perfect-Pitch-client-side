@@ -1,22 +1,23 @@
 <!-- toaster -->
 <p-toast />
 <!-- spinner -->
-<div class="max-w-4xl mx-auto font-[sans-serif] p-6">
+<ngx-spinner
+bdColor="rgba(51,51,51,0.8)"
+size="medium"
+color="#fff"
+type="ball-scale-multiple"
+>
+<p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
 
-  <div class="text-center mx-auto mb-16">
+<div class="max-w-4xl mx-auto font-[sans-serif]">
+
+  <div class="text-center mx-auto">
    
-    <ngx-spinner
-    bdColor="rgba(51,51,51,0.8)"
-    size="medium"
-    color="#fff"
-    type="ball-scale-multiple"
-  >
-    <p style="font-size: 20px; color: white">Loading...</p>
-  </ngx-spinner>
    
    
    <!-- component -->
-    <div class="h-auto flex w-full">
+    <div class="h-auto flex w-full" >
       <a href="#" class="flex mx-auto  items-center text-2xl font-semibold text-gray-900 dark:text-black">
         <button class="w-10 h-10  rounded-3xl bg-red-800 focus:outline-none "><i class="fa fa-play w-4  text-white"
             id="play-btn"></i></button>
@@ -33,7 +34,7 @@
         <label class="text-gray-800 text-sm mb-2 block">Full Name</label>
         <input name="fName" type="text"
           class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-          placeholder="Enter name"  formControlName="fullName" FullNameValidator/>
+          placeholder="Enter name"  formControlName="fullName" AlphabetValidator/>
           <span style="color: red;"
           *ngIf="registerForm.controls['fullName'].invalid && registerForm.controls['fullName'].touched">
           Full Name is not Valid
@@ -66,7 +67,7 @@
         <label class="text-gray-800 text-sm mb-2 block">Mobile No.</label>
         <input name="phone" type="phone"
           class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all"
-          placeholder="Enter mobile number" formControlName="phone" PhoneNumberValidator/>
+          placeholder="Enter mobile number" formControlName="phone" NumberValidator/>
           <span style="color: red;"
           *ngIf="registerForm.controls['phone'].value.length === 0 && !registerForm.controls['phone'].touched && submitted">
           phone number is required

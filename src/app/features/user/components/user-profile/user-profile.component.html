@@ -1,59 +1,126 @@
 
-<div class="bg-white ml-0 md:ml-52 lg:ml-[270px] rounded-lg w-full overflow-hidden mt-[1px]">
-  <div class="bg-black flex justify-center p-6 h-[70px]">
-    <h1 class="text-white">User Profile</h1>
-  </div>
-  <nav class="flex justify-around h-10 border-b-2 bg-black text-white">
-    <a href="#" class="active">Profile</a>
-    <a href="#">Edit Profile</a>
-    <a href="#">Phone Verification</a>
-    <a href="#">ID Verification</a>
-    <a href="#">Reset Password</a>
-    <a href="#">Activity Log</a>
-  </nav>
-  
-  <div class="bg-black text-white md:flex xs:flex-wrap">
-    <div class="w-1/2 flex border-r-2">
-      <div class="mx-auto p-8">
-        <!-- profile image -->
-         <div class="w-[200px]">
+<!-- toaster -->
+<p-toast />
 
-           <div class="image-container">
-             <label class="hoverable" for="fileInput">
-               <img class="w-[200px] h-[200px]" [src]="url ? url : 'https://www.w3schools.com/howto/img_avatar.png'" />
-               <div class="background"></div>
-             </label>
-             <br />
-             <input style="display: none;"
-               id="fileInput"
-               type="file"
-               [(ngModel)]="url"
-               class="select-profile-picture"
-               (change)="onSelectFile($event)"/>
-            
-           </div>
-         </div>
-        
-        
-        <div class="ml-5 mt-4">
-          <h2>{{userData.fullName}}</h2>
-          <p>{{userData.email}}</p>
-          <p>{{userData.phone}}</p>
+<!-- spinner -->
+ 
+    <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-scale-multiple"
+  >
+    <p style="font-size: 20px; color: white">Loading...</p>
+  </ngx-spinner>
+
+
+<div class="bg-white relative rounded-lg w-[100%] overflow-hidden mt-1" style="transform: scale(0.99);">
+  <!-- Header Section -->
+  <div class="bg-black flex justify-center p-6 h-[70px]">
+    <h1 class="text-white text-xl font-bold">User Profile</h1>
+  </div>
+
+ <div class="flex bg-black justify-end ">
+  <button (click)="logout()" type="button" class="mr-10 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Logout</button>
+
+ </div>
+  
+  <div class="bg-black text-white md:flex">
+    <div class="w-full md:w-1/2 flex border-r-2 border-gray-700">
+      <div class="mx-auto p-8 flex flex-col items-center">
+        <div class="w-[200px] mb-4">
+          <div class="relative group">
+            <label class="cursor-pointer block" for="fileInput">
+              <img
+                class="w-[200px] h-[200px] rounded-full object-cover border-4 border-white"
+                [src]="url ? url : 'https://www.w3schools.com/howto/img_avatar.png'"
+                alt="Profile Image"
+              />
+              <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span class="text-white text-sm">Change Picture</span>
+              </div>
+            </label>
+            <input
+              style="display: none;"
+              id="fileInput"
+              type="file"
+              [(ngModel)]="url"
+              class="select-profile-picture"
+              (change)="onSelectFile($event)"
+            />
+          </div>
+        </div>
+
+        <div class="text-center">
+          <h2 class="text-2xl font-semibold">{{userData.fullName}}</h2>
+          <p class="text-gray-400">{{userData.email}}</p>
+          <p class="text-gray-400">{{userData.phone}}</p>
         </div>
       </div>
     </div>
-    <div class="w-1/2 m-5 p-9">
-      <ul class="space-y-5">
-       
-        <li><span>Name:</span>{{userData.fullName}}</li>
-        <li *ngIf="userData.isAdmin" ><span>Role:</span>Admin</li>
-        <li *ngIf="!userData.isAdmin" ><span>Role:</span>User</li>
-        <li><span>Email:</span>{{userData.email}}</li>
-        <li><span>Contact:</span>{{userData.phone}}</li>
-      </ul>
-      <button (click)="openEditDialog({email:userData.email,fullName:userData.fullName,phone:userData.phone})" type="button" class="mt-7 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Edit Profile</button>
-    </div> 
+
+    <div class="w-full md:w-1/2 m-5 p-9 bg-gray-800 rounded-lg shadow-lg">
+      <form #profileForm="ngForm">
+        <ul class="space-y-5 text-sm">
+          <li class="flex justify-between items-center">
+            <label for="fullName" class="font-semibold w-1/4">Name:</label>
+            <input
+              id="fullName"
+              type="text"
+              [(ngModel)]="userData.fullName"
+              name="fullName"
+              class="w-3/4 p-2 text-white rounded-lg"
+              disabled
+            />
+          </li>
+    
+          <li class="flex justify-between items-center">
+            <label class="font-semibold w-1/4">Role:</label>
+            <span class="w-3/4">{{userData.isAdmin ? 'Admin' : 'User'}}</span>
+          </li>
+    
+          <!-- Email Input -->
+          <li class="flex justify-between items-center">
+            <label for="email" class="font-semibold w-1/4">Email:</label>
+            <input
+              id="email"
+              type="email"
+              [(ngModel)]="userData.email"
+              name="email"
+              class="w-3/4 p-2 text-white rounded-lg"
+              disabled
+            />
+          </li>
+    
+          <!-- Phone Input -->
+          <li class="flex justify-between items-center">
+            <label for="phone" class="font-semibold w-1/4">Contact:</label>
+            <input
+              id="phone"
+              type="tel"
+              [(ngModel)]="userData.phone"
+              name="phone"
+              class="w-3/4 p-2 text-white rounded-lg"
+              disabled
+            />
+          </li>
+        </ul>
+        <button
+          (click)="openEditDialog({email: userData.email, fullName: userData.fullName, phone: userData.phone})"
+          type="button"
+          class="mt-7 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 float-end"
+        >
+          Edit Profile
+        </button>
+      </form>
+      <div class="flex mt-10 ">
+        <a (click)="oldPassword()" class="text-cyan-500 hover:text-cyan-300 font-medium underline">
+          Reset Password
+        </a>
+      </div>
+      
+     
+    </div>
     
   </div>
-  
 </div>

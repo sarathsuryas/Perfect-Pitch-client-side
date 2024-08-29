@@ -79,7 +79,7 @@ export class UserResetPasswordFormComponent {
   ResetPassword() {
     if (this.ResponseResetForm.valid) {
       this.IsResetFormValid = true;
-      console.log(this.UserId)
+   
       this._userService.newPassword(this.ResponseResetForm.controls['confirmPassword'].value,this.UserId).subscribe(
         data => {
           this.ResponseResetForm.reset();

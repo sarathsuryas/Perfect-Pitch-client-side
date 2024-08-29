@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { CookieService } from "ngx-cookie-service";
 import { NgxSpinnerService } from "ngx-spinner";
-import { catchError, exhaustMap, map, of, tap } from "rxjs";
+import { catchError, debounceTime, exhaustMap, map, of, tap } from "rxjs";
 import { adminLogin, adminLoginFail, adminLoginSuccess, adminLogout, getUsersFail, getUsersSuccess, removeToken, searchUser, setAdminTokenCookie, setTokenAdmin } from "./admin.action";
 import { AdminService } from "src/app/features/admin/services/admin.service";
 
@@ -50,20 +50,7 @@ export class AdminEffects {
     )
   )
    
-  logout$ = createEffect(() =>
-    this._actions$.pipe(
-      ofType(adminLogout),
-      tap(() =>this._spinner.show()),
-      tap(() => {
-        this._cookieService.delete("adminToken");
-      }),
-      map(() => removeToken()),
-      tap(() => {
-        this._spinner.hide()
-        this._router.navigate(['/admin']);
-      })
-    )
-  );
+  
 
 
   setTokenFromCookie$ = createEffect(()=>
@@ -79,6 +66,7 @@ export class AdminEffects {
  searchUser$ = createEffect(()=>
  this._actions$.pipe(
   ofType(searchUser),
+  debounceTime(1000),
   exhaustMap(action=>
     this._adminService.getUsersData(action.search).pipe(
       map(user=>getUsersSuccess({users:user})),

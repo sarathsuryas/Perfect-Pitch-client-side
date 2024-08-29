@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { loginUser, loginUserFail, loginUserSuccess, registerUser, registerUserFail, registerUserSuccess, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
+import { loginUser, loginUserFail, loginUserSuccess, logOut, registerUser, registerUserFail, registerUserSuccess, removeToken, userSetTokenFromCookie, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
 import { initialState } from "./user.state";
 import { addUser, addUserFail, addUserSuccess, blockUser, blockUserFail, blockUserSuccess, editUser, editUserFail, editUserSuccess, getUsers, getUsersFail, getUsersSuccess, searchUser } from "../admin/admin.action";
 
@@ -125,5 +125,17 @@ on(blockUserFail,(state,{error})=>({
  })),
  on(searchUser,(state,action)=>({
    ...state,
+ })),
+ on(userSetTokenFromCookie,(state,action)=>({
+  ...state,
+  token:action.token
+ })),
+ on(logOut,(state)=>({
+  ...state,
+  token:null
+ })),
+ on(removeToken,(state)=>({
+  ...state,
+  token:null
  }))
 )

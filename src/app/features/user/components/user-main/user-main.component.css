@@ -1,5 +1,5 @@
-
-.container{
+ 
+/* .container{
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -18,14 +18,13 @@
   top: 50px;
   left: 0;
   height: calc(100vh);
-  width: 200px;
+  width: 20vw;
 }
 .main {
-  display: flex;
-  flex: 1;
-  margin-top: 50px;
+  margin-top: 80px;
+  width: 80vw;
 }
-
+ */
 
 
 
@@ -37,4 +36,68 @@
     display: none;
   }
  
-} */
+} */ 
+
+
+h1 {
+  padding: 0 1rem;
+}
+
+h2 {
+  padding: 1rem;
+}
+
+mat-toolbar {
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+}
+
+mat-sidenav-container {
+  height: 100%;
+  /* Adjust based on mat-toolbar height */
+}
+
+/* Move the content down so that it won't be hidden by the toolbar */
+mat-sidenav {
+  padding-top: 3.5rem;
+  transition: width 0.3s ease;
+}
+
+@media screen and (min-width: 600px) {
+  mat-sidenav {
+    padding-top: 4rem;
+  }
+}
+
+@media screen and (max-width:1210px){
+  .search{
+    display: none;
+  }
+}
+
+
+
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+}
+
+/* Move the content down so that it won't be hidden by the toolbar */
+mat-sidenav-content {
+  padding-top: 3.5rem;
+}
+
+@media screen and (min-width: 600px) {
+  mat-sidenav-content {
+    padding-top: 4rem;
+  }
+}
+
+.expanded {
+  width: 250px;
+}
