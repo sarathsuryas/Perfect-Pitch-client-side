@@ -22,3 +22,11 @@ export const loginUserFail = createAction('[User] login user fail',props<{error:
 
 export const closeSidebar = createAction('[User] close SideBar')
 
+// logout
+
+export const logOut = createAction('[User] logout')
+export const removeToken = createAction('[User] Remove Token')
+
+// set token from cookie
+export const userSetTokenFromCookie = createAction('[User] set token from cookie',props<{token:string}>())
+

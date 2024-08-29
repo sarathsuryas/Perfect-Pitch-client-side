@@ -45,20 +45,28 @@ import { UserMainComponent } from './features/user/components/user-main/user-mai
 import { AdminAuthInterceptor } from './core/interceptors/admin-auth-interceptor/admin-auth.interceptor';
 import { UserProfileComponent } from './features/user/components/user-profile/user-profile.component';
 import {  EmailValidationDirective } from './shared/directives/email/email-valdation.directive';
-import { FullNameValidatorDirective } from './shared/directives/fullName/full-name-validator.directive';
-import { PhoneNumberValidatorDirective } from './shared/directives/phoneNumber/phone-number-validator.directive';
+import { AlphabetValidatorDirective } from './shared/directives/alphabet/alphabet-validator.directive';
+import { NumberValidatorDirective } from './shared/directives/number/number-validator.directive';
 import { PasswordValidatorDirective } from './shared/directives/password/password-validator.directive';
 import { CountdownModule } from 'ngx-countdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatTableModule} from '@angular/material/table';
 import { AdminResetPasswordComponent } from './features/admin/components/admin-reset-password/admin-reset-password.component';
 import { UserAuthInterceptor } from './core/interceptors/user-auth-interceptor/user-auth.interceptor';
 import { AdminResetPasswordFormComponent } from './features/admin/components/admin-reset-password-form/admin-reset-password-form.component';
 import { UserForgotPasswordComponent } from './features/user/components/user-forgot-password/user-forgot-password.component';
 import { UserResetPasswordFormComponent } from './features/user/components/user-reset-password-form/user-reset-password-form.component';
 import { EditProfileComponent } from './features/user/components/edit-profile/edit-profile.component';
+import { ResetPasswordComponent } from './features/user/components/reset-password/reset-password.component';
+import { OldPasswordComponent } from './features/user/components/old-password/old-password.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { GlobalErrorHandlerInterceptor } from './core/interceptors/global-error-handler.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -79,14 +87,16 @@ import { EditProfileComponent } from './features/user/components/edit-profile/ed
     UserMainComponent,
     UserProfileComponent,
     EmailValidationDirective,
-    FullNameValidatorDirective,
-    PhoneNumberValidatorDirective,
+    AlphabetValidatorDirective,
+    NumberValidatorDirective,
     PasswordValidatorDirective,
     AdminResetPasswordComponent,
     AdminResetPasswordFormComponent,
     UserForgotPasswordComponent,
     UserResetPasswordFormComponent,
     EditProfileComponent,
+    ResetPasswordComponent,
+    OldPasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -113,6 +123,10 @@ import { EditProfileComponent } from './features/user/components/edit-profile/ed
     MatPaginatorModule,
     MatTableModule,
     InputTextModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     StoreModule.forRoot([]),
     StoreModule.forFeature('user',userReducer),
@@ -129,8 +143,13 @@ import { EditProfileComponent } from './features/user/components/edit-profile/ed
        {provide:HTTP_INTERCEPTORS,
         useClass:UserAuthInterceptor,
         multi:true
+       },
+       {
+        provide:HTTP_INTERCEPTORS,
+        useClass:GlobalErrorHandlerInterceptor,
+        multi:true
        }
-      ],
+      ], 
   bootstrap: [AppComponent]
 })
 export class AppModule { }

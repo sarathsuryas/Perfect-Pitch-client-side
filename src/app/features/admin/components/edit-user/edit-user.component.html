@@ -4,7 +4,7 @@
     <div class="form-row">
       <mat-form-field class="form-field" appearance="fill">
         <mat-label>Full Name</mat-label>
-        <input matInput formControlName="fullName" FullNameValidator/>
+        <input matInput formControlName="fullName" AlphabetValidator/>
         <mat-error *ngIf="editForm.controls['fullName'].value.length === 0 && !editForm.controls['fullName'].touched && submitted">
           Full Name is <strong>required</strong>
         </mat-error>
@@ -28,7 +28,7 @@
     <div class="form-row">
       <mat-form-field class="form-field" appearance="fill">
         <mat-label>Phone</mat-label>
-        <input matInput formControlName="phone" PhoneNumberValidator/>
+        <input matInput formControlName="phone" NumberValidator/>
         <mat-error *ngIf="editForm.controls['phone'].invalid">
           Phone number is <strong>Not Valid</strong>
         </mat-error>

@@ -5,6 +5,8 @@ import { AddUserComponent } from './features/admin/components/add-user/add-user.
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { setAdminTokenCookie } from './store/admin/admin.action';
+import { userSetTokenFromCookie } from './store/user/user.action';
+import { CookieService } from 'ngx-cookie-service';
  
 @Component({
   selector: 'app-root',
@@ -13,8 +15,10 @@ import { setAdminTokenCookie } from './store/admin/admin.action';
 })
 export class AppComponent {
   title = "sarath"
-  constructor(private _store:Store) {
+  constructor(private _store:Store,private _cookieService:CookieService) {
     this._store.dispatch(setAdminTokenCookie())
+    const token = _cookieService.get('token')
+    this._store.dispatch(userSetTokenFromCookie({token}))
   }
   
 }

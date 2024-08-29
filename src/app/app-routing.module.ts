@@ -24,7 +24,7 @@ const routes: Routes = [
   {path:'login',component:UserLoginComponent},
   {path:'register',component:UserRegisterComponent},
   {path:'otp-verify',component:OtpComponent},
-  {path:'home',component:UserMainComponent,
+  {path:'home',component:UserMainComponent,canActivate:[UserAuthGuard],
     children:[
       {path:'user-profile',component:UserProfileComponent}
     ]

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { map, Observable } from 'rxjs';
 import { AddUserDto } from 'src/app/core/dtos/addUser.dto';
 import { EditUserDto } from 'src/app/core/dtos/editUser.dto';
@@ -15,10 +16,10 @@ export class AdminService {
   
  
   private api = `${environment.apiUrl}/admin`
-  constructor(private readonly _http:HttpClient) { }
+  constructor(private readonly _http:HttpClient,private _cookieService:CookieService) { }
 
   login(email:string,password:string):Observable<IAdminData> {
-    return this._http.post<IAdminData>(`${this.api}/login`,{email,password})
+    return this._http.post<IAdminData>(`${this.api}/login`,{email,password},{withCredentials:true})
   }
   getUsersData(search:string = ''): Observable<userModel[]> {
 
@@ -48,9 +49,10 @@ export class AdminService {
     return this._http.post<ITokenData>(`${this.api}/valid-password-token`, body);
   }
   newPassword(password:string,AdminId:string): Observable<any> {
-    console.log(password)
     return this._http.post(`${this.api}/new-password`, {password,AdminId});
   }
-
+ logOut() {
+  this._cookieService.delete('adminToken')
+ }
 
 }
