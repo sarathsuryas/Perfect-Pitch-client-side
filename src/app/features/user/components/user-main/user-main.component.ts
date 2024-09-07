@@ -4,6 +4,8 @@ import { UserService } from '../../services/user.service';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
+import { UploadVideoComponent } from '../upload-video/upload-video.component';
 
 @Component({
   selector: 'app-user-main',
@@ -29,8 +31,11 @@ title = 'material-responsive-sidenav';
   isMobile= true;
   isCollapsed = true;
   searchBar:boolean = false
+  show:boolean = true
+  animal!: string;
+  name!: string;
 
-  constructor(private _observer: BreakpointObserver) {}
+  constructor(private _observer: BreakpointObserver,public dialog: MatDialog) {}
 
   ngOnInit() {
     this._observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
@@ -55,4 +60,19 @@ title = 'material-responsive-sidenav';
     this.searchBar = true
 }
 
+
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(UploadVideoComponent, {
+        height: '400px',
+          width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
+  }
+
 }
+ 

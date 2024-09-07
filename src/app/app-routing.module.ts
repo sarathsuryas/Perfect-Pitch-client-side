@@ -18,6 +18,7 @@ import { AdminResetPasswordFormComponent } from './features/admin/components/adm
 import { UserForgotPasswordComponent } from './features/user/components/user-forgot-password/user-forgot-password.component';
 import { UserResetPasswordFormComponent } from './features/user/components/user-reset-password-form/user-reset-password-form.component';
 import { UserProfileComponent } from './features/user/components/user-profile/user-profile.component';
+import { UploadVideoComponent } from './features/user/components/upload-video/upload-video.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},

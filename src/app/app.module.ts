@@ -66,6 +66,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { GlobalErrorHandlerInterceptor } from './core/interceptors/global-error-handler.interceptor';
+import { UploadVideoComponent } from './features/user/components/upload-video/upload-video.component';
+import {MatStepperModule} from '@angular/material/stepper';
+
 
 
 @NgModule({
@@ -97,6 +100,7 @@ import { GlobalErrorHandlerInterceptor } from './core/interceptors/global-error-
     EditProfileComponent,
     ResetPasswordComponent,
     OldPasswordComponent,
+    UploadVideoComponent,
   ],
   imports: [
     BrowserModule,
@@ -127,6 +131,7 @@ import { GlobalErrorHandlerInterceptor } from './core/interceptors/global-error-
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
+    MatStepperModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     StoreModule.forRoot([]),
     StoreModule.forFeature('user',userReducer),
