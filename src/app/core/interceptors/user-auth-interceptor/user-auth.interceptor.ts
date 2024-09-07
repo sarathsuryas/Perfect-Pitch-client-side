@@ -21,8 +21,10 @@ export class UserAuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     if(request.url.includes('/admin')) {
       return next.handle(request);
-      
+    } else if(request.url.includes('//s3.ap-south-1.amazonaws.com')) {
+      return next.handle(request);
     }
+     
     const token = this._cookieService.get('token')
     const authReq = request.clone({
       setHeaders:{Authorization:`Bearer ${token}`}

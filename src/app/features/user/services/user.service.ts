@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { userModel } from '../../../store/user/user.model';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
 import { IUserData } from 'src/app/core/interfaces/IUserData';
 import { CookieService } from 'ngx-cookie-service';
@@ -13,6 +13,7 @@ import { ICustomResponse } from 'src/app/core/interfaces/ICustomResponse';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { logOut } from 'src/app/store/user/user.action';
+import { IVideoUploadDto } from 'src/app/core/dtos/IVideoUpload.dto';
 
 @Injectable({ 
   providedIn: 'root'
@@ -53,13 +54,43 @@ export class UserService {
   userData():Observable<IUserData> {
      return this._http.get<IUserData>(`${this.api}/get-user-data`)
   } 
-  profileImageUpload(files:File):Observable<string> {
-    const formData: FormData = new FormData();
-    formData.append('file', files);
-      return this._http.post<string>(`${this.api}/upload-profile-picture`,formData)
+
+  getPresignedUrl(fileName:string,contentType:string,uploadType:string):Observable<ICustomResponse> {
+    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`,{fileName,contentType,uploadType})
   }
 
-  editProfile(data:EditUserDto) {
+
+  profileImageUpload(fileuploadurl:string, contenttype:string, file:File): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': contenttype });
+   
+           
+    const req = new HttpRequest(
+      'PUT',
+      fileuploadurl,
+      file,
+      {
+        headers: headers, 
+      });
+    return this._http.request(req);
+  }
+  
+  videoUpload(fileuploadurl:string, contenttype:string, file:File): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': contenttype });
+   
+           
+    const req = new HttpRequest(
+      'PUT',
+      fileuploadurl,
+      file,
+      {
+        headers: headers, 
+      });
+    return this._http.request(req);
+  }
+
+  
+
+  editProfile(data:EditUserDto) { 
       this._http.put<IReturnEdit>(`${this.api}/edit-profile`,data).subscribe()
   }
   checkOldPassword(password:string):Observable<ICustomResponse> {
@@ -76,5 +107,10 @@ export class UserService {
     this._store.dispatch(logOut())
     this._router.navigate([''])
   }
+
+ 
+ submitVideoDetails(data:IVideoUploadDto):Observable<{videoId:string}> {
+  return this._http.post<{videoId:string}>(`${this.api}/post-video-details`,data)
+ } 
 
 }

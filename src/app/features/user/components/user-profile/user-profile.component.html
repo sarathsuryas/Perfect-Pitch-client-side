@@ -59,17 +59,17 @@
       </div>
     </div>
 
-    <div class="w-full md:w-1/2 m-5 p-9 bg-gray-800 rounded-lg shadow-lg">
+    <div class="w-full md:w-1/2 m-5 p-9 bg-black-800  rounded-lg shadow-lg">
       <form #profileForm="ngForm">
         <ul class="space-y-5 text-sm">
-          <li class="flex justify-between items-center">
+          <li class="flex justify-between items-center \">
             <label for="fullName" class="font-semibold w-1/4">Name:</label>
             <input
               id="fullName"
-              type="text"
+              type="text" 
               [(ngModel)]="userData.fullName"
               name="fullName"
-              class="w-3/4 p-2 text-white rounded-lg"
+              class="w-3/4 p-2 text-black rounded-lg"
               disabled
             />
           </li>
@@ -87,7 +87,7 @@
               type="email"
               [(ngModel)]="userData.email"
               name="email"
-              class="w-3/4 p-2 text-white rounded-lg"
+              class="w-3/4 p-2 text-black rounded-lg"
               disabled
             />
           </li>
@@ -100,7 +100,7 @@
               type="tel"
               [(ngModel)]="userData.phone"
               name="phone"
-              class="w-3/4 p-2 text-white rounded-lg"
+              class="w-3/4 p-2 text-black rounded-lg"
               disabled
             />
           </li>
