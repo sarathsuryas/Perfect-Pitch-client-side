@@ -1,58 +1,69 @@
-<h1 mat-dialog-title>Upload Video</h1>
-<div mat-dialog-content>
+<h1 mat-dialog-title class="text-lg font-bold">Upload Video</h1>
 
-  <!-- <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
-    {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
-  </button> -->
+<div mat-dialog-content class="h-full">
   <mat-stepper [linear]="isLinear" #stepper>
-    <mat-step [stepControl]="firstFormGroup">
-      <div class="flex items-center justify-center h-[200px]">
+
+    <!-- Step 1: File Upload -->
+    <mat-step [stepControl]="firstFormGroup" label="Upload Video File">
+      <div class="flex flex-col items-center justify-center h-[150px]">
         <label for="dropzone-file"
-          class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
-          <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+          class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition ease-in-out">
+          <div class="flex flex-col items-center justify-center">
+            <svg class="w-10 h-10 mb-4 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 10l4.586-4.586A2 2 0 0 0 17.586 3H6.414A2 2 0 0 0 4.586 5.414L9 10m6 0v10M9 10v10m12-10v5m-6 5v2m-2-2v2M3 16h5M3 20h5" />
             </svg>
             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span>
               or drag and drop</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+            <p  class="text-xs text-gray-500 dark:text-gray-400" >{{videoName}} </p>
           </div>
-          <input id="dropzone-file" type="file" class="hidden" />
+          <input id="dropzone-file" type="file" class="hidden" (change)="videoFile($event)" />
         </label>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
+      </div>
+      <div class="mt-4 flex justify-end">
+        <button mat-button matStepperNext color="primary">Next</button>
       </div>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="Fill out your address">
-      <form [formGroup]="secondFormGroup">
-        <mat-form-field>
-          <mat-label>Address</mat-label>
-          <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
-        </mat-form-field>
-        <div>
+
+    <!-- Step 2: Thumbnail Upload -->
+    <mat-step [stepControl]="secondFormGroup" label="Upload Thumbnail">
+      <form [formGroup]="secondFormGroup" class="space-y-4">
+        <label for="thumbnail_input" class="block text-sm font-medium text-gray-900 dark:text-white">Upload Thumbnail</label>
+        <input
+          class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+          id="thumbnail_input" type="file" (change)="thumbNail($event)">
+        <div class="flex justify-between mt-4">
           <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperNext color="primary">Next</button>
         </div>
       </form>
     </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      <p>You are now done.</p>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
+
+    <!-- Step 3: Video Details -->
+    <mat-step [stepControl]="thirdFormGroup" label="Video Details">
+      <form [formGroup]="thirdFormGroup" class="flex flex-col items-center">
+        <mat-form-field class="w-full">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title">
+        </mat-form-field>
+        <mat-form-field  class="w-full">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+        </mat-form-field>
+        <div class="flex justify-between w-full">
+          <button mat-button matStepperPrevious>Back</button>
+          <div mat-dialog-actions class="flex">
+            <div>
+              <button mat-button (click)="onNoClick()">Cancel</button>
+              <button mat-button color="primary" [mat-dialog-close] cdkFocusInitial>Submit</button>
+            </div>
+          </div>
+        </div>
+      </form>
     </mat-step>
   </mat-stepper>
-
-
-
+ 
+  
 </div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close] cdkFocusInitial>Ok</button>
-</div>
+
