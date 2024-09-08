@@ -19,6 +19,7 @@ import { IVideoUploadDto } from 'src/app/core/dtos/IVideoUpload.dto';
   providedIn: 'root'
 })
 export class UserService {
+  
   private api = `${environment.apiUrl}/users`
   constructor(private readonly _http: HttpClient, private readonly _cookieService: CookieService,private _router:Router,private readonly _store:Store) { }
 
@@ -60,6 +61,13 @@ export class UserService {
   }
 
 
+   generatePresignedUrlVideo(fileName:string,contentType:string) {
+    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`,{fileName,contentType})
+  }
+  generatePresignedUrlVideoThumbNail(fileName:string,contentType:string) {
+    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`,{fileName,contentType})
+  }
+
   profileImageUpload(fileuploadurl:string, contenttype:string, file:File): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': contenttype });
    
@@ -75,9 +83,20 @@ export class UserService {
   }
   
   videoUpload(fileuploadurl:string, contenttype:string, file:File): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': contenttype });
-   
-           
+    const headers = new HttpHeaders({ 'Content-Type': contenttype });        
+    const req = new HttpRequest(
+      'PUT',
+      fileuploadurl,
+      file,
+      {
+        headers: headers, 
+      });
+    return this._http.request(req);
+  }
+
+
+  videoThumbNailUpload(fileuploadurl:string, contenttype:string, file:File): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': contenttype });   
     const req = new HttpRequest(
       'PUT',
       fileuploadurl,

@@ -127,7 +127,7 @@ export class UserProfileComponent implements OnInit {
     const myId = uuidv4();
     this._userService.getPresignedUrl("uuid"+ myId + this.fileObj.name , this.fileObj.type,"userProfilePicture").subscribe((result) => {
       if (result.success) {
-        const fileuploadurl = result.presignedUrl
+        const fileuploadurl = result.presignedUrl.url
         const imageForm = new FormData();
         imageForm.append('file', this.fileObj);
        
