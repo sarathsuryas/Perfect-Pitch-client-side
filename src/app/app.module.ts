@@ -68,6 +68,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { GlobalErrorHandlerInterceptor } from './core/interceptors/global-error-handler.interceptor';
 import { UploadVideoComponent } from './features/user/components/upload-video/upload-video.component';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatRadioModule} from '@angular/material/radio';
+import { VideosListComponent } from './features/user/components/videos-list/videos-list.component';
+import { UploadAudioComponent } from './features/user/components/upload-audio/upload-audio.component';
+import { SingleAudioUploadComponent } from './features/user/components/single-audio-upload/single-audio-upload.component';
+import { MultipleAudioUploadComponent } from './features/user/components/multiple-audio-upload/multiple-audio-upload.component';
+import { AudioUploadDialogComponent } from './features/user/components/audio-upload-dialog/audio-upload-dialog.component';
 
 
 
@@ -101,6 +107,11 @@ import {MatStepperModule} from '@angular/material/stepper';
     ResetPasswordComponent,
     OldPasswordComponent,
     UploadVideoComponent,
+    VideosListComponent,
+    UploadAudioComponent,
+    SingleAudioUploadComponent,
+    MultipleAudioUploadComponent,
+    AudioUploadDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -122,6 +133,7 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatDialogModule,
     MatButtonModule,
     MatInputModule,
+    MatRadioModule,
     AppRoutingModule,
     MatSlideToggleModule,
     MatPaginatorModule,

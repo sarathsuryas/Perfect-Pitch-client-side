@@ -18,7 +18,7 @@
               or drag and drop</p>
             <p  class="text-xs text-gray-500 dark:text-gray-400" >{{videoName}} </p>
           </div>
-          <input id="dropzone-file" type="file" class="hidden" (change)="videoFile($event)" />
+          <input id="dropzone-file" type="file" class="hidden" (change)="videoFile($event)"/>
         </label>
       </div>
       <div class="mt-4 flex justify-end">
@@ -41,29 +41,31 @@
     </mat-step>
 
     <!-- Step 3: Video Details -->
-    <mat-step [stepControl]="thirdFormGroup" label="Video Details">
-      <form [formGroup]="thirdFormGroup" class="flex flex-col items-center">
+    <mat-step [stepControl]="thirdFormGroup" label="Video Details" >
+      <form [formGroup]="thirdFormGroup" class="flex flex-col items-center" (ngSubmit)="submit()">
         <mat-form-field class="w-full">
           <mat-label>Title</mat-label>
-          <input matInput formControlName="title">
+          <input matInput formControlName="title" AlphabetValidator>
+        </mat-form-field>
+        <mat-form-field class="w-full">
+          <mat-label>Genre</mat-label>
+          <input matInput formControlName="genre" AlphabetValidator>
         </mat-form-field>
         <mat-form-field  class="w-full">
           <mat-label>Description</mat-label>
-          <textarea matInput formControlName="description"></textarea>
-        </mat-form-field>
+          <textarea matInput formControlName="description" AlphabetValidator></textarea>
+        </mat-form-field>         
         <div class="flex justify-between w-full">
           <button mat-button matStepperPrevious>Back</button>
           <div mat-dialog-actions class="flex">
             <div>
               <button mat-button (click)="onNoClick()">Cancel</button>
-              <button mat-button color="primary" [mat-dialog-close] cdkFocusInitial (click)="submit()">Submit</button>
+              <button type="submit" mat-button color="primary" cdkFocusInitial>Submit</button>
             </div>
           </div>
         </div>
       </form>
     </mat-step>
   </mat-stepper>
- 
-  
 </div>
 

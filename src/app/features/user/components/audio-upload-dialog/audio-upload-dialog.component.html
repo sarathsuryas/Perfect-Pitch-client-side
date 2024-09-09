@@ -1,0 +1,19 @@
+<h2 class="text-2xl font-semibold text-center text-gray-800 mb-2">Select Upload Option</h2>
+
+<div class="p-4">
+  <mat-radio-group [(ngModel)]="selectedOption" class="space-y-4">
+    <mat-radio-button class="block p-3 border rounded hover:bg-gray-100" value="single">Single Audio Upload</mat-radio-button>
+    <mat-radio-button class="block p-3 border rounded hover:bg-gray-100" value="multiple">Multiple Audio Upload</mat-radio-button>
+  </mat-radio-group>
+</div>
+
+<div class="flex justify-end space-x-4 mt-6 p-4">
+  <button class="text-red-500 hover:text-red-700 font-semibold" (click)="onClose()">Cancel</button>
+  <button
+    class="bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+    [disabled]="!selectedOption"
+    (click)="onSelect()"
+  >
+    Continue
+  </button>
+</div>

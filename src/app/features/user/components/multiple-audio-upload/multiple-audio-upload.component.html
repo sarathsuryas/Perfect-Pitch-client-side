@@ -1,0 +1,67 @@
+<div class="container mx-auto p-8">
+  <div>
+    <h2 class="text-2xl font-semibold mb-4">Upload Song Album</h2>
+    <form [formGroup]="albumForm" id="album-upload" class="bg-white shadow-md rounded px-8 pt-6 pb-8" (ngSubmit)="submit()">
+      
+      <!-- Album Title Input -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="albumTitle">
+          Album Title
+        </label>
+        <input
+          type="text"
+          id="albumTitle"
+          name="albumTitle"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Enter album title"
+          formControlName="albumTitle"
+        />
+      </div>
+      <span style="color: red;" *ngIf="albumForm.invalid && albumForm.controls['albumTitle'].touched">
+        Please enter a valid album title
+      </span>
+
+       <!-- Thumbnail Upload Input -->
+       <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="albumThumbnail">
+          Upload Album Thumbnail
+        </label>
+        <input
+          type="file"
+          id="albumThumbnail"
+          name="albumThumbnail"
+          accept="image/*"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          (change)="selectedThumbnail($event)"
+        />
+      </div>
+      <!-- Audio Files Input -->
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="albumFiles">
+          Choose Audio Files (Multiple Songs)
+        </label>
+        <input
+          type="file"
+          id="albumFiles"
+          name="albumFiles"
+          multiple
+          accept="audio/*"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          (change)="selectedFiles($event)"
+        />
+      </div>
+
+     
+
+      <!-- Submit Button -->
+      <div class="flex items-center justify-between">
+        <button
+          type="submit"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+          Upload Album
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

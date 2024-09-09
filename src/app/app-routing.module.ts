@@ -19,6 +19,10 @@ import { UserForgotPasswordComponent } from './features/user/components/user-for
 import { UserResetPasswordFormComponent } from './features/user/components/user-reset-password-form/user-reset-password-form.component';
 import { UserProfileComponent } from './features/user/components/user-profile/user-profile.component';
 import { UploadVideoComponent } from './features/user/components/upload-video/upload-video.component';
+import { VideosListComponent } from './features/user/components/videos-list/videos-list.component';
+import { UploadAudioComponent } from './features/user/components/upload-audio/upload-audio.component';
+import { SingleAudioUploadComponent } from './features/user/components/single-audio-upload/single-audio-upload.component';
+import { MultipleAudioUploadComponent } from './features/user/components/multiple-audio-upload/multiple-audio-upload.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -27,7 +31,11 @@ const routes: Routes = [
   {path:'otp-verify',component:OtpComponent},
   {path:'home',component:UserMainComponent,canActivate:[UserAuthGuard],
     children:[
-      {path:'user-profile',component:UserProfileComponent}
+      {path:'user-profile',component:UserProfileComponent},
+      {path:'music-videos',component:VideosListComponent},
+      {path:'upload-audio',component:UploadAudioComponent},
+      {path:"single-audio-upload",component:SingleAudioUploadComponent},
+      {path:"multiple-audio-upload",component:MultipleAudioUploadComponent}
     ]
   },
   {path:'admin',component:AdminLoginComponent},

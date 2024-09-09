@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { logOut } from 'src/app/store/user/user.action';
 import { IVideoUploadDto } from 'src/app/core/dtos/IVideoUpload.dto';
+import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 
 @Injectable({ 
   providedIn: 'root'
@@ -62,10 +63,10 @@ export class UserService {
 
 
    generatePresignedUrlVideo(fileName:string,contentType:string) {
-    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`,{fileName,contentType})
+    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`,{fileName,contentType}).toPromise()
   }
   generatePresignedUrlVideoThumbNail(fileName:string,contentType:string) {
-    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`,{fileName,contentType})
+    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`,{fileName,contentType}).toPromise()
   }
 
   profileImageUpload(fileuploadurl:string, contenttype:string, file:File): Observable<any> {
@@ -82,7 +83,7 @@ export class UserService {
     return this._http.request(req);
   }
   
-  videoUpload(fileuploadurl:string, contenttype:string, file:File): Observable<any> {
+  videoUpload(fileuploadurl:string, contenttype:string, file:File){
     const headers = new HttpHeaders({ 'Content-Type': contenttype });        
     const req = new HttpRequest(
       'PUT',
@@ -91,11 +92,11 @@ export class UserService {
       {
         headers: headers, 
       });
-    return this._http.request(req);
+    return this._http.request(req).toPromise();
   }
 
 
-  videoThumbNailUpload(fileuploadurl:string, contenttype:string, file:File): Observable<any> {
+  videoThumbNailUpload(fileuploadurl:string, contenttype:string, file:File) {
     const headers = new HttpHeaders({ 'Content-Type': contenttype });   
     const req = new HttpRequest(
       'PUT',
@@ -104,7 +105,7 @@ export class UserService {
       {
         headers: headers, 
       });
-    return this._http.request(req);
+    return this._http.request(req).toPromise();
   }
 
   
@@ -131,5 +132,11 @@ export class UserService {
  submitVideoDetails(data:IVideoUploadDto):Observable<{videoId:string}> {
   return this._http.post<{videoId:string}>(`${this.api}/post-video-details`,data)
  } 
+
+getVideoList():Observable<IVideoList[]> {
+  return this._http.get<IVideoList[]>(`${this.api}/video-list`)
+}
+
+
 
 }

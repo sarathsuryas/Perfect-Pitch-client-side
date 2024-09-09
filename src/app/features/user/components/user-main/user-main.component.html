@@ -32,7 +32,7 @@
             <a (click)="openDialog()" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload Video</a>
           </li>
           <li>
-            <a href="#"
+            <a (click)="openUploadAudioDialog()"
               class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload Audio</a>
           </li>
           <li>
@@ -70,7 +70,7 @@
           <span *ngIf="!isCollapsed">Posts</span>
         </span>
       </a>
-      <a mat-list-item>
+      <a mat-list-item routerLink="music-videos">
         <span class="entry">
           <mat-icon>videocam</mat-icon>
           <span *ngIf="!isCollapsed">Videos</span>
