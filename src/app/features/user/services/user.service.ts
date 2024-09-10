@@ -15,6 +15,8 @@ import { Store } from '@ngrx/store';
 import { logOut } from 'src/app/store/user/user.action';
 import { IVideoUploadDto } from 'src/app/core/dtos/IVideoUpload.dto';
 import { IVideoList } from 'src/app/core/interfaces/IVideoList';
+import { IPreSignedUrls } from 'src/app/core/interfaces/IPresignedUrls';
+import { ISumbitAlbumDetails } from 'src/app/core/dtos/ISubmitAlbumDetails.dto';
 
 @Injectable({ 
   providedIn: 'root'
@@ -137,6 +139,26 @@ getVideoList():Observable<IVideoList[]> {
   return this._http.get<IVideoList[]>(`${this.api}/video-list`)
 }
 
+generatePreSignedUrlsForAlbums(detailsForSignedUrls:{name:string,type:string}[]):Observable<IPreSignedUrls> {
+const  post_params = JSON.stringify(detailsForSignedUrls)
+return this._http.post<IPreSignedUrls>(`${this.api}/generate-pre-signed-urls`,{post_params})
+}
 
+audioUpload(fileuploadurl:string, contenttype:string, file:File){
+  const headers = new HttpHeaders({ 'Content-Type': contenttype });        
+  const req = new HttpRequest(
+    'PUT',
+    fileuploadurl,
+    file,
+    {
+      headers: headers, 
+    });
+  return this._http.request(req).toPromise();
+}
+
+submitAlbumDetails(data:ISumbitAlbumDetails) {
+  const files = JSON.stringify(data)
+   return this._http.post(`${this.api}/submit-album-details`,{files})
+}
 
 }
