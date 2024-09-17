@@ -63,15 +63,15 @@ export class UploadVideoComponent implements OnInit{
     try {
     if(this.thirdFormGroup.valid) {
       this.dialogRef.close();
-      const videoData = await this._userService.generatePresignedUrlVideo(this.videoData.name, this.videoData.type) as ICustomResponse
+      const videoData = await this._userService.generatePresignedUrlMedia(this.videoData.name, this.videoData.type) as ICustomResponse
       this.presignedUrlVideo = videoData.presignedUrl.url
       this.uniqueKeyVideo = videoData.presignedUrl.uniqueKey
-      const thumbNailData = await this._userService.generatePresignedUrlVideoThumbNail(this.thumbNailData.name, this.thumbNailData.type) as ICustomResponse
+      const thumbNailData = await this._userService.generatePresignedUrlMediaThumbNail(this.thumbNailData.name, this.thumbNailData.type) as ICustomResponse
       this.presignedUrlThumbNail = thumbNailData.presignedUrl.url
       this.uniqueKeyThumbNail = thumbNailData.presignedUrl.uniqueKey
-      const data = await this._userService.videoUpload(this.presignedUrlVideo, this.videoData.type, this.videoData)
+      const data = await this._userService.mediaUpload(this.presignedUrlVideo, this.videoData.type, this.videoData)
       console.log(data,"data")
-      const result = await this._userService.videoThumbNailUpload(this.presignedUrlThumbNail, this.thumbNailData.type, this.thumbNailData)
+      const result = await this._userService.mediaThumbNailUpload(this.presignedUrlThumbNail, this.thumbNailData.type, this.thumbNailData)
       console.log(result,"result")
       const title = this.thirdFormGroup.controls['title'].value as string
       const genre = this.thirdFormGroup.controls['genre'].value as string

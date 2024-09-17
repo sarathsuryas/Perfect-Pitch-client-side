@@ -13,6 +13,7 @@ import { AudioUploadDialogComponent } from '../audio-upload-dialog/audio-upload-
   templateUrl: './user-main.component.html',
   styleUrls: ['./user-main.component.css']
 })
+
 export class UserMainComponent implements OnInit {
   //   sidebar:boolean = true;
 
@@ -25,7 +26,7 @@ export class UserMainComponent implements OnInit {
   //   })
 
   // }
-
+  
   title = 'material-responsive-sidenav';
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
@@ -34,8 +35,7 @@ export class UserMainComponent implements OnInit {
   searchBar: boolean = false
   show: boolean = true
   animal!: string;
-  name!: string;
-
+  name!: string; 
   constructor(private _observer: BreakpointObserver, public dialog: MatDialog) { }
 
   ngOnInit() {

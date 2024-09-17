@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { ISumbitAlbumDetails } from 'src/app/core/dtos/ISubmitAlbumDetails.dto';
+import { MessageService } from 'primeng/api';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-multiple-audio-upload',
@@ -17,7 +19,15 @@ export class MultipleAudioUploadComponent implements OnInit {
   detailsForSignedUrls: { name: string, type: string }[] = [];
   presignedUrlsAndUniqueKey: { url: string, uniqueKey: string }[] = []
   songsDetails: { title: string, uniqueKey: string }[] = []
-  constructor(private _fb: FormBuilder, private _userServce: UserService) { }
+  @ViewChild('myInput')
+  myInputVariable!: ElementRef;
+  @ViewChild('songs')
+  songs!:ElementRef
+  constructor(private _fb: FormBuilder,
+     private _userServce: UserService,
+     private _messageService:MessageService,
+     private _spinner: NgxSpinnerService,
+    ) { }
 
   ngOnInit(): void {
     this.albumForm = this._fb.group({
@@ -48,6 +58,7 @@ export class MultipleAudioUploadComponent implements OnInit {
 
   submit() {
     if (this.albumForm.valid) {
+      this._spinner.show()
       this._userServce.generatePreSignedUrlsForAlbums(this.detailsForSignedUrls).subscribe(async (data) => {
         this.presignedUrlsAndUniqueKey = data.presignedUrls
         try {
@@ -64,9 +75,19 @@ export class MultipleAudioUploadComponent implements OnInit {
             thumbnailKey: this.presignedUrlsAndUniqueKey.pop()?.uniqueKey as string,
             songs: this.songsDetails
           }
-          this._userServce.submitAlbumDetails(obj).subscribe()
+          this._userServce.submitAlbumDetails(obj).subscribe((data)=>{
+            this._messageService.add({ severity: 'success', summary: 'Success', detail: 'album uploaded' });
+            this.myInputVariable.nativeElement.value = "";
+            this.songs.nativeElement.value = "";
+            this.albumForm.reset()
+            this._spinner.hide()
+          },(error)=>{
+            console.error(error)
+            this._spinner.hide()
+          })
 
         } catch (error) {
+          this._spinner.hide()
           console.error(error)
         }
 

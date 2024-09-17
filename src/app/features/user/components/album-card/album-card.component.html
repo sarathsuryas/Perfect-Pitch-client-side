@@ -1,0 +1,16 @@
+<div class="spotify-playlists">
+  <h2>Albums</h2>
+
+  <div class="list grid grid-cols-1 gap-8 px-1 md:grid-cols-2 
+  lg:grid-cols-4 md:p-2 xl:p-4">
+    <div *ngFor="let value of albumData" class="item">
+         
+    <a routerLink="/home/album-songs/{{value._id}}">  <img src="{{value.thumbNailLink}}" /></a>
+      <div class="play">
+        <span class="fa fa-play"></span>
+      </div>
+      <h4>{{value.title}}</h4>
+      <p>{{value.artistName}}</p>
+    </div>
+  </div>
+</div>

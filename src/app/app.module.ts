@@ -74,7 +74,10 @@ import { UploadAudioComponent } from './features/user/components/upload-audio/up
 import { SingleAudioUploadComponent } from './features/user/components/single-audio-upload/single-audio-upload.component';
 import { MultipleAudioUploadComponent } from './features/user/components/multiple-audio-upload/multiple-audio-upload.component';
 import { AudioUploadDialogComponent } from './features/user/components/audio-upload-dialog/audio-upload-dialog.component';
-
+import { AlbumListComponent } from './features/user/components/album-list/album-list.component';
+import {MatCardModule} from '@angular/material/card';
+import { AlbumCardComponent } from './features/user/components/album-card/album-card.component';
+import { AlbumComponent } from './features/user/components/album/album.component';
 
 
 @NgModule({
@@ -112,6 +115,9 @@ import { AudioUploadDialogComponent } from './features/user/components/audio-upl
     SingleAudioUploadComponent,
     MultipleAudioUploadComponent,
     AudioUploadDialogComponent,
+    AlbumListComponent,
+    AlbumCardComponent,
+    AlbumComponent,
   ],
   imports: [
     BrowserModule,
@@ -144,6 +150,7 @@ import { AudioUploadDialogComponent } from './features/user/components/audio-upl
     MatSidenavModule,
     MatListModule,
     MatStepperModule,
+    MatCardModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     StoreModule.forRoot([]),
     StoreModule.forFeature('user',userReducer),

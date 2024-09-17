@@ -23,6 +23,8 @@ import { VideosListComponent } from './features/user/components/videos-list/vide
 import { UploadAudioComponent } from './features/user/components/upload-audio/upload-audio.component';
 import { SingleAudioUploadComponent } from './features/user/components/single-audio-upload/single-audio-upload.component';
 import { MultipleAudioUploadComponent } from './features/user/components/multiple-audio-upload/multiple-audio-upload.component';
+import { AlbumListComponent } from './features/user/components/album-list/album-list.component';
+import { AlbumComponent } from './features/user/components/album/album.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -35,7 +37,10 @@ const routes: Routes = [
       {path:'music-videos',component:VideosListComponent},
       {path:'upload-audio',component:UploadAudioComponent},
       {path:"single-audio-upload",component:SingleAudioUploadComponent},
-      {path:"multiple-audio-upload",component:MultipleAudioUploadComponent}
+      {path:"multiple-audio-upload",component:MultipleAudioUploadComponent},
+      {path:'albums',component:AlbumListComponent},
+      {path:"landing",component:UserHomeComponent},
+      {path:"album-songs/:id",component:AlbumComponent}
     ]
   },
   {path:'admin',component:AdminLoginComponent},

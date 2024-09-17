@@ -1,0 +1,53 @@
+<div id="w-w-dm-id">
+  <div data-wkik-type="responsive-container-block" class="responsive-container-block bg">
+    <p class="text-blk title">Album
+    </p>
+    <p id="w-c-s-fc_p-1-dm-id" class="text-blk heading">{{ albumData.title}}
+    </p>
+    <div data-wkik-type="responsive-container-block" class="responsive-container-block content">
+      <div data-wkik-type="responsive-cell-block" desktopcolspan="6" ipadprocolspan="6" tabletcolspan="12" mobilecolspan="12" class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 player-blk">
+        <div data-wkik-type="responsive-container-block" class="responsive-container-block info">
+          <div data-wkik-type="responsive-cell-block" desktopcolspan="6" ipadprocolspan="6" tabletcolspan="12" mobilecolspan="12" class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 desc-blk">
+            <p class="text-blk album">All in One
+            </p>
+            <p class="text-blk band">One Music
+            </p>
+          </div>
+          <div data-wkik-type="responsive-cell-block" desktopcolspan="6" ipadprocolspan="6" tabletcolspan="12" mobilecolspan="12" class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 btnblk">
+            <form class="form-blk">
+              <a id="w-c-s-bgc_p-1-dm-id" class="text-blk button">Add To Library
+              </a>
+            </form>
+          </div>
+        </div>
+        <div *ngFor="let value of albumData.songs; index as i" data-wkik-type="responsive-container-block" class="responsive-container-block player">
+          <div data-wkik-type="responsive-cell-block" desktopcolspan="4" ipadprocolspan="4" tabletcolspan="6" mobilecolspan="12" class="responsive-cell-block wk-desk-4 wk-ipadp-4 wk-tab-6 wk-mobile-12 play p1" (click)="changeSong(i)">
+          </div>
+          
+          <div data-wkik-type="responsive-cell-block" desktopcolspan="4" ipadprocolspan="4" tabletcolspan="6" mobilecolspan="12" class="responsive-cell-block wk-desk-4 wk-ipadp-4 wk-tab-6 wk-mobile-12 name">
+            <p class="text-blk name-txt">Lorem ipsum
+            </p>
+          </div>
+          <div data-wkik-type="responsive-cell-block" desktopcolspan="4" ipadprocolspan="4" tabletcolspan="6" mobilecolspan="12" class="responsive-cell-block wk-desk-4 wk-ipadp-4 wk-tab-6 wk-mobile-12 time">
+            <p class="text-blk time-txt">2:33
+            </p>
+          </div>
+        </div>
+        
+        <div data-wkik-type="responsive-container-block" class="responsive-container-block player-head">
+          <div data-wkik-type="responsive-cell-block" desktopcolspan="6" ipadprocolspan="6" tabletcolspan="12" mobilecolspan="12" class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 name-cont">
+            <p class="text-blk song-name">Lorem Ipsum
+            </p>
+          </div>
+          <div data-wkik-type="responsive-cell-block" desktopcolspan="6" ipadprocolspan="6" tabletcolspan="12" mobilecolspan="12" class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 play-cont">
+          </div>
+        </div>
+        <audio controls id="inwr">
+          <source src="" type="audio/mpeg"/>
+        </audio>
+      </div>
+      <img src="{{albumData.thumbNailLink}}" data-wkik-type="responsive-cell-block" desktopcolspan="6" ipadprocolspan="6" tabletcolspan="12" mobilecolspan="12" class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 img-blk">
+    </div>
+  </div>
+</div> 
+

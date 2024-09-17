@@ -1,4 +1,15 @@
+<p-toast />
+
+<ngx-spinner
+bdColor="rgba(51,51,51,0.8)"
+size="medium"
+color="#fff"
+type="ball-scale-multiple"
+>
+<p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
 <div class="container mx-auto p-8">
+  
   <div>
     <h2 class="text-2xl font-semibold mb-4">Upload Song Album</h2>
     <form [formGroup]="albumForm" id="album-upload" class="bg-white shadow-md rounded px-8 pt-6 pb-8" (ngSubmit)="submit()">
@@ -28,6 +39,7 @@
         </label>
         <input
           type="file"
+          #myInput
           id="albumThumbnail"
           name="albumThumbnail"
           accept="image/*"
@@ -41,6 +53,7 @@
           Choose Audio Files (Multiple Songs)
         </label>
         <input
+          #myInput
           type="file"
           id="albumFiles"
           name="albumFiles"

@@ -2,7 +2,7 @@
   <!-- Single Audio File Upload Section -->
   <div class="mb-10">
     <h2 class="text-2xl font-semibold mb-4">Upload Single Audio File</h2>
-    <form id="single-audio-upload" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <form [formGroup]="songForm" id="single-audio-upload" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" (ngSubmit)="submit()">
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="songTitle">
           Song Title
@@ -11,9 +11,42 @@
           type="text"
           id="songTitle"
           name="songTitle"
+          formControlName="title"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Enter song title"
+          placeholder="Enter song title" AlphabetValidator
         />
+        <span style="color: red;" *ngIf="songForm.invalid && songForm.controls['title'].touched">
+          Please enter a valid album title
+        </span>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="Genre">
+          Genre
+        </label>
+        <input
+          type="text"
+          id="songTitle"
+          name="genre"
+          formControlName="genre"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Enter song genre" AlphabetValidator
+        />
+        <span style="color: red;" *ngIf="songForm.invalid && songForm.controls['genre'].touched">
+          Please enter a valid genre
+        </span>
+      </div>
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="audioFile">
+          Choose Thumbnail
+        </label>
+        <input
+          type="file"
+          id="audioFile"
+          name="audioFile"
+          accept="audio/*"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" (change)="onselectedThumbnail($event)"
+        />
+        
       </div>
       <div class="mb-6">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="audioFile">
@@ -24,8 +57,9 @@
           id="audioFile"
           name="audioFile"
           accept="audio/*"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" (change)="onSelectedFile($event)"
         />
+        
       </div>
       <div class="flex items-center justify-between">
         <button
@@ -38,6 +72,5 @@
     </form>
   </div>
 
-  <!-- Album Upload Section -->
  
 </div>
