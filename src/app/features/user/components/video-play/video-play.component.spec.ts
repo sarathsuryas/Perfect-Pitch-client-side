@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AlbumComponent } from './album.component';
+import { VideoPlayComponent } from './video-play.component';
 
-describe('AlbumComponent', () => {
-  let component: AlbumComponent;
-  let fixture: ComponentFixture<AlbumComponent>;
+describe('VideoPlayComponent', () => {
+  let component: VideoPlayComponent;
+  let fixture: ComponentFixture<VideoPlayComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AlbumComponent]
+      declarations: [VideoPlayComponent]
     });
-    fixture = TestBed.createComponent(AlbumComponent);
+    fixture = TestBed.createComponent(VideoPlayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

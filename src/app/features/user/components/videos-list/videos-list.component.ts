@@ -10,10 +10,10 @@ import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 export class VideosListComponent implements OnInit {
  constructor(private readonly _userService:UserService) {}
 videos:IVideoList[] = []
-
   ngOnInit(): void {
     this._userService.getVideoList().subscribe((data)=>{
      this.videos = data
+     console.log(data)
     })
   }
 

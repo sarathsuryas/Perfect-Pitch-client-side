@@ -7,4 +7,5 @@ export interface IUserData {
     token:string;
     phone:number;
     profileImage:string;
+    subscribers:[]
 }

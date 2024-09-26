@@ -6,8 +6,8 @@
 
 
 <mat-toolbar style="background-color:#181818;">
-  <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
-    <mat-icon>menu</mat-icon>
+  <button mat-icon-button aria-label="Menu icon" class="" (click)="toggleMenu()">
+    <mat-icon class="text-white">menu</mat-icon>
   </button>
   <div class="flex">
     <a class="font-semibold text-white pt-[5px]">
@@ -55,8 +55,8 @@
 </mat-toolbar> 
 
 
-<mat-sidenav-container autosize="true" class="h-fit">
-  <mat-sidenav [ngClass]="!isCollapsed ? 'expanded' : ''" [mode]="isMobile ? 'over' : 'side'"
+<mat-sidenav-container autosize="true" style="scrollbar-width: none;" class="h-fit delay-300 transition-all animate-popup">
+  <mat-sidenav [ngClass]="!isCollapsed ? 'expanded animate-slideInFromLeft' : 'animate-slideInFromRight'" [mode]="isMobile ? 'over' : 'side'"
     [opened]="isMobile ? 'false' : 'true'">
     <mat-nav-list>
       <a mat-list-item routerLink="landing">

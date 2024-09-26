@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './core/user/static-components/nav-bar/nav-bar.component';
@@ -77,7 +76,17 @@ import { AudioUploadDialogComponent } from './features/user/components/audio-upl
 import { AlbumListComponent } from './features/user/components/album-list/album-list.component';
 import {MatCardModule} from '@angular/material/card';
 import { AlbumCardComponent } from './features/user/components/album-card/album-card.component';
-import { AlbumComponent } from './features/user/components/album/album.component';
+import {VgCoreModule} from '@videogular/ngx-videogular/core';
+import {VgControlsModule} from '@videogular/ngx-videogular/controls';
+import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
+import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
+import { VideoPlayComponent } from './features/user/components/video-play/video-play.component';
+import { NgxAudioPlayerModule } from '@khajegan/ngx-audio-player';
+import { AlbumSongsListComponent } from './features/user/components/album-songs-list/album-songs-list.component';
+import { AudioPlayerComponent } from './features/user/components/audio-player/audio-player.component';
+import { VideoCardComponent } from './features/user/components/video-card/video-card.component';
+import { VideoPlayerComponent } from './features/user/components/video-player/video-player.component';
+import { CommentComponent } from './features/user/components/comment/comment.component';
 
 
 @NgModule({
@@ -117,7 +126,12 @@ import { AlbumComponent } from './features/user/components/album/album.component
     AudioUploadDialogComponent,
     AlbumListComponent,
     AlbumCardComponent,
-    AlbumComponent,
+    VideoPlayComponent,
+    AlbumSongsListComponent,
+    AudioPlayerComponent,
+    VideoCardComponent,
+    VideoPlayerComponent,
+    CommentComponent,
   ],
   imports: [
     BrowserModule,
@@ -151,6 +165,11 @@ import { AlbumComponent } from './features/user/components/album/album.component
     MatListModule,
     MatStepperModule,
     MatCardModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule,
+    NgxAudioPlayerModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     StoreModule.forRoot([]),
     StoreModule.forFeature('user',userReducer),

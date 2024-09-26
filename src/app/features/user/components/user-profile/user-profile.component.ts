@@ -26,6 +26,7 @@ export class UserProfileComponent implements OnInit {
   presignedUrl: string = '';
   fileObj!: File;
   userId!:string | undefined
+  uniqueKey:string = ''
 
   constructor(
     private _userService: UserService,
@@ -125,14 +126,17 @@ export class UserProfileComponent implements OnInit {
       
     }
     const myId = uuidv4();
-    this._userService.getPresignedUrl("uuid"+ myId + this.fileObj.name , this.fileObj.type,"userProfilePicture").subscribe((result) => {
+    this._userService.getPresignedUrl( myId + this.fileObj.name , this.fileObj.type).subscribe((result) => {
       if (result.success) {
         const fileuploadurl = result.presignedUrl.url
+        this.uniqueKey = result.presignedUrl.uniqueKey
         const imageForm = new FormData();
         imageForm.append('file', this.fileObj);
        
         this._userService.profileImageUpload(fileuploadurl, this.fileObj.type, this.fileObj).subscribe((result) => {
-          console.log(result, 'result data')
+         if(result) {
+          this._userService.submitProfileImageDetails(this.uniqueKey).subscribe()
+         }
         },
 
         ),

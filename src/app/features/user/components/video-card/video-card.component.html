@@ -1,0 +1,44 @@
+
+<div  id="trending music videos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-black">
+  <!-- component -->
+  <div *ngFor="let v of videos; index as i" class="relative flex flex-col bg-gray-800">
+    <a routerLink="/home/play-video/{{v._id}}">
+    <div class="min-h-28">
+      <div class="ml-3 mx-auto py-4">
+        <!-- <h2 class="font-black  text-white uppercase">
+          Live Streaming
+        </h2> -->
+
+        <div class="mx-4">
+          <div class="md:w-full ">
+            <div class="wrap-video">
+              <video class="object-cover h-[240px] w-full bg-black" [muted]="'muted'"  onmouseover="this.play()"
+                onmouseout="this.pause();">
+                <source src="{{v.link}}" type="video/mp4">
+              </video>
+            </div>
+            <span class="pt-4 grid grid-cols-6 gap-4">
+              <span class="col-start-1 col-end-3 font-bold text-lg text-white uppercase font-mono">
+                {{v.title}}
+              </span>
+              <span class="col-end-7 col-span-2 text-sm text-slate-500 uppercase font-mono flex justify-end">
+                <span class="">
+                  {{v.description}}
+                </span>
+              </span>
+            </span>
+            <span class="block text-slate-400 text-xs uppercase font-mono">
+              {{v.artist}}
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </div>
+  </a>
+  </div>
+
+</div>

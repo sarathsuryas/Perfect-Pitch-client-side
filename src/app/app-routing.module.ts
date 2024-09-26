@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UserRoutingModule } from './core/routes/user-routing.module';
-import { AdminRoutingModule } from './core/routes/admin-routing.module';
 import { AdminLoginComponent } from './features/admin/components/admin-login/admin-login.component';
 import { AdminMainComponent } from './features/admin/components/admin-main/admin-main.component';
 import { AdminAuthGuard } from './core/admin/guards/admin-auth.guard';
@@ -18,13 +16,13 @@ import { AdminResetPasswordFormComponent } from './features/admin/components/adm
 import { UserForgotPasswordComponent } from './features/user/components/user-forgot-password/user-forgot-password.component';
 import { UserResetPasswordFormComponent } from './features/user/components/user-reset-password-form/user-reset-password-form.component';
 import { UserProfileComponent } from './features/user/components/user-profile/user-profile.component';
-import { UploadVideoComponent } from './features/user/components/upload-video/upload-video.component';
 import { VideosListComponent } from './features/user/components/videos-list/videos-list.component';
 import { UploadAudioComponent } from './features/user/components/upload-audio/upload-audio.component';
 import { SingleAudioUploadComponent } from './features/user/components/single-audio-upload/single-audio-upload.component';
 import { MultipleAudioUploadComponent } from './features/user/components/multiple-audio-upload/multiple-audio-upload.component';
 import { AlbumListComponent } from './features/user/components/album-list/album-list.component';
-import { AlbumComponent } from './features/user/components/album/album.component';
+import { AlbumSongsListComponent } from './features/user/components/album-songs-list/album-songs-list.component';
+import { VideoPlayComponent } from './features/user/components/video-play/video-play.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -40,7 +38,8 @@ const routes: Routes = [
       {path:"multiple-audio-upload",component:MultipleAudioUploadComponent},
       {path:'albums',component:AlbumListComponent},
       {path:"landing",component:UserHomeComponent},
-      {path:"album-songs/:id",component:AlbumComponent}
+      {path:"album-songs/:id",component:AlbumSongsListComponent},
+      {path:"play-video/:id",component:VideoPlayComponent}
     ]
   },
   {path:'admin',component:AdminLoginComponent},

@@ -20,6 +20,9 @@ import { ISumbitAlbumDetails } from 'src/app/core/dtos/ISubmitAlbumDetails.dto';
 import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
 import { ISubmitSongDetailsDto } from 'src/app/core/dtos/ISubmitSongDetails.dto';
 import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
+import { IVideoDetails } from 'src/app/core/interfaces/IVideoDetails';
+import { IResponseVideo } from 'src/app/core/interfaces/IResponseVideo';
+import { IVideoCommentDto } from 'src/app/core/dtos/IVideoComment.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -62,8 +65,8 @@ export class UserService {
     return this._http.get<IUserData>(`${this.api}/get-user-data`)
   }
 
-  getPresignedUrl(fileName: string, contentType: string, uploadType: string): Observable<ICustomResponse> {
-    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`, { fileName, contentType, uploadType })
+  getPresignedUrl(fileName: string, contentType: string,): Observable<ICustomResponse> {
+    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`, { fileName, contentType })
   }
 
 
@@ -87,6 +90,12 @@ export class UserService {
       });
     return this._http.request(req);
   }
+
+  submitProfileImageDetails(uniqueKey:string) {
+    return this._http.put(`${this.api}/submit-profile-image-details`,{uniqueKey})
+  }
+ 
+
 
   mediaUpload(fileuploadurl: string, contenttype: string, file: File) {
     const headers = new HttpHeaders({ 'Content-Type': contenttype });
@@ -167,13 +176,28 @@ export class UserService {
     return this._http.get<IAlbumData[]>(`${this.api}/get-albums`)
   }
 
-submitSongDetails(data:ISubmitSongDetailsDto) {
-  const file = JSON.stringify(data)
-  return this._http.post(`${this.api}/submit-audio-details`,{file})
-}
+  submitSongDetails(data: ISubmitSongDetailsDto) {
+    const file = JSON.stringify(data)
+    return this._http.post(`${this.api}/submit-audio-details`, { file })
+  }
 
-getAlbumDetails(id:string):Observable<IAlbumDetails> {
-  return this._http.get<IAlbumDetails>(`${this.api}/album-details?id=${id}`)
-}
+  getAlbumDetails(id: string): Observable<IAlbumDetails> {
+    return this._http.get<IAlbumDetails>(`${this.api}/album-details?id=${id}`)
+  }
+
+  getVideoDetails(id:string):Observable<IResponseVideo>{
+    return this._http.get<IResponseVideo>(`${this.api}/get-video-page-details?id=${id}`)
+  }
+
+  likeVideo(videoId:string):Observable<string> {
+   return this._http.put<string>(`${this.api}/like-video`,{videoId})
+  }
+  subscribeUser(subscribedUserId:string) {
+    return this._http.put(`${this.api}/subscribe-user`,{subscribedUserId})
+  }
+
+  commentVideo(comment:IVideoCommentDto) {
+    return this._http.post(`${this.api}/add-video-comment`,comment)
+  }
 
 }
