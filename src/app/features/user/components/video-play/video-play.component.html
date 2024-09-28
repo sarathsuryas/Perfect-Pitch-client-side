@@ -61,7 +61,9 @@
         [userProfileImage]="userImage" 
         [userName]="userName"
         [commentss]="comments"
-        
+        [commentId]="commentId"
+        (cId)="newLikeComment($event)"
+        [userId]="userId"
         >
         </app-comment>
        </div>

@@ -21,7 +21,6 @@ export class EditUserComponent {
     this.editForm = this.fb.group({
       fullName: [this.data.fullName, Validators.required],
       email: [this.data.email, [Validators.required]],
-      phone: [this.data.phone, [Validators.compose([Validators.required,Validators.minLength(10)])]]
     });
   }
 

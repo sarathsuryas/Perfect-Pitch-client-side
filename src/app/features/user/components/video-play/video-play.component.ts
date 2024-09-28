@@ -18,7 +18,6 @@ import { IResponseVideo } from 'src/app/core/interfaces/IResponseVideo';
 })
 export class VideoPlayComponent implements OnInit {
 
-
   @ViewChild('title') title!: ElementRef;
   @ViewChild('artist') artist!: ElementRef;
   @ViewChild('description') description!: ElementRef;
@@ -40,9 +39,11 @@ export class VideoPlayComponent implements OnInit {
   userImage: string = ''
   userName: string = ''
   currentVideoId: string = ''
-  comments!:ICommentResponse
+  comments:ICommentResponse[] = []
   suggestedVideoComments:ISuggestionCommentResponse[] = []
   suggestComments:any[] = []
+  commentId:string = ''
+  newLikeCommentId:string = ''
 
   constructor(private _userService: UserService, private route: ActivatedRoute, private _store: Store) { }
 
@@ -68,6 +69,7 @@ export class VideoPlayComponent implements OnInit {
      this.suggestedVideoComments = data.suggestedVideoComments
       this.artistId = data.userId
       this.comments = data.comments
+      
       // this.suggestedVideoComments =  data.suggestedVideoComments
       if (data.video.like.includes(uId as never)) {
         this.like = true
@@ -85,7 +87,7 @@ export class VideoPlayComponent implements OnInit {
 
   currentIndex = 0;
 
-  api!: { getDefaultMedia: () => { (): any; new(): any; subscriptions: { (): any; new(): any; loadedMetadata: { (): any; new(): any; subscribe: { (arg0: () => void): void; new(): any; }; }; ended: { (): any; new(): any; subscribe: { (arg0: () => void): void; new(): any; }; }; }; }; play: () => void; };
+  
 
   onClickPlaylistVideo(item: IVideoDetails, index: number) {
     this.currentIndex = index;
@@ -166,13 +168,21 @@ export class VideoPlayComponent implements OnInit {
   addComment(comment: string) {
     const obj: IVideoCommentDto = {
       videoId: this.currentVideoId,
-      userName: this.userName,
       comment: comment,
-      profileImage: this.userImage,
     }
-    this._userService.commentVideo(obj).subscribe()
+    this._userService.commentVideo(obj).subscribe((data)=>{
+      this.commentId = data.commentId
+    })
+  }
+  newLikeComment(commentId: string) {
+    this.newLikeCommentId = commentId
+    this.likeComment(this.newLikeCommentId)
   }
 
+  likeComment(commentId:string) {
+    this._userService.likeComment(commentId).subscribe()
+  }   
+   
 
 
 }

@@ -1,4 +1,4 @@
-import {  Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ICommentDetails } from 'src/app/core/interfaces/ICommentDetails';
 import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
 
@@ -21,94 +21,97 @@ import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
   styleUrls: ['./comment.component.css']
 })
 export class CommentComponent {
-  
-  @Input() userProfileImage:string = ''
-  @Input() userName:string = ''
+
+  @Input() userProfileImage: string = ''
+  @Input() userName: string = ''
   @Output() comment = new EventEmitter<string>();
-  @Input() commentss!:ICommentResponse
-  comments: ICommentDetails[]  = []
+  @Input() commentss: ICommentResponse[] = []
+  @Input() commentId: string = ''
+  @Output() cId = new EventEmitter<string>()
+  @Input() userId:string = ''
+  commentLikes:[] = []
+
+
+
+  comments: ICommentResponse[] = []
   currentUser = {
     name: 'Current User',
     avatar: 'kldfdfsdpl'
   };
   constructor() {
-    setTimeout(() => {
-      this.comments = this.commentss.comments
-      
-    }, 1000);
+  
   }
 
   ngOnChanges() {
-    
+     this.comments = this.commentss
+    for (const element of this.comments) {
+        this.commentLikes.push(element.likes.length as never)
+    }
+   
   }
 
   newCommentText = '';
 
 
   addComment() {
-    if (this.newCommentText.trim()) {
-       this.comment.emit(this.newCommentText)
-      
-      const newComment: ICommentDetails = {
-        userName: this.userName,
-        profileImage: this.userProfileImage,
-        comment: this.newCommentText,
-        likes: 0,
-        dislikes: 0,
-        timestamp: 'Just now',
-        replies: [],
-        showReplyInput: undefined,
-        _id: '',
-        userId: ''
-      };
-       this.comments.unshift(newComment);
-      this.newCommentText = '';
-    }
-  }
+    this.comment.emit(this.newCommentText) 
+    setTimeout(()=>{
+      if (this.newCommentText.trim()) {
+            const newComment: ICommentResponse = {
+              comment: this.newCommentText,
+              likes: [],
+              userId: {
+                fullName: this.userName,
+                profileImage: this.userProfileImage
+              },
+              _id:this.commentId,
+              videoId: ''
+            };
 
-  likeComment(comment: ICommentDetails) {
-    comment.likes++;
+            this.comments.unshift(newComment);
+            this.newCommentText = '';
+          }
+        },3000)
     
   }
 
-  dislikeComment(comment:ICommentDetails) {
-    comment.dislikes++;
+  likeComment(commentId:string) {
+      this.cId.emit(commentId)
   }
 
-  toggleReplyInput(comment: ICommentDetails) {
-    comment.showReplyInput = !comment.showReplyInput;
-    if (!comment.showReplyInput) {
-      comment.replyText = '';
-    }
+ 
+
+  toggleReplyInput() {
+    // comment.showReplyInput = !comment.showReplyInput;
+    // if (!comment.showReplyInput) {
+    //   comment.replyText = '';
+    // }
   }
 
-  cancelReply(comment: ICommentDetails) {
-    comment.showReplyInput = false;
-    comment.replyText = '';
+  cancelReply() {
+    // comment.showReplyInput = false;
+    // comment.replyText = '';
   }
 
-  addReply(comment: ICommentDetails) {
-    if (comment.replyText && comment.replyText.trim()) {
-      const newReply: ICommentDetails = {
-        _id: '',
-        userName: this.userName,
-        profileImage: this.userProfileImage,
-        comment: comment.replyText,
-        likes: 0,
-        dislikes: 0,
-        timestamp: 'Just now',
-        replies: [],
-        showReplyInput: undefined,
-        userId: ''
-      };
-      comment.replies.push(newReply as never);
-      this.cancelReply(comment);
-    }
+  addReply() {
+    // if (comment.replyText && comment.replyText.trim()) {
+    //   const newReply: ICommentDetails = {
+    //     comment: comment.replyText,
+    //     likes: 0,
+    //     dislikes: 0,
+    //     timestamp: 'Just now',
+    //     replies: [],
+    //     showReplyInput: undefined,
+    //     userId: ''
+    //   };
+    //   comment.replies.push(newReply as never);
+    //   this.cancelReply(comment);
+    // }
   }
 
 
 
-// sample
+  // sample
 
   // currentUser = {
   //   name: 'Current User',

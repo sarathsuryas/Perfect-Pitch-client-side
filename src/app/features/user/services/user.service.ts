@@ -20,9 +20,9 @@ import { ISumbitAlbumDetails } from 'src/app/core/dtos/ISubmitAlbumDetails.dto';
 import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
 import { ISubmitSongDetailsDto } from 'src/app/core/dtos/ISubmitSongDetails.dto';
 import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
-import { IVideoDetails } from 'src/app/core/interfaces/IVideoDetails';
 import { IResponseVideo } from 'src/app/core/interfaces/IResponseVideo';
 import { IVideoCommentDto } from 'src/app/core/dtos/IVideoComment.dto';
+import { IComment } from 'src/app/core/interfaces/IComments';
 
 @Injectable({
   providedIn: 'root'
@@ -196,8 +196,12 @@ export class UserService {
     return this._http.put(`${this.api}/subscribe-user`,{subscribedUserId})
   }
 
-  commentVideo(comment:IVideoCommentDto) {
-    return this._http.post(`${this.api}/add-video-comment`,comment)
+  commentVideo(comment:IVideoCommentDto):Observable<IComment> {
+    return this._http.post<IComment>(`${this.api}/add-video-comment`,comment) 
+  }
+  likeComment(commentId:string){ 
+    alert(commentId)
+    return this._http.patch(`${this.api}/like-comment`,{commentId})
   }
 
 }

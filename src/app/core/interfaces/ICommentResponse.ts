@@ -1,6 +1,11 @@
-import { ICommentDetails } from "./ICommentDetails";
 
 export interface ICommentResponse {
-  _id:string;
-  comments:ICommentDetails[]
+  _id:string,
+    videoId:string,
+    comment:string,
+    userId: {
+      fullName:string;
+      profileImage:string 
+    }
+    likes:[],
 }

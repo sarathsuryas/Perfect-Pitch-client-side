@@ -33,28 +33,28 @@
     
     <!-- Comment list -->
     <div *ngIf="comments" class="space-y-6">
-         <div *ngFor="let comment of comments" class="flex space-x-4">
-           <img  [src]="comment.profileImage"  class="w-10 h-10 rounded-full">
+         <div *ngFor="let comment of comments"  class="flex space-x-4">
+           <img  [src]="comment.userId.profileImage"  class="w-10 h-10 rounded-full">
            <div class="flex-grow">
 
              <div class="flex items-center space-x-2">
-               <span class="font-semibold">{{ comment.userName }}</span>
+               <span class="font-semibold">{{ comment.userId.fullName}}</span>
                <span class="text-gray-500 text-sm">just now</span>
              </div>
              <p class="mt-1">{{ comment.comment}}</p>
              <div class="flex items-center space-x-4 mt-2">
                <button 
-                 (click)="likeComment(comment)" 
+                 (click)="likeComment(comment._id)" 
                  class="flex items-center space-x-1 text-gray-500 hover:text-blue-500"
                >
                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                  </svg>
-                 <span>{{ comment.likes}}</span>
+                 <span>{{ comment.likes.length}}</span>
                </button>
               
                <button 
-                 (click)="toggleReplyInput(comment)" 
+                 (click)="toggleReplyInput()" 
                  class="text-gray-500 hover:text-blue-500"
                >
                  Reply
@@ -62,35 +62,35 @@
              </div>
              
              <!-- Reply input -->
-             <div  *ngIf="comment.showReplyInput" class="mt-4 flex items-start space-x-4">
+             <div  *ngIf="comment" class="mt-4 flex items-start space-x-4">
                <img  src="{{userProfileImage}}" alt="Current user" class="w-8 h-8 rounded-full">
                <div class="flex-grow">
                  <input 
-                   [(ngModel)]="comment.replyText" 
+                   [(ngModel)]="comment.comment" 
                    placeholder="Add a public reply..." 
                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                  >
                  <div class="flex justify-end mt-2 space-x-2">
                    <button 
-                     (click)="cancelReply(comment)" 
+                     (click)="cancelReply()" 
                      class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-full"
                    >
                      Cancel
                    </button>
-                   <button 
-                     (click)="addReply(comment)" 
+                   <!-- <button 
+                     (click)="addReply()" 
                      [disabled]="!comment.replyText?.trim()" 
                      class="px-4 py-2 bg-blue-500 text-white rounded-full disabled:opacity-50"
                    >
                      Reply
-                   </button>
+                   </button> -->
                  </div>
                </div>
              </div>
              
              <!-- Replies -->
-             <div  class="mt-4 space-y-4">
-               <div *ngFor="let reply of comment.replies" class="flex space-x-4">
+             <!-- <div  class="mt-4 space-y-4">
+               <div *ngFor="let reply of comment" class="flex space-x-4">
                  <img [src]="reply.profileImage" [alt]="reply.userName" class="w-8 h-8 rounded-full">
                  <div>
                    <div class="flex items-center space-x-2">
@@ -120,7 +120,7 @@
                    </div>
                  </div>
                </div>
-             </div>
+             </div> -->
            </div>
          </div>
        

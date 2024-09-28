@@ -8,7 +8,7 @@ export interface IResponseVideo {
   suggestions:IVideoDetails[]
   userId:string;
   profileImage:string;
-  comments:ICommentResponse
+  comments:ICommentResponse[]
   userName:string;
   suggestedVideoComments: ISuggestionCommentResponse[]
 }

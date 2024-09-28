@@ -32,13 +32,8 @@ export class UserRegisterComponent {
     this.registerForm = this._fb.group({
       fullName: ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       email: ['', Validators.required],
-      phone: ['', Validators.compose([Validators.required,Validators.maxLength(10)])],
       password: ['', Validators.compose([Validators.required])],
-      confirmPassword: ['', Validators.required]
-    }, {
-      validators: Validation.match('password', 'confirmPassword')
-    }
-    )
+    })
 
 
   }
@@ -51,13 +46,12 @@ export class UserRegisterComponent {
 
 
     if (!this.registerForm.invalid) {
-      const { fullName, email, phone, confirmPassword } = this.registerForm.value
-      const parseData = parseInt(phone)
+      const { fullName, email, password } = this.registerForm.value
+      
       const obj: RegisterUserDto = {
         fullName: fullName,
         email: email,
-        phone: parseData,
-        password: confirmPassword
+        password: password
       }
       this._store.dispatch(registerUser({ userData: obj }))
       this.error$.subscribe((data) => {
