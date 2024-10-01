@@ -5,7 +5,6 @@ export type userModel = {
   isAdmin:boolean;
   isBlocked:boolean;
   profileImage?:string;
-  phone?:number;
 }
 
 

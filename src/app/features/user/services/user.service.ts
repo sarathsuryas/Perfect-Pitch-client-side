@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { debounceTime, map, Observable, tap } from 'rxjs';
 import { userModel } from '../../../store/user/user.model';
 import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
@@ -12,7 +12,7 @@ import { IReturnEdit } from 'src/app/core/interfaces/IReturnEdit';
 import { ICustomResponse } from 'src/app/core/interfaces/ICustomResponse';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { logOut } from 'src/app/store/user/user.action';
+import { logOut, removeToken } from 'src/app/store/user/user.action';
 import { IVideoUploadDto } from 'src/app/core/dtos/IVideoUpload.dto';
 import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 import { IPreSignedUrls } from 'src/app/core/interfaces/IPresignedUrls';
@@ -23,6 +23,11 @@ import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
 import { IResponseVideo } from 'src/app/core/interfaces/IResponseVideo';
 import { IVideoCommentDto } from 'src/app/core/dtos/IVideoComment.dto';
 import { IComment } from 'src/app/core/interfaces/IComments';
+import { IGoogleLoginDto } from 'src/app/core/dtos/IGoogleLogin.dto';
+import { selectIsAuthUser } from 'src/app/store/user/user.selector';
+import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
+import { ICommentReply } from 'src/app/core/interfaces/ICommentReply';
+import { ICommentReplyDto } from 'src/app/core/dtos/ICommentReply.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +48,10 @@ export class UserService {
   userLogin(email: string, password: string): Observable<IUserData> {
     return this._http.post<IUserData>(`${this.api}/login`, { email, password }, { withCredentials: true })
   }
+  googleLogin(data:IGoogleLoginDto): Observable<IUserData> {
+    return this._http.post<IUserData>(`${this.api}/google-login`, data, { withCredentials: true })
+  }
+
   resendOtp(userData: string): Observable<string> {
     return this._http.post<string>(`${this.api}/resend-otp`, { userData })
   }
@@ -137,8 +146,9 @@ export class UserService {
 
   logOut() {
     this._cookieService.delete('token')
-    this._cookieService.delete('refreshToken')
+    this._cookieService.delete('refreshToken') 
     this._store.dispatch(logOut())
+    this._store.select(selectIsAuthUser).subscribe((data)=>console.log(data))
     this._router.navigate([''])
   }
 
@@ -189,6 +199,10 @@ export class UserService {
     return this._http.get<IResponseVideo>(`${this.api}/get-video-page-details?id=${id}`)
   }
 
+  getComments(videoId:string):Observable<ICommentResponse[]>{
+   return this._http.get<ICommentResponse[]>(`${this.api}/get-comments?id=${videoId}`)
+  }
+
   likeVideo(videoId:string):Observable<string> {
    return this._http.put<string>(`${this.api}/like-video`,{videoId})
   }
@@ -200,8 +214,18 @@ export class UserService {
     return this._http.post<IComment>(`${this.api}/add-video-comment`,comment) 
   }
   likeComment(commentId:string){ 
-    alert(commentId)
     return this._http.patch(`${this.api}/like-comment`,{commentId})
+  }
+  replyComment(reply:ICommentReplyDto) {
+    return this._http.post(`${this.api}/reply-comment`,{reply})
+  }
+
+  getReply(commentId:string):Observable<ICommentReply[]> {
+    return this._http.get<ICommentReply[]>(`${this.api}/get-replies?id=${commentId}`)
+  }
+
+  likeReply(replyId:string) {
+    return this._http.patch(`${this.api}/like-reply`,{replyId})
   }
 
 }

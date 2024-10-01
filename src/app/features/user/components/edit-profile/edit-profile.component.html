@@ -14,18 +14,7 @@
       </mat-form-field>
     </div>
 
-    <div class="form-row">
-      <mat-form-field class="form-field" appearance="fill">
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="phone" NumberValidator/>
-        <mat-error *ngIf="editForm.controls['phone'].invalid">
-          Phone number is <strong>Not Valid</strong>
-        </mat-error>
-        <mat-error *ngIf="editForm.controls['phone'].value.length === 0 && submitted">
-          Phone number is <strong>required</strong>
-        </mat-error>
-      </mat-form-field>
-    </div>
+   
   </form>
 </div>
 <div mat-dialog-actions>

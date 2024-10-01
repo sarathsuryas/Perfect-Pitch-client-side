@@ -107,8 +107,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   logout() {
-    this._cookieService.delete('token')
-    this._store.dispatch(logOut())
     this._userService.logOut()
   }
 

@@ -13,7 +13,7 @@ import { UserState } from 'src/app/store/user/user.state';
 
 @Component({
   selector: 'app-otp',
-  templateUrl: './otp.component.html',
+  templateUrl:'./otp.component.html',
   styleUrls: ['./otp.component.css']
 })
 export class OtpComponent implements OnInit {

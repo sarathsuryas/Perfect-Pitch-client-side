@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { loginUser, loginUserFail, loginUserSuccess, registerUser, registerUserFail, registerUserSuccess, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
+import { googleLoginFail, googleLoginUser, googleLoginUserSuccess, loginUser, loginUserFail, loginUserSuccess, registerUser, registerUserFail, registerUserSuccess, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
 import { UserService } from "../../features/user/services/user.service";
-import { catchError, exhaustMap, map, mergeMap, of, tap } from "rxjs";
+import { catchError, exhaustMap, map, mergeMap, of, tap,delay } from "rxjs";
 import { CookieService } from "ngx-cookie-service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Router } from "@angular/router";
-import { Token } from "@angular/compiler";
 import { addUser, addUserFail, addUserSuccess, blockUser, blockUserFail, blockUserSuccess, editUser, editUserFail, editUserSuccess, getUsers, getUsersFail, getUsersSuccess } from "../admin/admin.action";
 import { AdminService } from "src/app/features/admin/services/admin.service";
 import { IUserData } from "src/app/core/interfaces/IUserData";
@@ -113,6 +112,37 @@ export class UserEffects {
    )
  )
  
+
+$googleLogin = createEffect(()=>
+  this._actions$.pipe(
+    ofType(googleLoginUser),
+    tap(() =>this._spinner.show()),
+    exhaustMap((action)=>
+      this._userService.googleLogin(action.userData).pipe(
+        tap(data=> this._cookieService.set('token',data.token,{path:''})),
+        map((data)=>googleLoginUserSuccess({userData:data})),
+        tap((data)=>{
+          if(data) {
+            this._spinner.hide()
+            this._router.navigateByUrl('home')
+          }
+         }),
+        catchError((error)=>of(googleLoginFail(error)).pipe(
+          tap((data)=>{
+            console.log(data,'error')  
+            if(data) {
+               this._spinner.hide()
+            }
+           })
+        )
+      )
+      )
+    )
+  )
+)
+
+
+
 
  /// get users data 
 

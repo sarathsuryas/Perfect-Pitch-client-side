@@ -8,7 +8,6 @@ import { UserLoginComponent } from './features/user/components/user-login/user-l
 import { UserRegisterComponent } from './features/user/components/user-register/user-register.component';
 import { OtpComponent } from './shared/user/components/otp/otp.component';
 import { UserHomeComponent } from './features/user/components/user-home/user-home.component';
-import { NavBarComponent } from './core/user/static-components/nav-bar/nav-bar.component';
 import { UserMainComponent } from './features/user/components/user-main/user-main.component';
 import { UserAuthGuard } from './core/user/guards/user-auth.guard';
 import { AdminResetPasswordComponent } from './features/admin/components/admin-reset-password/admin-reset-password.component';

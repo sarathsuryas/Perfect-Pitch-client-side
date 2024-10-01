@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { loginUser, loginUserFail, loginUserSuccess, logOut, registerUser, registerUserFail, registerUserSuccess, removeToken, userSetTokenFromCookie, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
+import { googleLoginFail, googleLoginUser, googleLoginUserSuccess, loginUser, loginUserFail, loginUserSuccess, logOut, registerUser, registerUserFail, registerUserSuccess, removeToken, userSetTokenFromCookie, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
 import { initialState } from "./user.state";
 import { addUser, addUserFail, addUserSuccess, blockUser, blockUserFail, blockUserSuccess, editUser, editUserFail, editUserSuccess, getUsers, getUsersFail, getUsersSuccess, searchUser } from "../admin/admin.action";
 
@@ -137,5 +137,22 @@ on(blockUserFail,(state,{error})=>({
  on(removeToken,(state)=>({
   ...state,
   token:null
+ })),
+ on(googleLoginUser,(state)=>({
+  ...state,
+  isLoading:true,
+  error:null
+ })),
+ on(googleLoginUserSuccess,(state,action)=>({
+  ...state,
+  isLoading:false,
+  user:action.userData,
+  token:action.userData.token,
+  error:null
+ })),
+ on(googleLoginFail,(state,action)=>({
+  ...state,
+  isLoading:false,
+  error:action.error
  }))
 )

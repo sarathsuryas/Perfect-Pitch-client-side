@@ -2,6 +2,7 @@ import { createAction, props } from "@ngrx/store";
 import { RegisterUserDto } from "src/app/core/dtos/registerUserDto";
 import { userModel } from "./user.model";
 import { IUserData } from "src/app/core/interfaces/IUserData";
+import { IGoogleLoginDto } from "src/app/core/dtos/IGoogleLogin.dto";
 
     // user registration
 export const registerUser = createAction('[User] Register User',props<{userData:RegisterUserDto}>())
@@ -25,8 +26,15 @@ export const closeSidebar = createAction('[User] close SideBar')
 // logout
 
 export const logOut = createAction('[User] logout')
-export const removeToken = createAction('[User] Remove Token')
+
 
 // set token from cookie
 export const userSetTokenFromCookie = createAction('[User] set token from cookie',props<{token:string}>())
+
+// googleLoginUser
+
+export const googleLoginUser = createAction('[User] google Login',props<{userData:IGoogleLoginDto}>())
+export const googleLoginUserSuccess = createAction('[User] google Login Success',props<{userData:IUserData}>())
+export const googleLoginFail = createAction('[User] google Login Fail',props<{error:string}>())
+export const removeToken = createAction('[User] Remove Token')
 

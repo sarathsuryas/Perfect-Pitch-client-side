@@ -1,6 +1,3 @@
-import { ICommentDetails } from "./ICommentDetails";
-import { ICommentResponse } from "./ICommentResponse";
-import { ISuggestionCommentResponse } from "./ISuggestionCommentResponse";
 import { IVideoDetails } from "./IVideoDetails";
 
 export interface IResponseVideo {
@@ -8,7 +5,5 @@ export interface IResponseVideo {
   suggestions:IVideoDetails[]
   userId:string;
   profileImage:string;
-  comments:ICommentResponse[]
   userName:string;
-  suggestedVideoComments: ISuggestionCommentResponse[]
 }

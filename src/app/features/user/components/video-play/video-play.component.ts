@@ -4,10 +4,8 @@ import { UserService } from '../../services/user.service';
 import { IVideoDetails } from 'src/app/core/interfaces/IVideoDetails';
 import { Store } from '@ngrx/store';
 import { IVideoCommentDto } from 'src/app/core/dtos/IVideoComment.dto';
-import { ICommentDetails } from 'src/app/core/interfaces/ICommentDetails';
 import { ISuggestionCommentResponse } from 'src/app/core/interfaces/ISuggestionCommentResponse';
 import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
-import { IResponseVideo } from 'src/app/core/interfaces/IResponseVideo';
 
 
 
@@ -39,8 +37,6 @@ export class VideoPlayComponent implements OnInit {
   userImage: string = ''
   userName: string = ''
   currentVideoId: string = ''
-  comments:ICommentResponse[] = []
-  suggestedVideoComments:ISuggestionCommentResponse[] = []
   suggestComments:any[] = []
   commentId:string = ''
   newLikeCommentId:string = ''
@@ -50,7 +46,6 @@ export class VideoPlayComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') as string
     this._userService.getVideoDetails(this.id).subscribe((data) => {
-    
       this.videoData = data.video
       this.currentVideoId = data.video._id
       this.videoSuggestions = data.suggestions
@@ -66,9 +61,7 @@ export class VideoPlayComponent implements OnInit {
       this.userImage = data.profileImage
       this.userName = data.userName
       /// artist Id means the user who posted the content
-     this.suggestedVideoComments = data.suggestedVideoComments
       this.artistId = data.userId
-      this.comments = data.comments
       
       // this.suggestedVideoComments =  data.suggestedVideoComments
       if (data.video.like.includes(uId as never)) {
@@ -98,11 +91,8 @@ export class VideoPlayComponent implements OnInit {
     this.artist.nativeElement.innerHTML = this.currentVideo.artist
     this.description.nativeElement.innerHTML = this.currentVideo.description
     this.artistImage = this.currentVideo.artistId.profileImage
-    for(const value of this.suggestedVideoComments) {
-       this.suggestComments.push(value)
-    }
+    
     // this.comments = this.suggestedVideoComments[0] 
-      this.comments =  this.suggestComments[index]
     /// artist Id means the user who posted the content
     this.artistId = this.currentVideo.artistId._id
     if (this.currentVideo.like.includes(this.userId as never)) {

@@ -4,8 +4,9 @@ export interface ICommentResponse {
     videoId:string,
     comment:string,
     userId: {
+      _id:string;
       fullName:string;
       profileImage:string 
     }
     likes:[],
-}
+}  
