@@ -60,15 +60,39 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { CommentSectionComponent } from './user/components/comment-section/comment-section.component';
 import { CommentRepliesComponent } from './user/components/comment-replies/comment-replies.component';
+import { ShortsPlayerComponent } from './user/components/shorts-player/shorts-player.component';
+import { ShortsComponent } from './user/components/shorts/shorts.component';
+import { ShortsUploadComponent } from './user/components/shorts-upload/shorts-upload.component';
+import { TrimSliderComponent } from './user/components/trim-slider/trim-slider.component';
+import { MusicPlaylistComponent } from './user/components/music-playlist/music-playlist.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { PlaylistCardsComponent } from './user/components/playlist-cards/playlist-cards.component';
+import { ViewPlaylistComponent } from './user/components/view-playlist/view-playlist.component';
+import {  PlaylistDialogComponent } from './user/components/playlist-dialougue/playlist-dialougue.component';
+import { CreatePlaylistDialogComponent } from './user/components/create-playlist-dialog/create-playlist-dialog.component';
+import {  MatSelectModule } from '@angular/material/select';
+import { TestComponent } from './user/components/test/test.component';
+import { MatCardModule } from '@angular/material/card';
+import { SharedModule } from "../shared/shared.module";
+import { SnackbarComponent } from './user/components/snackbar/snackbar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MusicGenresComponent } from './user/components/music-genres/music-genres.component';
+import { AddGenresComponent } from './admin/components/add-genres/add-genres.component';
+import { FirstLetterToUpperCasePipe } from '../core/pipes/first-letter-to-upper-case.pipe';
+import { PlyrModule } from '@atom-platform/ngx-plyr';
+import { GlobalAudioPlayerComponent } from './user/components/global-audio-player/global-audio-player.component';
+import { SongsListComponent } from './user/components/songs-list/songs-list.component';
+import { ArtistListingComponent } from './user/components/artist-listing/artist-listing.component';
+import { ArtistCardsComponent } from './user/components/artist-cards/artist-cards.component';
 
 
 @NgModule({
   declarations: [
     AdminNavBarComponent,
-    AdminSideBarComponent,
+    AdminSideBarComponent, 
     AdminMainComponent,
     UserManagementComponent,
-    UserLoginComponent,
+    UserLoginComponent, 
     UserRegisterComponent,
     UserProfileComponent,
     MultipleAudioUploadComponent,
@@ -99,7 +123,25 @@ import { CommentRepliesComponent } from './user/components/comment-replies/comme
     UserMainComponent,
     GoogleSigninComponent,
     CommentSectionComponent,
-    CommentRepliesComponent
+    CommentRepliesComponent,
+    ShortsPlayerComponent,
+    ShortsComponent,
+    ShortsUploadComponent,
+    TrimSliderComponent,
+    MusicPlaylistComponent,
+    PlaylistCardsComponent,
+    ViewPlaylistComponent,
+    PlaylistDialogComponent,
+    CreatePlaylistDialogComponent,
+    TestComponent,
+    SnackbarComponent,
+    MusicGenresComponent,
+    AddGenresComponent,
+    FirstLetterToUpperCasePipe,
+    GlobalAudioPlayerComponent,
+    SongsListComponent,
+    ArtistListingComponent,
+    ArtistCardsComponent,
   ],
   imports: [
     CommonModule,
@@ -129,7 +171,12 @@ import { CommentRepliesComponent } from './user/components/comment-replies/comme
     MatDialogModule,
     MatButtonModule,
     MatInputModule,
-  ],
+    MatProgressBarModule,
+    MatSelectModule,
+    MatCardModule,
+    MatSnackBarModule,
+    PlyrModule,
+],
   providers:[
     {
       provide: 'SocialAuthServiceConfig',

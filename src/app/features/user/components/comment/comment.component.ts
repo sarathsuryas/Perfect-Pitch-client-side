@@ -31,19 +31,17 @@ export class CommentComponent implements OnInit{
   @Input() userId: string = ''
   @Input() videoId:string = ''
   comments:ICommentResponse[] = []
-
-
   currentUser = {
     name: 'Current User',
     avatar: 'kldfdfsdpl'
   };
   constructor(private readonly _userService:UserService) { }
   ngOnInit(): void {
-   
-  }
-
+    
+   }
   ngOnChanges() {
-   
+    console.log(this.userName)
+
     if(this.videoId) {
       this._userService.getComments(this.videoId).subscribe({
         next:(data)=>{
@@ -61,7 +59,7 @@ export class CommentComponent implements OnInit{
 
   addComment() {
     this.comment.emit(this.newCommentText)
- 
+    
       if (this.newCommentText.trim()) {
         const newComment: ICommentResponse = {
           comment: this.newCommentText,

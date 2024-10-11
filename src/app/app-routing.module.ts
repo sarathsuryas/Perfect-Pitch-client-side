@@ -22,6 +22,16 @@ import { MultipleAudioUploadComponent } from './features/user/components/multipl
 import { AlbumListComponent } from './features/user/components/album-list/album-list.component';
 import { AlbumSongsListComponent } from './features/user/components/album-songs-list/album-songs-list.component';
 import { VideoPlayComponent } from './features/user/components/video-play/video-play.component';
+import { ShortsComponent } from './features/user/components/shorts/shorts.component';
+import { ShortsUploadComponent } from './features/user/components/shorts-upload/shorts-upload.component';
+import { MusicPlaylistComponent } from './features/user/components/music-playlist/music-playlist.component';
+import { ViewPlaylistComponent } from './features/user/components/view-playlist/view-playlist.component';
+import { TestComponent } from './features/user/components/test/test.component';
+import { MusicGenresComponent } from './features/user/components/music-genres/music-genres.component';
+import { AddGenresComponent } from './features/admin/components/add-genres/add-genres.component';
+import { GlobalAudioPlayerComponent } from './features/user/components/global-audio-player/global-audio-player.component';
+import { SongsListComponent } from './features/user/components/songs-list/songs-list.component';
+import { ArtistListingComponent } from './features/user/components/artist-listing/artist-listing.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -38,7 +48,16 @@ const routes: Routes = [
       {path:'albums',component:AlbumListComponent},
       {path:"landing",component:UserHomeComponent},
       {path:"album-songs/:id",component:AlbumSongsListComponent},
-      {path:"play-video/:id",component:VideoPlayComponent}
+      {path:"play-video/:id",component:VideoPlayComponent},
+      {path:'shorts',component:ShortsComponent},
+      {path:'shorts-upload',component:ShortsUploadComponent},
+      {path:'music-playlist',component:MusicPlaylistComponent},
+      {path:'view-playlist/:id',component:ViewPlaylistComponent},
+      {path:'test',component:TestComponent},
+      {path:'genres',component:MusicGenresComponent},
+      {path:'audio',component:GlobalAudioPlayerComponent},
+      {path:'songs-list/:id',component:SongsListComponent},
+      {path:'artist-list',component:ArtistListingComponent}
     ]
   },
   {path:'admin',component:AdminLoginComponent},
@@ -48,7 +67,8 @@ const routes: Routes = [
   {path:'reset-password-form/:token',component:UserResetPasswordFormComponent},
   {path:'admin/home',component:AdminMainComponent,canActivate:[AdminAuthGuard],
   children:[
-    {path:'user-management',component:UserManagementComponent}
+    {path:'user-management',component:UserManagementComponent},
+    {path:'add-genres',component:AddGenresComponent}
   ]
   },
 ];

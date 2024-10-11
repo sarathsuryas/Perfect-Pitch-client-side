@@ -7,10 +7,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadVideoComponent } from '../upload-video/upload-video.component';
 import { AudioUploadDialogComponent } from '../audio-upload-dialog/audio-upload-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-main',
-  templateUrl: './user-main.component.html',
+  templateUrl:  './user-main.component.html',
   styleUrls: ['./user-main.component.css']
 })
 
@@ -36,7 +37,8 @@ export class UserMainComponent implements OnInit {
   show: boolean = true
   animal!: string;
   name!: string; 
-  constructor(private _observer: BreakpointObserver, public dialog: MatDialog) { }
+  isDropdownOpen = false;
+  constructor(private _observer: BreakpointObserver, public dialog: MatDialog,private _router:Router) { }
 
   ngOnInit() {
     this._observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
@@ -47,7 +49,19 @@ export class UserMainComponent implements OnInit {
       }
     });
   }
+  navigateToShortsUpload() {
+    this._router.navigate(['/home/shorts-upload']);
+  }
 
+  navigateToUserProfile() {
+    this._router.navigate(['/home/user-profile']);
+  }
+
+  onSearch(event: Event) {
+    const searchTerm = (event.target as HTMLInputElement).value;
+    console.log('Searching for:', searchTerm);
+    // Implement your search logic here
+  }
   toggleMenu() {
     if (this.isMobile) {
       this.sidenav.toggle();
@@ -56,6 +70,9 @@ export class UserMainComponent implements OnInit {
       this.sidenav.open();
       this.isCollapsed = !this.isCollapsed;
     }
+  }
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
   openSearchBox() {
     this.searchBar = true

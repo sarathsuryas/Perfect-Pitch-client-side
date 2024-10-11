@@ -103,6 +103,11 @@ mat-sidenav-content {
 }
 
 
-::-webkit-scrollbar {
-  scrollbar-width: none;
+.no-scrollbar {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Edge */
 }

@@ -1,5 +1,24 @@
 import { Component, Input } from '@angular/core';
-import { Track } from '@khajegan/ngx-audio-player';
+import { PlaylistDialogComponent } from '../playlist-dialougue/playlist-dialougue.component';
+import { MatDialog } from '@angular/material/dialog';
+import { IAudioData } from 'src/app/core/interfaces/IAudioData';
+import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
+import { UserService } from '../../services/user.service';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
+import { Store } from '@ngrx/store';
+import { playSong } from 'src/app/store/song/song.action';
+
+interface Song {
+  id: string;
+  title: string;
+  artist: string;
+  album: string;
+  duration: string;
+  coverUrl: string;
+}
+
 
 @Component({
   selector: 'app-audio-player',
@@ -7,25 +26,120 @@ import { Track } from '@khajegan/ngx-audio-player';
   styleUrls: ['./audio-player.component.css']
 })
 export class AudioPlayerComponent {
-  @Input() msaapPlaylist: Track[] = []
-  songId!:string
-msaapDisplayTitle = true;
-msaapDisplayPlayList = true;
-msaapPageSizeOptions = [10];
-msaapDisplayVolumeControls = true;
-msaapDisplayRepeatControls = true;
-msaapDisplayArtist = false;
-msaapDisplayDuration = false;
+ @Input() AlbumDetails!:IAlbumData
+ @Input() playlistDetails!:IUserPlaylists 
+ @Input() songs:IAudioData[] = []
+ songId:string = ''
+ horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+ verticalPosition: MatSnackBarVerticalPosition = 'bottom';
 
-msaapDisablePositionSlider = true;
-
+ constructor(
+  private dialog: MatDialog,
+  private _userService:UserService,
+  private snackBar: MatSnackBar,
+  private _store:Store<Song>
+ ) {
+  
+ }
 
  
+ 
+ currentSongIndex: number = 0;
+ isPlaying: boolean = false;
+ audio: HTMLAudioElement | null = null;
+ currentTime: number = 0;
+ duration: number = 0;
+ 
+ ngOnInit() {
+   this.audio = new Audio();
+   this.audio.addEventListener('ended', () => this.playNext());
+   this.audio.addEventListener('timeupdate', () => {
+     this.currentTime = this.audio?.currentTime || 0;
+   });
+   this.audio.addEventListener('loadedmetadata', () => {
+     this.duration = this.audio?.duration || 0;
+   });
+ }
+ 
+ playSong(index: number) {
+   if (this.audio) {
+     this.currentSongIndex = index;
+     this.audio.src = this.songs[index].link;
+     this._store.dispatch(playSong({songs:this.songs,index:index}))
+    //  this.audio.play();
+     this.isPlaying = true;
+   }
+ }
+ 
+ togglePlayPause() {
+ 
+   if (this.audio) {
+     if (this.isPlaying) {
+       this.audio.pause();
+     } else {
+       this.audio.play();
+     }
+     this.isPlaying = !this.isPlaying;
+   }
+ }
+ 
+ playNext() {
+   this.currentSongIndex = (this.currentSongIndex + 1) % this.songs.length;
+   this.playSong(this.currentSongIndex);
+ }
+ 
+ playPrevious() {
+   this.currentSongIndex = (this.currentSongIndex - 1 + this.songs.length) % this.songs.length;
+   this.playSong(this.currentSongIndex);
+ }
+ 
+ formatTime(time: number): string {
+   const minutes = Math.floor(time / 60);
+   const seconds = Math.floor(time % 60);
+   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+ }
+ 
+ onSeek(event: Event) {
+   const seekTime = +(event.target as HTMLInputElement).value;
+   if (this.audio) {
+     this.audio.currentTime = seekTime;
+   }
+ } 
 
-  ngOnInit(): void {
-  }
+ 
+ openPlaylistDialog(song:IAudioData): void {
+  const dialogRef = this.dialog.open(PlaylistDialogComponent, {
+    width: '350px',
+    data:song._id
+  });
 
-  onEnded($event: string) {
-    alert('giueh')
+  dialogRef.afterClosed().subscribe({
+    next:(result)=>{
+      this._userService.addToPlaylsit(song._id,result._value[0]._id).subscribe({
+        next:(data)=>{
+           if(data.exist) {
+            this.snackBar.open("Song Already in Playlist","Close",{
+              duration:3000,
+              horizontalPosition: this.horizontalPosition,
+              verticalPosition: this.verticalPosition,
+            })
+           } else if(!data.exist) {
+            this.snackBar.open("Song Added to Playlist","Close",{
+              duration:3000,
+              horizontalPosition: this.horizontalPosition,
+              verticalPosition: this.verticalPosition,
+            })
+           }
+        }
+      })
+    },
+    error:(err)=>{
+      console.error(err)
     }
+  });
+    // console.log('Selected playlists:', result._value[0]._id,'songId', song._id);
+}
+
+
+
 }

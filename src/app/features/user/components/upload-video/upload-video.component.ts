@@ -77,7 +77,7 @@ export class UploadVideoComponent implements OnInit{
       const genre = this.thirdFormGroup.controls['genre'].value as string
       const description = this.thirdFormGroup.controls['description'].value as string
 
-      this._userService.submitVideoDetails({ videoName: title, genre: genre, thumbNailName: this.thumbNailData.name, videoDescription: description, uniqueKeyThumbNail: this.uniqueKeyThumbNail, uniqueKeyVideo: this.uniqueKeyVideo }).subscribe((data) => {
+      this._userService.submitVideoDetails({ videoName: title, genre: genre, thumbNailName: this.thumbNailData.name, videoDescription: description, uniqueKeyThumbNail: this.uniqueKeyThumbNail, uniqueKeyVideo: this.uniqueKeyVideo , shorts:false}).subscribe((data) => {
         if (data) {
           alert("success")
         }

@@ -1,0 +1,74 @@
+.video-shorts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+}
+
+.video-player {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: calc(100vh - 100px);
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.video-controls button {
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.video-controls button:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.video-info {
+  padding: 20px;
+  text-align: center;
+}
+
+.video-info h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.video-info p {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.video-info button {
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.video-info button:hover {
+  background-color: #cc0000;
+}

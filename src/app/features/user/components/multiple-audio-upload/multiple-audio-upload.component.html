@@ -6,7 +6,7 @@ size="medium"
 color="#fff"
 type="ball-scale-multiple"
 >
-<p style="font-size: 20px; color: white">Loading...</p>
+<p style="font-size: 20px; color: white">Uploading...</p>
 </ngx-spinner>
 <div class="container mx-auto p-8">
   
@@ -32,6 +32,25 @@ type="ball-scale-multiple"
         Please enter a valid album title
       </span>
 
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="albumGenre">
+          Album Genre
+        </label>
+        <select
+          id="albumGenre"
+          name="albumGenre"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          formControlName="genreId"
+        >
+          <option value="" disabled selected>Select genre</option>
+          <option *ngFor="let genre of genres" value="{{genre._id}}">{{genre.Genre}}</option>
+            
+        </select>
+      </div>
+      <span style="color: red;" *ngIf="albumForm.controls['genreId'].invalid">
+        Please select a genre
+      </span>
+      
        <!-- Thumbnail Upload Input -->
        <div class="mb-6">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="albumThumbnail">

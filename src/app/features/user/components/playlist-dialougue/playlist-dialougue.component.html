@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Save to...</h2>
+<mat-dialog-content>
+  <mat-selection-list #playlistList [multiple]="false">
+    <mat-list-option *ngFor="let playlist of playlists" 
+                     [value]="playlist"
+                     checkboxPosition="before">
+      {{ playlist.title }}
+    </mat-list-option>
+  </mat-selection-list>
+  <button mat-button color="primary" (click)="createNewPlaylist()">
+    <mat-icon>add</mat-icon> CREATE NEW PLAYLIST
+  </button>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">CANCEL</button>
+  <button mat-button color="primary" (click)="onSave()">SAVE</button>
+</mat-dialog-actions>

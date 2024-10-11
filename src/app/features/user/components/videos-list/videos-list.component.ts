@@ -13,7 +13,7 @@ videos:IVideoList[] = []
   ngOnInit(): void {
     this._userService.getVideoList().subscribe((data)=>{
      this.videos = data
-     console.log(data)
+     
     })
   }
 

@@ -28,6 +28,14 @@ import { selectIsAuthUser } from 'src/app/store/user/user.selector';
 import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
 import { ICommentReply } from 'src/app/core/interfaces/ICommentReply';
 import { ICommentReplyDto } from 'src/app/core/dtos/ICommentReply.dto';
+import { IUploadShortsDto } from 'src/app/core/dtos/uploadShorts.dto';
+import { IShortsUploadResponse } from 'src/app/core/interfaces/IShortsUploadResponse';
+import { IShortsResponse } from 'src/app/core/interfaces/IShortsResponse';
+import { IAlbumResponse } from 'src/app/core/interfaces/IAlbumResponse';
+import { ICreatePlaylistDto } from 'src/app/core/dtos/createPlaylist.dto';
+import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
+import { IGenres } from 'src/app/core/interfaces/IGenres';
+import { ISongsSameGenre } from 'src/app/core/interfaces/ISongsSameGenre';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +56,7 @@ export class UserService {
   userLogin(email: string, password: string): Observable<IUserData> {
     return this._http.post<IUserData>(`${this.api}/login`, { email, password }, { withCredentials: true })
   }
-  googleLogin(data:IGoogleLoginDto): Observable<IUserData> {
+  googleLogin(data: IGoogleLoginDto): Observable<IUserData> {
     return this._http.post<IUserData>(`${this.api}/google-login`, data, { withCredentials: true })
   }
 
@@ -100,14 +108,15 @@ export class UserService {
     return this._http.request(req);
   }
 
-  submitProfileImageDetails(uniqueKey:string) {
-    return this._http.put(`${this.api}/submit-profile-image-details`,{uniqueKey})
+  submitProfileImageDetails(uniqueKey: string) {
+    return this._http.put(`${this.api}/submit-profile-image-details`, { uniqueKey })
   }
- 
+
 
 
   mediaUpload(fileuploadurl: string, contenttype: string, file: File) {
     const headers = new HttpHeaders({ 'Content-Type': contenttype });
+    
     const req = new HttpRequest(
       'PUT',
       fileuploadurl,
@@ -146,9 +155,9 @@ export class UserService {
 
   logOut() {
     this._cookieService.delete('token')
-    this._cookieService.delete('refreshToken') 
+    this._cookieService.delete('refreshToken')
     this._store.dispatch(logOut())
-    this._store.select(selectIsAuthUser).subscribe((data)=>console.log(data))
+    this._store.select(selectIsAuthUser).subscribe((data) => console.log(data))
     this._router.navigate([''])
   }
 
@@ -191,41 +200,104 @@ export class UserService {
     return this._http.post(`${this.api}/submit-audio-details`, { file })
   }
 
-  getAlbumDetails(id: string): Observable<IAlbumDetails> {
-    return this._http.get<IAlbumDetails>(`${this.api}/album-details?id=${id}`)
+  getAlbumDetails(id: string): Observable<IAlbumResponse> {
+    return this._http.get<IAlbumResponse>(`${this.api}/album-details?id=${id}`)
   }
 
-  getVideoDetails(id:string):Observable<IResponseVideo>{
+  getVideoDetails(id: string): Observable<IResponseVideo> {
     return this._http.get<IResponseVideo>(`${this.api}/get-video-page-details?id=${id}`)
   }
 
-  getComments(videoId:string):Observable<ICommentResponse[]>{
-   return this._http.get<ICommentResponse[]>(`${this.api}/get-comments?id=${videoId}`)
+  getComments(videoId: string): Observable<ICommentResponse[]> {
+    return this._http.get<ICommentResponse[]>(`${this.api}/get-comments?id=${videoId}`)
   }
 
-  likeVideo(videoId:string):Observable<string> {
-   return this._http.put<string>(`${this.api}/like-video`,{videoId})
+  likeVideo(videoId: string): Observable<string> {
+    return this._http.put<string>(`${this.api}/like-video`, { videoId })
   }
-  subscribeUser(subscribedUserId:string) {
-    return this._http.put(`${this.api}/subscribe-user`,{subscribedUserId})
-  }
-
-  commentVideo(comment:IVideoCommentDto):Observable<IComment> {
-    return this._http.post<IComment>(`${this.api}/add-video-comment`,comment) 
-  }
-  likeComment(commentId:string){ 
-    return this._http.patch(`${this.api}/like-comment`,{commentId})
-  }
-  replyComment(reply:ICommentReplyDto) {
-    return this._http.post(`${this.api}/reply-comment`,{reply})
+  subscribeUser(artistId: string) {
+    return this._http.put(`${this.api}/subscribe-user`, { artistId })
   }
 
-  getReply(commentId:string):Observable<ICommentReply[]> {
+  commentVideo(comment: IVideoCommentDto): Observable<IComment> {
+    return this._http.post<IComment>(`${this.api}/add-video-comment`, comment)
+  }
+  likeComment(commentId: string) {
+    return this._http.patch(`${this.api}/like-comment`, { commentId })
+  }
+  replyComment(reply: ICommentReplyDto) {
+    return this._http.post(`${this.api}/reply-comment`, { reply })
+  }
+
+  getReply(commentId: string): Observable<ICommentReply[]> {
     return this._http.get<ICommentReply[]>(`${this.api}/get-replies?id=${commentId}`)
   }
 
-  likeReply(replyId:string) {
-    return this._http.patch(`${this.api}/like-reply`,{replyId})
+  likeReply(replyId: string) {
+    return this._http.patch(`${this.api}/like-reply`, { replyId })
   }
+
+  uploadShorts(data: IUploadShortsDto): Observable<IShortsUploadResponse> {
+    return this._http.post<IShortsUploadResponse>(`${this.api}/upload-shorts`, data)
+  }
+  
+  trimVideo(data:{start:string,end:string,file:File }) {
+    const formData = new FormData();
+    formData.append('file', data.file);
+    formData.append("start",data.start)
+    formData.append('end',data.end)
+    return this._http.post<IShortsUploadResponse>(`${this.api}/trim-video`, formData)
+  }
+ 
+
+ shortsUpload(fileuploadurl: string, contenttype: string, file: File) {
+  const headers = new HttpHeaders({ 'Content-Type': contenttype });
+  const req = new HttpRequest(
+    'PUT',
+    fileuploadurl,
+    file,
+    {
+      headers: headers,
+      reportProgress:true,
+      
+    });
+  return this._http.request(req)
+}
+
+submitShortsDetails(data:{caption:string,description:string,uniqueKey:string}) {
+ return this._http.post(`${this.api}/submit-shorts-details`,data)
+}
+
+getShorts():Observable<IShortsResponse> {
+  return this._http.get<IShortsResponse>(`${this.api}/get-shorts`)
+}
+
+createPlaylist(data:ICreatePlaylistDto):Observable<{playlistId:string}> {
+   return this._http.post<{playlistId:string}>(`${this.api}/create-Playlist`,data)
+}
+
+getUserPlalists():Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlist`)
+}
+
+addToPlaylsit(songId:string,playlistId:string):Observable<{success:boolean,exist:boolean}> {
+  return this._http.put<{success:boolean,exist:boolean}>(`${this.api}/add-to-playlist`,{songId,playlistId})
+}
+
+getPlaylistSongs(playlistId:string):Observable<IUserPlaylists> {
+  return  this._http.get<IUserPlaylists>(`${this.api}/get-playlist-songs?playlistId=${playlistId}`)
+}
+
+getGenres():Observable<IGenres[]>{
+  return this._http.get<IGenres[]>(`${this.api}/get-genres`)
+}
+
+getSameGenreSongs(genreId:string):Observable<ISongsSameGenre[]> {
+  return this._http.get<ISongsSameGenre[]>(`${this.api}/get-genre-songs?genreId=${genreId}`)
+}
+
+getArtists():Observable<{artists:IUserData[],userId:string}> {
+  return this._http.get<{artists:IUserData[],userId:string}>(`${this.api}/get-artists`)
+}
 
 }

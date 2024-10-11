@@ -4,8 +4,6 @@ import { UserService } from '../../services/user.service';
 import { IVideoDetails } from 'src/app/core/interfaces/IVideoDetails';
 import { Store } from '@ngrx/store';
 import { IVideoCommentDto } from 'src/app/core/dtos/IVideoComment.dto';
-import { ISuggestionCommentResponse } from 'src/app/core/interfaces/ISuggestionCommentResponse';
-import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
 
 
 

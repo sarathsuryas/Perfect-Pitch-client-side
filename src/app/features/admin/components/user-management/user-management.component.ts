@@ -89,7 +89,7 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-// sample table
+
 
 
 }

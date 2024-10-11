@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { PlyrComponent } from '@atom-platform/ngx-plyr';
 
 @Component({
   selector: 'app-video-player',
@@ -7,7 +8,6 @@ import { Component, Input } from '@angular/core';
 })
 export class VideoPlayerComponent {
 @Input() link:string = ''
-  constructor() {}
 
 }
   

@@ -37,6 +37,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CoreModule } from './core/core.module';
 import { FeaturesModule } from './features/features.module';
 import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
+import { songReducer } from './store/song/song.reducer';
 
 
 @NgModule({
@@ -58,7 +59,7 @@ import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
     AdminRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FormsModule,
+    FormsModule, 
     RouterModule,
     ButtonModule,
     ProgressSpinnerModule,
@@ -71,6 +72,7 @@ import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
     StoreModule.forRoot([]),
     StoreModule.forFeature('user', userReducer),
     StoreModule.forFeature('admin', adminReducer),
+    StoreModule.forFeature('song', songReducer),
     EffectsModule.forRoot([UserEffects, AdminEffects]),
     GoogleSigninButtonModule,
   ],
@@ -99,3 +101,4 @@ import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 export class AppModule { }
 
 
+ 

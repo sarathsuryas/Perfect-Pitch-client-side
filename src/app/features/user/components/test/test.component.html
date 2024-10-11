@@ -1,0 +1,68 @@
+<!-- <form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Upload Album</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Album Name</mat-label>
+        <input matInput formControlName="albumName" required>
+      </mat-form-field>
+
+      <div class="thumbnail-upload">
+        <button mat-raised-button color="primary" (click)="thumbnailInput.click()">
+          Select Thumbnail
+        </button>
+        <input #thumbnailInput type="file" (change)="onThumbnailSelected($event)" style="display: none;" accept="image/*">
+      </div>
+
+      <div *ngIf="thumbnailPreview" class="thumbnail-preview">
+        <img [src]="thumbnailPreview" alt="Album Thumbnail">
+      </div>
+
+      <div formArrayName="tracks">
+        <h3>Tracks</h3>
+        <div *ngFor="let track of tracks.controls; let i = index" [formGroupName]="i" class="track-item">
+          <mat-form-field appearance="fill">
+            <mat-label>Track Name</mat-label>
+            <input matInput formControlName="trackName" required>
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="trackInput.click()">
+            Select Track
+          </button>
+          <input #trackInput type="file" (change)="onTrackSelected($event, i)" style="display: none;" accept="audio/*">
+          <button mat-icon-button color="warn" (click)="removeTrack(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <button mat-button color="primary" (click)="addTrack()">Add Track</button>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!albumForm.valid">Upload Album</button>
+    </mat-card-actions>
+  </mat-card>
+</form> -->
+
+
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6 text-gray-800">Popular Artists</h1>
+  <div class="space-y-4">
+    <div *ngFor="let artist of artists" class="flex items-center justify-between py-4 border-b border-gray-200">
+      <div class="flex items-center space-x-4">
+        <img [src]="artist.imageUrl" [alt]="artist.name" class="w-16 h-16 rounded-full object-cover">
+        <div>
+          <h2 class="text-xl font-semibold text-gray-800">{{ artist.name }}</h2>
+          <p class="text-sm text-gray-600">{{ formatSubscribers(artist.subscribers) }} subscribers</p>
+        </div>
+      </div>
+      <button 
+        (click)="toggleSubscription(artist)"
+        [ngClass]="{'bg-blue-500 hover:bg-blue-600': !artist.isSubscribed, 'bg-gray-300 hover:bg-gray-400': artist.isSubscribed}"
+        class="px-4 py-2 rounded-full text-white font-semibold transition-colors duration-300"
+      >
+        {{ artist.isSubscribed ? 'Subscribed' : 'Subscribe' }}
+      </button>
+    </div>
+  </div>
+</div>

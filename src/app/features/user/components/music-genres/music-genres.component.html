@@ -1,0 +1,16 @@
+<div class="bg-gray-900 min-h-screen text-white p-6">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">Explore Music Genres</h1>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <div *ngFor="let genre of genres" 
+           class="relative overflow-hidden rounded-lg shadow-lg cursor-pointer transform transition duration-300 hover:scale-105"
+           [ngClass]="genre.color"
+           (click)="onGenreClick(genre)">
+        <img [alt]="genre.Genre" class="w-full h-40 object-cover opacity-75">
+        <div class="absolute inset-0 flex items-center justify-center">
+          <h2 class="text-2xl font-bold text-white text-center">{{ genre.Genre | firstLetterToUpperCase}}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

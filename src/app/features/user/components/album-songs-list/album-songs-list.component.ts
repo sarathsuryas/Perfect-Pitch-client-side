@@ -4,6 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
 import { Track } from '@khajegan/ngx-audio-player';
+import { MatDialog } from '@angular/material/dialog';
+import { PlaylistDialogComponent } from '../playlist-dialougue/playlist-dialougue.component';
+import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
+import { IAlbumResponse } from 'src/app/core/interfaces/IAlbumResponse';
+import { IAudioData } from 'src/app/core/interfaces/IAudioData';
 
 @Component({
   selector: 'app-album-songs-list',
@@ -11,17 +16,20 @@ import { Track } from '@khajegan/ngx-audio-player';
   styleUrls: ['./album-songs-list.component.css']
 })
 export class AlbumSongsListComponent {
-  albumData$!:Observable<IAlbumDetails> 
+  albumData$!:Observable<IAlbumResponse> 
   id!: string 
-  msaapPlaylist: Track[] = []
-  albumData:IAlbumDetails = {title:'',artistName:'',thumbNailLink:'',songs:[{title:'',link:'',artistName:''}]}
-  constructor(private _userService:UserService,private route: ActivatedRoute) {
+  albumSongs: IAudioData[] = []
+  albumData!:IAlbumData
+  constructor(private _userService:UserService,private route: ActivatedRoute,private dialog: MatDialog) {
     this.id = this.route.snapshot.paramMap.get('id') as string
      this.albumData$ = this._userService.getAlbumDetails(this.id)
      this.albumData$.subscribe((data)=>{
-      this.albumData = data
-       this.msaapPlaylist = data.songs
+      this.albumData = data.album
+       this.albumSongs = data.songs
     })
   }
+
+  
+
 
 }

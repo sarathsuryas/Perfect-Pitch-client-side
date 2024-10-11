@@ -13,5 +13,4 @@ access:string;
 genre:string
 shorts:boolean;
 thumbnailLink:string;
-
 }

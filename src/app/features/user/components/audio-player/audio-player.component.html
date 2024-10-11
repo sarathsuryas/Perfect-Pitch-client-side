@@ -1,7 +1,77 @@
+ 
+<div class="bg-gray-900 text-white min-h-screen flex flex-col">
+  <!-- Main Content -->
+  <div class="flex-grow overflow-y-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Now Playing</h1>
 
-  <ngx-audio-player  [playlist]="msaapPlaylist" [displayTitle]="msaapDisplayTitle" [autoPlay]="false" muted="muted"
-  [displayPlaylist]="msaapDisplayPlayList" [pageSizeOptions]="msaapPageSizeOptions" (trackEnded)="onEnded($event)"
-  [displayVolumeControls]="msaapDisplayVolumeControls" [displayRepeatControls]="msaapDisplayRepeatControls"
-  [disablePositionSlider]="msaapDisablePositionSlider" [displayArtist]="msaapDisplayArtist"
-  [displayDuration]="msaapDisplayDuration" [expanded]="true"></ngx-audio-player>
+    <!-- Current Song Info -->
+    <div *ngIf="AlbumDetails" class="flex items-center mb-8">
+      <img [src]="AlbumDetails.thumbNailLink" class="w-32 h-32 rounded-md mr-6">
+      <div>
+        <h2 class="text-2xl font-semibold">{{ AlbumDetails.title }}</h2>
+        <p class="text-gray-400">{{ AlbumDetails.artistId.fullName }}</p>
+      </div>
+    </div>
+    <div *ngIf="playlistDetails" class="flex items-center mb-8">
+      <img [src]="playlistDetails.title" class="w-32 h-32 rounded-md mr-6">
+      <div>
+        <h2 class="text-2xl font-semibold">{{ playlistDetails.title }}</h2>
+        <p class="text-gray-400">{{ playlistDetails.access }}</p>
+      </div>
+    </div>
 
+    <!-- Playlist -->
+    <h3 class="text-xl font-semibold mb-4">Playlist</h3>
+    <ul class="space-y-2">
+      <li *ngFor="let song of songs; let i = index" 
+          (click)="playSong(i)"
+          class="flex items-center p-2 hover:bg-gray-800 cursor-pointer rounded-md transition-colors duration-200"
+          [class.bg-gray-800]="i === currentSongIndex">
+        <img *ngIf="AlbumDetails" [src]="AlbumDetails.thumbNailLink" [alt]="AlbumDetails.title" class="w-10 h-10 rounded mr-4">
+        <div class="flex-grow">
+          <div [class.text-green-500]="i === currentSongIndex">{{ song.title }}</div>
+          <div class="text-sm text-gray-400">{{ song.artistId.fullName }}</div>
+        </div>
+        <button (click)="openPlaylistDialog(song)" class="dots text-sm text-gray-400"></button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Player Controls -->
+  <!-- <div class="bg-gray-800 p-4">
+    <div class="flex flex-col items-center mb-4">
+      <div class="flex items-center justify-center space-x-6 mb-4">
+        <button (click)="playPrevious()" class="text-gray-400 hover:text-white transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+          </svg>
+        </button>
+        <button (click)="togglePlayPause()" class="bg-white rounded-full p-3 hover:scale-105 transition-transform duration-200">
+          <svg *ngIf="!isPlaying" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+          </svg>
+          <svg *ngIf="isPlaying" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+        <button (click)="playNext()" class="text-gray-400 hover:text-white transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+      <div class="w-full flex items-center">
+        <span class="text-sm text-gray-400 w-12">{{ formatTime(currentTime) }}</span>
+        <input 
+          type="range" 
+          [min]="0" 
+          [max]="duration" 
+          [value]="currentTime" 
+          (input)="onSeek($event)"
+          class="w-full mx-4 accent-green-500"
+        >
+        <span class="text-sm text-gray-400 w-12">{{ formatTime(duration) }}</span>
+      </div>
+    </div>
+  </div>
+</div> -->

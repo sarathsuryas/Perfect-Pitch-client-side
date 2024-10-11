@@ -48,11 +48,6 @@ constructor(private _userService:UserService) {}
  
   
   
-
- 
-
- 
-
   likeComment() {
    if(this.liked) {
     this.liked = false

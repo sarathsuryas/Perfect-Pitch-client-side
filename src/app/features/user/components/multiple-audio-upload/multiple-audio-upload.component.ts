@@ -4,6 +4,8 @@ import { UserService } from '../../services/user.service';
 import { ISumbitAlbumDetails } from 'src/app/core/dtos/ISubmitAlbumDetails.dto';
 import { MessageService } from 'primeng/api';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { IGenres } from 'src/app/core/interfaces/IGenres';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-multiple-audio-upload',
@@ -19,6 +21,7 @@ export class MultipleAudioUploadComponent implements OnInit {
   detailsForSignedUrls: { name: string, type: string }[] = [];
   presignedUrlsAndUniqueKey: { url: string, uniqueKey: string }[] = []
   songsDetails: { title: string, uniqueKey: string }[] = []
+  genres:IGenres[] = []
   @ViewChild('myInput')
   myInputVariable!: ElementRef;
   @ViewChild('songs')
@@ -27,11 +30,21 @@ export class MultipleAudioUploadComponent implements OnInit {
      private _userServce: UserService,
      private _messageService:MessageService,
      private _spinner: NgxSpinnerService,
+     private _router:Router
     ) { }
 
   ngOnInit(): void {
     this.albumForm = this._fb.group({
-      albumTitle: ['', Validators.required]
+      albumTitle: ['', Validators.required],
+      genreId:['',Validators.required]
+    })
+    this._userServce.getGenres().subscribe({
+      next:(value)=> {
+         this.genres = value
+      },
+      error:(err)=>{
+        console.error(err)
+      }
     })
   }
   selectedThumbnail(event: Event): void {
@@ -72,19 +85,21 @@ export class MultipleAudioUploadComponent implements OnInit {
 
           const obj: ISumbitAlbumDetails = {
             title: this.albumForm.controls['albumTitle'].value,
+            genreId:this.albumForm.controls['genreId'].value,
             thumbnailKey: this.presignedUrlsAndUniqueKey.pop()?.uniqueKey as string,
             songs: this.songsDetails
           }
-          this._userServce.submitAlbumDetails(obj).subscribe((data)=>{
-            this._messageService.add({ severity: 'success', summary: 'Success', detail: 'album uploaded' });
+          this._userServce.submitAlbumDetails(obj).subscribe({
+           next:(value)=>{ this._messageService.add({ severity: 'success', summary: 'Success', detail: 'album uploaded' });
             this.myInputVariable.nativeElement.value = "";
             this.songs.nativeElement.value = "";
             this.albumForm.reset()
+            this._router.navigate(['home/albums'])
             this._spinner.hide()
-          },(error)=>{
-            console.error(error)
+          },error:(err)=>{
+            console.error(err)
             this._spinner.hide()
-          })
+          }})
 
         } catch (error) {
           this._spinner.hide()

@@ -8,7 +8,6 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
 import { OldPasswordComponent } from '../old-password/old-password.component';
 import { MessageService } from 'primeng/api';
 import { Store } from '@ngrx/store';
-import { logOut } from 'src/app/store/user/user.action';
 import { CookieService } from 'ngx-cookie-service';
 import { v4 as uuidv4 } from 'uuid';
 

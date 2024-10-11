@@ -1,0 +1,12 @@
+mat-dialog-content {
+  min-height: 200px;
+  min-width: 300px;
+}
+
+mat-selection-list {
+  margin-bottom: 20px;
+}
+
+button[mat-button] {
+  text-transform: uppercase;
+}

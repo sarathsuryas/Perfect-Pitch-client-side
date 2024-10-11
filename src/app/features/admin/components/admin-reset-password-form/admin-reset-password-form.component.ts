@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ITokenData } from 'src/app/core/interfaces/ITokenData';
 
 @Component({
   selector: 'app-admin-reset-password-form',

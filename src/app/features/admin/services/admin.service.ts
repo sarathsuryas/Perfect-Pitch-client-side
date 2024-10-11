@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 import { AddUserDto } from 'src/app/core/dtos/addUser.dto';
 import { EditUserDto } from 'src/app/core/dtos/editUser.dto';
 import { IAdminData } from 'src/app/core/interfaces/IAdminData';
+import { IGenres } from 'src/app/core/interfaces/IGenres';
 import { ITokenData } from 'src/app/core/interfaces/ITokenData';
 import { userModel } from 'src/app/store/user/user.model';
 import { environment } from 'src/environment/environment';
@@ -55,4 +56,13 @@ export class AdminService {
   this._cookieService.delete('adminToken')
  }
 
+ addGenres(genre:string,newId:number,color:string) {
+   return this._http.post(`${this.api}/add-genres`,{genre,newId,color})
+ }
+
+getGenres():Observable<IGenres[]> {
+  return this._http.get<IGenres[]>(`${this.api}/get-genres`)
 }
+
+}
+  

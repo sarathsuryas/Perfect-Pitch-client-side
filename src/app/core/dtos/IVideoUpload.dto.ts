@@ -5,4 +5,5 @@ export interface IVideoUploadDto {
   thumbNailName:string;
   uniqueKeyVideo:string;
   uniqueKeyThumbNail:string;
+  shorts:boolean
 }
