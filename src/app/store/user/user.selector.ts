@@ -78,3 +78,7 @@ export const selectIsAuthUser = createSelector(
   (userState) => !!userState.token
 )
 
+export const selectUserId  = createSelector(
+  selectUserState,
+  (userState)=> userState.userId
+)

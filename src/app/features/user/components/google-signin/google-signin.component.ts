@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { IGoogleLoginDto } from 'src/app/core/dtos/IGoogleLogin.dto';
+import { googleLoginUser } from 'src/app/store/user/user.action';
+import { UserState } from 'src/app/store/user/user.state';
 
 declare global {
   interface Window {
@@ -10,8 +16,15 @@ declare global {
   templateUrl: './google-signin.component.html',
   styleUrls: ['./google-signin.component.css']
 })
-export class GoogleSigninComponent {
+export class GoogleSigninComponent implements OnInit {
+  
   @Output() loginWithGoogle: EventEmitter<any> = new EventEmitter<any>();
+  authSubscription!: Subscription;
+
+  constructor( 
+    private readonly _authService: SocialAuthService,
+    private readonly _store: Store<UserState>,
+  ) {  }
   createFakeGoogleWrapper = () => {
     const googleLoginWrapper = document.createElement('div');
     googleLoginWrapper.style.display = 'none';
@@ -32,9 +45,32 @@ export class GoogleSigninComponent {
       },
     };
   };
+ 
+
+  ngOnInit(): void {
+    this.authSubscription = this._authService.authState.subscribe({
+      next:(user:IGoogleLoginDto)=>{
+         this._store.dispatch(googleLoginUser({userData:user}))
+      },
+      error:(error)=>{
+        console.error(error)
+      }
+    });
+  }
 
   handleGoogleLogin() {
-    this.loginWithGoogle.emit(this.createFakeGoogleWrapper());
+    this.googleSignin(this.createFakeGoogleWrapper())
   }
+
+  googleSignin(googleWrapper: any) {
+    googleWrapper.click();
+  }
+
+  ngOnDestroy(): void {
+    this.authSubscription.unsubscribe();
+    
+  }
+
+
 
 }

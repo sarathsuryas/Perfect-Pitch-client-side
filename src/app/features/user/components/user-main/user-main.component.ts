@@ -63,6 +63,7 @@ export class UserMainComponent implements OnInit {
     // Implement your search logic here
   }
   toggleMenu() {
+   
     if (this.isMobile) {
       this.sidenav.toggle();
       this.isCollapsed = false;

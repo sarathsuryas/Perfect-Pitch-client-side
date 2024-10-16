@@ -31,8 +31,6 @@ export class UserProfileComponent implements OnInit {
     private _userService: UserService,
     private dialog: MatDialog,
     private _messageService: MessageService,
-    private _store: Store,
-    private _cookieService: CookieService
   ) { }
 
 

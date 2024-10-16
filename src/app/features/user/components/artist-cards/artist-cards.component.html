@@ -1,9 +1,9 @@
-<div  class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+<div (click)="artistMedias()" class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
   <img [src]="artist.profileImage" [alt]="artist.fullName" class="w-full h-64 object-cover">
   <div class="p-4">
     <h2 class="text-xl font-semibold mb-2">{{ artist.fullName}}</h2>
     <div class="flex justify-between items-center">
-      <span class="text-sm text-gray-500">{{ formatSubscribers(likeCount) }} subscribers</span>
+      <span class="text-sm text-gray-500">{{ formatSubscribers(subscribersCount) }} subscribers</span>
       <button 
         (click)="toggleSubscription(artist)"
         [ngClass]="{'bg-red-500 hover:bg-red-600': !isSubscribed, 'bg-gray-300 hover:bg-gray-400': isSubscribed}"

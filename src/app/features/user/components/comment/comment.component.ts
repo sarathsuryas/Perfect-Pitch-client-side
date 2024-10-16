@@ -79,10 +79,6 @@ export class CommentComponent implements OnInit{
   
   }
 
-  likeComment(commentId: string) {
-   
-  }
-
 
 
   toggleReplyInput() {

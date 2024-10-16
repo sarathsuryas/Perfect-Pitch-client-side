@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
-import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
 
 @Component({
   selector: 'app-album-list',
@@ -15,7 +14,7 @@ export class AlbumListComponent implements OnInit{
   ngOnInit(): void {
    this._userService.getAlbums().subscribe((data)=>{
      this.albumData = data
-     console.log(this.albumData)
+     
    })
   }
 

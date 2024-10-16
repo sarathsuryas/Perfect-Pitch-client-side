@@ -8,14 +8,14 @@ type="ball-scale-multiple"
 >
 <p style="font-size: 20px; color: white">Uploading...</p>
 </ngx-spinner>
-<div class="container mx-auto p-8">
+<!-- <div class="container mx-auto p-8">
   
   <div>
     <h2 class="text-2xl font-semibold mb-4">Upload Song Album</h2>
     <form [formGroup]="albumForm" id="album-upload" class="bg-white shadow-md rounded px-8 pt-6 pb-8" (ngSubmit)="submit()">
-      
+       -->
       <!-- Album Title Input -->
-      <div class="mb-4">
+      <!-- <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="albumTitle">
           Album Title
         </label>
@@ -30,9 +30,9 @@ type="ball-scale-multiple"
       </div>
       <span style="color: red;" *ngIf="albumForm.invalid && albumForm.controls['albumTitle'].touched">
         Please enter a valid album title
-      </span>
+      </span> -->
 
-      <div class="mb-4">
+      <!-- <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="albumGenre">
           Album Genre
         </label>
@@ -50,10 +50,10 @@ type="ball-scale-multiple"
       <span style="color: red;" *ngIf="albumForm.controls['genreId'].invalid">
         Please select a genre
       </span>
-      
+       -->
        <!-- Thumbnail Upload Input -->
-       <div class="mb-6">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="albumThumbnail">
+       <!-- <div class="mb-6"> -->
+        <!-- <label class="block text-gray-700 text-sm font-bold mb-2" for="albumThumbnail">
           Upload Album Thumbnail
         </label>
         <input
@@ -65,9 +65,9 @@ type="ball-scale-multiple"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           (change)="selectedThumbnail($event)"
         />
-      </div>
+      </div> -->
       <!-- Audio Files Input -->
-      <div class="mb-6">
+      <!-- <div class="mb-6">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="albumFiles">
           Choose Audio Files (Multiple Songs)
         </label>
@@ -83,10 +83,10 @@ type="ball-scale-multiple"
         />
       </div>
 
-     
+      -->
 
       <!-- Submit Button -->
-      <div class="flex items-center justify-between">
+      <!-- <div class="flex items-center justify-between">
         <button
           type="submit"
           class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -96,4 +96,124 @@ type="ball-scale-multiple"
       </div>
     </form>
   </div>
+</div> -->
+<div class="container mx-auto p-4 bg-gray-100 min-h-screen">
+  <mat-card class="max-w-3xl mx-auto shadow-lg">
+    <mat-card-header class="bg-primary text-white py-4 px-6 rounded-t-lg">
+      <mat-card-title class="text-2xl font-bold">Upload Album</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="p-6">
+      <form [formGroup]="albumForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <mat-form-field class="w-full">
+          <mat-label>Album Name</mat-label>
+          <input matInput formControlName="albumName" required>
+          <mat-error *ngIf="albumForm.controls['albumName'].invalid">
+            Album name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Genre</mat-label>
+          <mat-select formControlName="genreId" required>
+            <mat-option *ngFor="let genre of genres" [value]="genre._id">
+              {{genre.Genre}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="albumForm.controls['genreId'].invalid">
+            Genre is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="flex items-center space-x-4">
+          <button mat-raised-button color="primary" (click)="albumThumbnailInput.click()" type="button">
+            <mat-icon>add_photo_alternate</mat-icon>
+            Select Album Thumbnail
+          </button>
+          <input #albumThumbnailInput type="file" (change)="onAlbumThumbnailSelected($event)" style="display: none;" accept="image/*">
+          <span *ngIf="albumForm.get('albumThumbnail')?.value" class="text-green-600">
+            <mat-icon>check_circle</mat-icon> Thumbnail selected
+          </span>
+        </div>
+        <mat-error *ngIf="albumForm.get('albumThumbnail')?.hasError('required') && albumForm.get('albumThumbnail')?.touched">
+          Album thumbnail is required
+        </mat-error>
+
+        <div *ngIf="albumThumbnailPreview" class="mt-4">
+          <img [src]="albumThumbnailPreview" alt="Album Thumbnail Preview" class="max-w-xs max-h-48 object-contain rounded-lg shadow-md">
+        </div>
+
+        <mat-divider class="my-6"></mat-divider>
+
+        <h3  class="text-xl font-semibold mb-4">Tracks</h3>
+
+        <div formArrayName="tracks" class="space-y-6">
+          <mat-card *ngFor="let track of tracks.controls; let i = index" [formGroupName]="i" class="p-4 bg-gray-50 rounded-lg shadow">
+            <div class="flex justify-between items-center mb-4">
+              <h4 class="text-lg font-medium">Track {{ i + 1 }}</h4>
+              <button mat-icon-button color="warn" (click)="removeTrack(i)" type="button">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <mat-form-field class="w-full">
+              <mat-label>Track Name</mat-label>
+              <input matInput formControlName="name" required>
+              <mat-error *ngIf="track.get('name')?.hasError('required')">
+                Track name is required
+              </mat-error>
+            </mat-form-field>
+
+            <div class="flex items-center space-x-4 mb-4">
+              <button mat-stroked-button color="primary" (click)="trackFileInput.click()" type="button">
+                <mat-icon>audiotrack</mat-icon>
+                Select Track File
+              </button>
+              <input #trackFileInput type="file" (change)="onTrackFileSelected($event, i)" style="display: none;" accept="audio/*">
+              <span *ngIf="track.get('song')?.value" class="text-green-600">
+                <mat-icon>check_circle</mat-icon> File selected
+              </span>
+            </div>
+            <mat-error *ngIf="track.get('song')?.hasError('required') && track.get('song')?.touched">
+              Track file is required
+            </mat-error>
+
+            <!-- <div *ngIf="track.get('file')?.value" class="mb-4">
+              <audio  [src]="getTrackPreviewUrl(i)" type="audio/mpeg"  controls class="w-full">
+                Your browser does not support the audio element.
+              </audio>
+            </div> -->
+
+            <div class="flex items-center space-x-4 mb-4">
+              <button mat-stroked-button color="primary" (click)="trackThumbnailInput.click()" type="button">
+                <mat-icon>image</mat-icon>
+                Select Track Thumbnail
+              </button>
+              <input #trackThumbnailInput type="file" (change)="onTrackThumbnailSelected($event, i)" style="display: none;" accept="image/*">
+              <span *ngIf="track.get('songThumbNail')?.value" class="text-green-600">
+                <mat-icon>check_circle</mat-icon> Thumbnail selected
+              </span>
+            </div>
+
+            <!-- <div *ngIf="getTrackThumbnailPreview(i)" class="mb-4">
+              <img [src]="getTrackThumbnailPreview(i)" alt="Track Thumbnail Preview" class="max-w-xs max-h-32 object-contain rounded-lg shadow-sm">
+            </div> -->
+          </mat-card>
+
+
+        </div>
+
+        <button mat-raised-button color="primary" (click)="addTrack()" type="button" class="mt-4">
+          <mat-icon>add</mat-icon>
+          Add Track
+        </button>
+
+        <div class="flex justify-end mt-6">
+          <button mat-raised-button color="accent" type="submit" [disabled]="!albumForm.valid" class="px-6 py-2">
+            <mat-icon>cloud_upload</mat-icon>
+            Upload Album
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -6,6 +6,7 @@ export type UserState = {
   error:string|null
   isLoading:boolean;
   token:string | null
+  userId:string
 }
 
 
@@ -14,5 +15,6 @@ export const initialState:UserState = {
   users: [],
   error: '',
   isLoading: false,
-  token: null
+  token: null,
+  userId: ""
 }

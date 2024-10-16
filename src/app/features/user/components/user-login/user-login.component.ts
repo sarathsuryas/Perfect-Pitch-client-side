@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -10,8 +10,8 @@ import {
   SocialAuthService,
   SocialUser,
 } from '@abacritt/angularx-social-login';
-import { Subscription } from 'rxjs';
-import { IGoogleLoginDto } from 'src/app/core/dtos/IGoogleLogin.dto';
+import { Subject, Subscription } from 'rxjs';
+import { GoogleSigninComponent } from '../google-signin/google-signin.component';
 
 declare global {
   interface Window {
@@ -27,46 +27,32 @@ export class UserLoginComponent implements OnInit {
   
   loginForm!: FormGroup
   submitted = false;
-  socialUser!: SocialUser;
-  isLoggedin?: boolean;
+  isLoggedin?: boolean = true
   authSubscription!: Subscription;
   constructor(
     private readonly _fb: FormBuilder,
     private readonly _store: Store<UserState>,
     private readonly _messageService: MessageService,
     private readonly _router:Router,
-    private readonly _authService: SocialAuthService
   ) { }
+  private readonly onDestroy: Subject<any> = new Subject<any>();
   ngOnInit(): void {
     this.loginForm = this._fb.group({
       email: ['',Validators.compose([Validators.required])],
       password: ['',Validators.compose([Validators.required])]
     })
-   
-   
-
+  
     this._store.select(selectIsAuthUser).subscribe(isAuthenticated=>{
       if(isAuthenticated) {
-        this._router.navigate(['home'])
+        this.isLoggedin = false
+        this._router.navigate(['home/landing'])
       }
     })
-
-
-    this.authSubscription = this._authService.authState.subscribe({
-      next:(user:IGoogleLoginDto)=>{
-         this._store.dispatch(googleLoginUser({userData:user}))
-      },
-      error:(error)=>{
-        console.error(error)
-      }
-    });
+    
 
   }
 
-  ngOnDestroy(): void {
-    this.authSubscription.unsubscribe();
-  }
-
+ 
   submit() {
     this.submitted = true
     if(this.loginForm.valid) {
@@ -81,9 +67,7 @@ export class UserLoginComponent implements OnInit {
   }
 
   
-  googleSignin(googleWrapper: any) {
-    googleWrapper.click();
-  }
+
   
  
 

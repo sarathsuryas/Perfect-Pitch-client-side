@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IUserData } from 'src/app/core/interfaces/IUserData';
 import { UserService } from '../../services/user.service';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-artist-cards',
@@ -8,14 +10,13 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./artist-cards.component.css']
 })
 export class ArtistCardsComponent implements OnInit{
-
 @Input() artist!:IUserData
 @Input() currentUserId:string = ''
-likeCount:number = 0
+subscribersCount:number = 0
 isSubscribed = false
-constructor(private _userService:UserService) {}
+constructor(private _userService:UserService,private _store:Store,private _router:Router) {}
 ngOnInit(): void {
-  this.likeCount = this.artist.subscribers.length
+  this.subscribersCount = this.artist.subscribers.length
  if(this.artist.subscribers.includes(this.currentUserId as never)) {
     this.isSubscribed = true
  } else {
@@ -24,17 +25,22 @@ ngOnInit(): void {
 }
 toggleSubscription(artist:IUserData ): void {
   if (this.isSubscribed) {
-    this.likeCount--
+  this.subscribersCount--
     this.isSubscribed = false
     this._userService.subscribeUser(artist._id).subscribe()
   } else {
     this.isSubscribed = true
-    this.likeCount++
+    this.subscribersCount++
     this._userService.subscribeUser(artist._id).subscribe()
   }
-  // Here you would typically call a service to update the subscription status on the server
-  console.log(`${this.isSubscribed ? 'Subscribed to' : 'Unsubscribed from'} ${artist.fullName}`);
+
 }
+
+artistMedias() {
+  this._router.navigate([`home/artist-medias/${this.artist._id}`])
+}
+
+
 
 formatSubscribers(subscribers: number): string {
   if (subscribers >= 1000000) {

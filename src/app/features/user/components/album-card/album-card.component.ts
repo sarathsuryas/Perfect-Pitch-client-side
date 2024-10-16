@@ -9,6 +9,6 @@ import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
 })
 export class AlbumCardComponent {
 @Input() albumData:IAlbumData[] = []
-
+ 
 }
  

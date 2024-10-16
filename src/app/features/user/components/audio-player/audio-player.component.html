@@ -27,7 +27,7 @@
           (click)="playSong(i)"
           class="flex items-center p-2 hover:bg-gray-800 cursor-pointer rounded-md transition-colors duration-200"
           [class.bg-gray-800]="i === currentSongIndex">
-        <img *ngIf="AlbumDetails" [src]="AlbumDetails.thumbNailLink" [alt]="AlbumDetails.title" class="w-10 h-10 rounded mr-4">
+        <img *ngIf="AlbumDetails" [src]="song.thumbNailLink" [alt]="AlbumDetails.title" class="w-10 h-10 rounded mr-4">
         <div class="flex-grow">
           <div [class.text-green-500]="i === currentSongIndex">{{ song.title }}</div>
           <div class="text-sm text-gray-400">{{ song.artistId.fullName }}</div>

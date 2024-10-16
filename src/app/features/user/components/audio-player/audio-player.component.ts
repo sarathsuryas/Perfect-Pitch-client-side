@@ -1,11 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { PlaylistDialogComponent } from '../playlist-dialougue/playlist-dialougue.component';
 import { MatDialog } from '@angular/material/dialog';
 import { IAudioData } from 'src/app/core/interfaces/IAudioData';
 import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
 import { UserService } from '../../services/user.service';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { Store } from '@ngrx/store';
 import { playSong } from 'src/app/store/song/song.action';
@@ -25,7 +24,7 @@ interface Song {
   templateUrl: './audio-player.component.html',
   styleUrls: ['./audio-player.component.css']
 })
-export class AudioPlayerComponent {
+export class AudioPlayerComponent implements OnChanges {
  @Input() AlbumDetails!:IAlbumData
  @Input() playlistDetails!:IUserPlaylists 
  @Input() songs:IAudioData[] = []
@@ -59,6 +58,10 @@ export class AudioPlayerComponent {
    this.audio.addEventListener('loadedmetadata', () => {
      this.duration = this.audio?.duration || 0;
    });
+ }
+
+ ngOnChanges(){
+  console.log(this.AlbumDetails)
  }
  
  playSong(index: number) {

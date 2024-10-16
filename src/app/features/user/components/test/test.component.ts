@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-interface Artist {
-  id: number;
-  name: string;
-  imageUrl: string;
-  subscribers: number;
-  isSubscribed: boolean;
-}
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-test',
@@ -14,134 +8,93 @@ interface Artist {
   styleUrls: ['./test.component.css']
 })
 export class TestComponent {
-
-  // albumForm: FormGroup;
-  // thumbnailPreview: string | ArrayBuffer | null = null;
-
-  // constructor(private fb: FormBuilder) {
-  //   this.albumForm = this.fb.group({
-  //     albumName: ['', Validators.required],
-  //     thumbnail: [null, Validators.required],
-  //     tracks: this.fb.array([])
-  //   });
+  // value = "sarath"
+  // ngOnInit() {
+  // this.value = "gffdfdsfds"
   // }
+// albumForm: FormGroup;
+// albumThumbnailPreview: string | null = null;
+// genres: string[] = [
+//   'Rock', 'Pop', 'Hip Hop', 'R&B', 'Country', 'Jazz', 'Classical', 'Electronic', 'Folk', 'Blues'
+// ];
 
-  // ngOnInit(): void {
-  //   this.addTrack();
-  // }
+// constructor(private fb: FormBuilder, private snackBar: MatSnackBar) {
+//   this.albumForm = this.fb.group({
+//     albumName: ['', Validators.required],
+//     albumThumbnail: [null, Validators.required],
+//     tracks: this.fb.array([])
+//   });
+//   this.addTrack(); // Add one track by default
+// }
 
-  // get tracks() {
-  //   return this.albumForm.get('tracks') as FormArray;
-  // }
+// get tracks() {
+//   return this.albumForm.get('tracks') as FormArray;
+// }
 
-  // addTrack() {
-  //   const trackForm = this.fb.group({
-  //     trackName: ['', Validators.required],
-  //     trackFile: [null, Validators.required]
-  //   });
-  //   this.tracks.push(trackForm);
-  // }
+// addTrack() {
+//   const trackForm = this.fb.group({
+//     name: ['', Validators.required],
+//     file: [null, Validators.required],
+//     thumbnail: [null]
+//   });
+//   this.tracks.push(trackForm);
+// }
 
-  // removeTrack(index: number) {
-  //   this.tracks.removeAt(index);
-  // }
+// removeTrack(index: number) {
+//   this.tracks.removeAt(index);
+// }
 
-  // onThumbnailSelected(event: Event) {
-  //   const file = (event.target as HTMLInputElement).files?.[0];
-  //   if (file) {
-  //     this.albumForm.patchValue({ thumbnail: file });
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       this.thumbnailPreview = reader.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
+// onAlbumThumbnailSelected(event: Event) {
+//   const file = (event.target as HTMLInputElement).files?.[0];
+//   if (file) {
+//     this.albumForm.patchValue({ albumThumbnail: file });
+//     this.albumForm.get('albumThumbnail')?.updateValueAndValidity();
 
-  // onTrackSelected(event: Event, index: number) {
-  //   const file = (event.target as HTMLInputElement).files?.[0];
-  //   if (file) {
-  //     this.tracks.at(index).patchValue({ trackFile: file });
-  //   }
-  // }
+//     const reader = new FileReader();
+//     reader.onload = () => {
+//       this.albumThumbnailPreview = reader.result as string;
+//     };
+//     reader.readAsDataURL(file);
+//   }
+// }
 
-  // onSubmit() {
-  //   if (this.albumForm.valid) {
-  //     console.log(this.albumForm.value);
-     
+// onTrackFileSelected(event: Event, index: number) {
+//   const file = (event.target as HTMLInputElement).files?.[0];
+//   if (file) {
+//     this.tracks.at(index).patchValue({ file: file });
+//     this.tracks.at(index).get('file')?.updateValueAndValidity();
+//   }
+// }
 
-      
-  //   }
-  // }
+// onTrackThumbnailSelected(event: Event, index: number) {
+//   const file = (event.target as HTMLInputElement).files?.[0];
+//   if (file) {
+//     this.tracks.at(index).patchValue({ thumbnail: file });
+//     this.tracks.at(index).get('thumbnail')?.updateValueAndValidity();
+//   }
+// }
 
-  artists: Artist[] = [
-    {
-      id: 1,
-      name: 'Taylor Swift',
-      imageUrl: '/placeholder.svg?height=100&width=100',
-      subscribers: 1000000,
-      isSubscribed: false
-    },
-    {
-      id: 2,
-      name: 'Ed Sheeran',
-      imageUrl: '/placeholder.svg?height=100&width=100',
-      subscribers: 800000,
-      isSubscribed: true
-    },
-    {
-      id: 3,
-      name: 'Beyoncé',
-      imageUrl: '/placeholder.svg?height=100&width=100',
-      subscribers: 1200000,
-      isSubscribed: false
-    },
-    {
-      id: 4,
-      name: 'Drake',
-      imageUrl: '/placeholder.svg?height=100&width=100',
-      subscribers: 950000,
-      isSubscribed: false
-    },
-    {
-      id: 5,
-      name: 'Adele',
-      imageUrl: '/placeholder.svg?height=100&width=100',
-      subscribers: 1100000,
-      isSubscribed: true
-    },
-    {
-      id: 6,
-      name: 'The Weeknd',
-      imageUrl: '/placeholder.svg?height=100&width=100',
-      subscribers: 890000,
-      isSubscribed: false
-    }
-  ];
+// getTrackPreviewUrl(index: number): string {
+//   const file = this.tracks.at(index).get('file')?.value;
+//   return file ? URL.createObjectURL(file) : '';
+// }
 
-  constructor() { }
+// getTrackThumbnailPreview(index: number): string | null {
+//   const file = this.tracks.at(index).get('thumbnail')?.value;
+//   if (file) {
+//     return URL.createObjectURL(file);
+//   }
+//   return null;
+// }
 
-  ngOnInit(): void {
-  }
-
-  toggleSubscription(artist: Artist): void {
-    artist.isSubscribed = !artist.isSubscribed;
-    if (artist.isSubscribed) {
-      artist.subscribers++;
-    } else {
-      artist.subscribers--;
-    }
-    // Here you would typically call a service to update the subscription status on the server
-    console.log(`${artist.isSubscribed ? 'Subscribed to' : 'Unsubscribed from'} ${artist.name}`);
-  }
-
-  formatSubscribers(subscribers: number): string {
-    if (subscribers >= 1000000) {
-      return (subscribers / 1000000).toFixed(1) + 'M';
-    } else if (subscribers >= 1000) {
-      return (subscribers / 1000).toFixed(1) + 'K';
-    }
-    return subscribers.toString();
-  }
+// onSubmit() {
+//   if (this.albumForm.valid) {
+//     console.log('Album data:', this.albumForm.value);
+//     // Here you would typically send the data to your backend
+//     this.snackBar.open('Album uploaded successfully!', 'Close', { duration: 3000 });
+//   } else {
+//     this.snackBar.open('Please fill all required fields', 'Close', { duration: 3000 });
+//   }
+// }
 
 }

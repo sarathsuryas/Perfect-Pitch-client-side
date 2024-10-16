@@ -1,6 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import {Howl, Howler} from 'howler';
-import { AudioPlayerService } from '../../services/audio-player.service';
 import { PlyrComponent } from '@atom-platform/ngx-plyr';
 
 @Component({
@@ -10,7 +8,7 @@ import { PlyrComponent } from '@atom-platform/ngx-plyr';
 })
 export class GlobalAudioPlayerComponent {
 
-  constructor(private audioService: AudioPlayerService) {}
+  // constructor(private audioService: AudioPlayerService) {}
   @ViewChild(PlyrComponent)
   plyr!: PlyrComponent;
   

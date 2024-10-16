@@ -32,13 +32,16 @@ import { AddGenresComponent } from './features/admin/components/add-genres/add-g
 import { GlobalAudioPlayerComponent } from './features/user/components/global-audio-player/global-audio-player.component';
 import { SongsListComponent } from './features/user/components/songs-list/songs-list.component';
 import { ArtistListingComponent } from './features/user/components/artist-listing/artist-listing.component';
+import { ArtistMediasComponent } from './features/user/components/artist-medias/artist-medias.component';
+import { TestnavComponent } from './features/user/components/testnav/testnav.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
   {path:'login',component:UserLoginComponent},
   {path:'register',component:UserRegisterComponent},
   {path:'otp-verify',component:OtpComponent},
-  {path:'home',component:UserMainComponent,canActivate:[UserAuthGuard],
+  {path:'test-nav',component:TestnavComponent},
+  {path:'home',component:UserMainComponent, canActivate:[UserAuthGuard],
     children:[
       {path:'user-profile',component:UserProfileComponent},
       {path:'music-videos',component:VideosListComponent},
@@ -57,7 +60,8 @@ const routes: Routes = [
       {path:'genres',component:MusicGenresComponent},
       {path:'audio',component:GlobalAudioPlayerComponent},
       {path:'songs-list/:id',component:SongsListComponent},
-      {path:'artist-list',component:ArtistListingComponent}
+      {path:'artist-list',component:ArtistListingComponent},
+      {path:'artist-medias/:id',component:ArtistMediasComponent}
     ]
   },
   {path:'admin',component:AdminLoginComponent},

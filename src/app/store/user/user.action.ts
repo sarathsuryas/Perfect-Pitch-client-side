@@ -38,3 +38,6 @@ export const googleLoginUserSuccess = createAction('[User] google Login Success'
 export const googleLoginFail = createAction('[User] google Login Fail',props<{error:string}>())
 export const removeToken = createAction('[User] Remove Token')
 
+// set user data for go to media page 
+
+export const setUserId = createAction('[User] setUserId',props<{userId:string}>())

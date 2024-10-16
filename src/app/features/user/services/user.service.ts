@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { debounceTime, map, Observable, tap } from 'rxjs';
+import { debounceTime, forkJoin, map, Observable, tap } from 'rxjs';
 import { userModel } from '../../../store/user/user.model';
 import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
@@ -116,7 +116,7 @@ export class UserService {
 
   mediaUpload(fileuploadurl: string, contenttype: string, file: File) {
     const headers = new HttpHeaders({ 'Content-Type': contenttype });
-    
+
     const req = new HttpRequest(
       'PUT',
       fileuploadurl,
@@ -157,7 +157,6 @@ export class UserService {
     this._cookieService.delete('token')
     this._cookieService.delete('refreshToken')
     this._store.dispatch(logOut())
-    this._store.select(selectIsAuthUser).subscribe((data) => console.log(data))
     this._router.navigate([''])
   }
 
@@ -175,7 +174,7 @@ export class UserService {
     return this._http.post<IPreSignedUrls>(`${this.api}/generate-pre-signed-urls`, { post_params })
   }
 
-  audioUpload(fileuploadurl: string, contenttype: string, file: File) {
+  uploadSingleFileToS3(fileuploadurl: string, contenttype: string, file: File) {
     const headers = new HttpHeaders({ 'Content-Type': contenttype });
     const req = new HttpRequest(
       'PUT',
@@ -184,8 +183,17 @@ export class UserService {
       {
         headers: headers
       });
-    return this._http.request(req).toPromise()
+    return this._http.request(req)
   }
+
+  uploadMultipleFileToS3(files: { url: string, contenttype: string, file: File }[]) {
+    const multipleRequest = files.map(({ url, contenttype, file }) => {
+      return this.uploadSingleFileToS3(url, contenttype, file)
+    })
+    return forkJoin(multipleRequest)
+  }
+
+
 
   submitAlbumDetails(data: ISumbitAlbumDetails) {
     const files = JSON.stringify(data)
@@ -215,6 +223,7 @@ export class UserService {
   likeVideo(videoId: string): Observable<string> {
     return this._http.put<string>(`${this.api}/like-video`, { videoId })
   }
+  
   subscribeUser(artistId: string) {
     return this._http.put(`${this.api}/subscribe-user`, { artistId })
   }
@@ -240,64 +249,68 @@ export class UserService {
   uploadShorts(data: IUploadShortsDto): Observable<IShortsUploadResponse> {
     return this._http.post<IShortsUploadResponse>(`${this.api}/upload-shorts`, data)
   }
-  
-  trimVideo(data:{start:string,end:string,file:File }) {
+
+  trimVideo(data: { start: string, end: string, file: File }) {
     const formData = new FormData();
     formData.append('file', data.file);
-    formData.append("start",data.start)
-    formData.append('end',data.end)
+    formData.append("start", data.start)
+    formData.append('end', data.end)
     return this._http.post<IShortsUploadResponse>(`${this.api}/trim-video`, formData)
   }
- 
 
- shortsUpload(fileuploadurl: string, contenttype: string, file: File) {
-  const headers = new HttpHeaders({ 'Content-Type': contenttype });
-  const req = new HttpRequest(
-    'PUT',
-    fileuploadurl,
-    file,
-    {
-      headers: headers,
-      reportProgress:true,
-      
-    });
-  return this._http.request(req)
-}
 
-submitShortsDetails(data:{caption:string,description:string,uniqueKey:string}) {
- return this._http.post(`${this.api}/submit-shorts-details`,data)
-}
+  shortsUpload(fileuploadurl: string, contenttype: string, file: File) {
+    const headers = new HttpHeaders({ 'Content-Type': contenttype });
+    const req = new HttpRequest(
+      'PUT',
+      fileuploadurl,
+      file,
+      {
+        headers: headers,
+        reportProgress: true,
 
-getShorts():Observable<IShortsResponse> {
-  return this._http.get<IShortsResponse>(`${this.api}/get-shorts`)
-}
+      });
+    return this._http.request(req)
+  }
 
-createPlaylist(data:ICreatePlaylistDto):Observable<{playlistId:string}> {
-   return this._http.post<{playlistId:string}>(`${this.api}/create-Playlist`,data)
-}
+  submitShortsDetails(data: { caption: string, description: string, uniqueKey: string }) {
+    return this._http.post(`${this.api}/submit-shorts-details`, data)
+  }
 
-getUserPlalists():Observable<IUserPlaylists[]> {
+  getShorts(): Observable<IShortsResponse> {
+    return this._http.get<IShortsResponse>(`${this.api}/get-shorts`)
+  }
+
+  createPlaylist(data: ICreatePlaylistDto): Observable<{ playlistId: string }> {
+    return this._http.post<{ playlistId: string }>(`${this.api}/create-Playlist`, data)
+  }
+
+  getUserPlalists(): Observable<IUserPlaylists[]> {
     return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlist`)
-}
+  }
 
-addToPlaylsit(songId:string,playlistId:string):Observable<{success:boolean,exist:boolean}> {
-  return this._http.put<{success:boolean,exist:boolean}>(`${this.api}/add-to-playlist`,{songId,playlistId})
-}
+  addToPlaylsit(songId: string, playlistId: string): Observable<{ success: boolean, exist: boolean }> {
+    return this._http.put<{ success: boolean, exist: boolean }>(`${this.api}/add-to-playlist`, { songId, playlistId })
+  }
 
-getPlaylistSongs(playlistId:string):Observable<IUserPlaylists> {
-  return  this._http.get<IUserPlaylists>(`${this.api}/get-playlist-songs?playlistId=${playlistId}`)
-}
+  getPlaylistSongs(playlistId: string): Observable<IUserPlaylists> {
+    return this._http.get<IUserPlaylists>(`${this.api}/get-playlist-songs?playlistId=${playlistId}`)
+  }
 
-getGenres():Observable<IGenres[]>{
-  return this._http.get<IGenres[]>(`${this.api}/get-genres`)
-}
+  getGenres(): Observable<IGenres[]> {
+    return this._http.get<IGenres[]>(`${this.api}/get-genres`)
+  }
 
-getSameGenreSongs(genreId:string):Observable<ISongsSameGenre[]> {
-  return this._http.get<ISongsSameGenre[]>(`${this.api}/get-genre-songs?genreId=${genreId}`)
-}
+  getSameGenreSongs(genreId: string): Observable<ISongsSameGenre[]> {
+    return this._http.get<ISongsSameGenre[]>(`${this.api}/get-genre-songs?genreId=${genreId}`)
+  }
 
-getArtists():Observable<{artists:IUserData[],userId:string}> {
-  return this._http.get<{artists:IUserData[],userId:string}>(`${this.api}/get-artists`)
-}
+  getArtists(): Observable<{ artists: IUserData[], userId: string }> {
+    return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists`)
+  }
+
+  getArtistMedias() {
+    return this._http.get(`${this.api}/get-medias`)
+  }
 
 }

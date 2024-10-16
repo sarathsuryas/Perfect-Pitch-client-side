@@ -4,9 +4,8 @@ import { setAdminTokenCookie } from './store/admin/admin.action';
 import { userSetTokenFromCookie } from './store/user/user.action';
 import { CookieService } from 'ngx-cookie-service';
 import { initFlowbite } from 'flowbite';
-import { Subscription } from 'rxjs';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
- 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -24,6 +23,4 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     initFlowbite();
   }
-  
- 
 }

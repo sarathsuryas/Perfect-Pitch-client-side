@@ -73,7 +73,6 @@ import { CreatePlaylistDialogComponent } from './user/components/create-playlist
 import {  MatSelectModule } from '@angular/material/select';
 import { TestComponent } from './user/components/test/test.component';
 import { MatCardModule } from '@angular/material/card';
-import { SharedModule } from "../shared/shared.module";
 import { SnackbarComponent } from './user/components/snackbar/snackbar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MusicGenresComponent } from './user/components/music-genres/music-genres.component';
@@ -84,7 +83,9 @@ import { GlobalAudioPlayerComponent } from './user/components/global-audio-playe
 import { SongsListComponent } from './user/components/songs-list/songs-list.component';
 import { ArtistListingComponent } from './user/components/artist-listing/artist-listing.component';
 import { ArtistCardsComponent } from './user/components/artist-cards/artist-cards.component';
-
+import { ArtistMediasComponent } from './user/components/artist-medias/artist-medias.component';
+import { TestnavComponent } from './user/components/testnav/testnav.component';
+import { TracksUploadListsComponent } from './user/components/tracks-upload-lists/tracks-upload-lists.component';
 
 @NgModule({
   declarations: [
@@ -142,6 +143,9 @@ import { ArtistCardsComponent } from './user/components/artist-cards/artist-card
     SongsListComponent,
     ArtistListingComponent,
     ArtistCardsComponent,
+    ArtistMediasComponent,
+    TestnavComponent,
+    TracksUploadListsComponent,
   ],
   imports: [
     CommonModule,
