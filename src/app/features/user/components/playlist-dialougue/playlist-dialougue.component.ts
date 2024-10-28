@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreatePlaylistDialogComponent } from '../create-playlist-dialog/create-playlist-dialog.component';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { ICreatePlaylistDto } from 'src/app/core/dtos/createPlaylist.dto';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { Route, Router } from '@angular/router';

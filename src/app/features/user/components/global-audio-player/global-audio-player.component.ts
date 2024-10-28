@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Howl } from 'howler';
 import { IAudioData } from 'src/app/core/interfaces/IAudioData';
-import { selectSongs } from 'src/app/store/song/song.selector';
 import { Songs } from 'src/app/store/song/song.state';
 
 
@@ -12,90 +11,91 @@ import { Songs } from 'src/app/store/song/song.state';
   styleUrls: ['./global-audio-player.component.css']
 })
 export class GlobalAudioPlayerComponent {
-  sound!: Howl;
-  isPlaying = false;
-  currentTime = 0;
-  duration = 0;
-  volume = 1;
-  link: string = ''
-  index:number = 0
-  songs:IAudioData[] = [] 
-  constructor(private _store:Store<Songs>) {}
+  // sound!: Howl;
+  // isPlaying = false;
+  // currentTime = 0;
+  // duration = 0;
+  // volume = 1;
+  // link: string = ''
+  // index:number = 0
+  // songs:IAudioData[] = [] 
+  // constructor(private _store:Store<Songs>) {}
 
-  ngOnInit() {
+  // ngOnInit() {
   
 
-    this._store.select(selectSongs).subscribe({
-      next:(value)=>{
-         this.link = value.songs[value.index as number].link
-         this.songs = value.songs
-         this.index = value.index as number
-         this.togglePlayPause()
-      },
-      error:(err)=>{
-        console.error(err)
-      }
-    })
-  }
+  //   this._store.select(selectSong).subscribe({
+  //     next:(value)=>{
+  //       console.log(value)
+  //        this.link = value.songs[value.index as number].link
+  //        this.songs = value.songs
+  //        this.index = value.index as number
+  //        this.togglePlayPause()
+  //     },
+  //     error:(err)=>{
+  //       console.error(err)
+  //     }
+  //   })
+  // }
 
-  loadAudio() {
-    this.sound = new Howl({
-      src: [this.link],
-      html5: true,
-      onplay: () => {
-        this.isPlaying = true;
-        this.duration = this.sound.duration();
-        this.trackProgress();
-      },
-      onend: () => {
-        this.isPlaying = false;
-      }
-    });
-  }
+  // loadAudio() {
+  //   this.sound = new Howl({
+  //     src: [this.link],
+  //     html5: true,
+  //     onplay: () => {
+  //       this.isPlaying = true;
+  //       this.duration = this.sound.duration();
+  //       this.trackProgress();
+  //     },
+  //     onend: () => {
+  //       this.isPlaying = false;
+  //     }
+  //   });
+  // }
 
-  playPrevious() {
+  // playPrevious() {
     
-  }
+  // }
 
-  playNext() {
-    this.index++
-    this.link = ''
-    this.link = this.songs[this.index].link   
-    this.sound.play();
-  }
+  // playNext() {
+  //   this.index++
+  //   this.link = ''
+  //   this.link = this.songs[this.index].link   
+  //   this.sound.play();
+  // }
 
-  togglePlayPause() {
-    this.loadAudio()
-    if (this.isPlaying) {
-      this.sound.pause();
-      this.isPlaying = false;
-    } else {
-      this.sound.play();
-      this.isPlaying = true;
-    }
-  }
+  // togglePlayPause() {
+  //   this.loadAudio()
+  //   if (this.isPlaying) {
+  //     this.sound.pause();
+  //     this.isPlaying = false;
+  //   } else {
+  //     this.sound.play();
+  //     this.isPlaying = true;
+  //   }
+  // }
 
-  onSeek(event: any) {
-    const seekTo = event.target.value;
-    this.sound.seek(seekTo);
-    this.currentTime = seekTo;
-  }
+  // onSeek(event: any) {
+  //   const seekTo = event.target.value;
+  //   this.sound.seek(seekTo);
+  //   this.currentTime = seekTo;
+  // }
 
-  changeVolume(event: any) {
-    this.volume = event.target.value;
-    this.sound.volume(this.volume);
-  }
+  // changeVolume(event: any) {
+  //   this.volume = event.target.value;
+  //   this.sound.volume(this.volume);
+  // }
 
-  formatTime(seconds: number): string {
-    const minutes: number = Math.floor(seconds / 60);
-    const secs: number = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? '0' + secs : secs}`;
-  }
+  // formatTime(seconds: number): string {
+  //   const minutes: number = Math.floor(seconds / 60);
+  //   const secs: number = Math.floor(seconds % 60);
+  //   return `${minutes}:${secs < 10 ? '0' + secs : secs}`;
+  // }
 
-  trackProgress() {
-    setInterval(() => {
-      this.currentTime = this.sound.seek() as number;
-    }, 1000);
-  }
+  // trackProgress() {
+  //   setInterval(() => {
+  //     this.currentTime = this.sound.seek() as number;
+  //   }, 1000);
+  // }
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { IGenres } from 'src/app/core/interfaces/IGenres';
 import { Router } from '@angular/router';
 interface Genre {

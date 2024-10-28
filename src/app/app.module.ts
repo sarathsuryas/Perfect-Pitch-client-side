@@ -35,7 +35,7 @@ import { CoreModule } from './core/core.module';
 import { FeaturesModule } from './features/features.module';
 import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { songReducer } from './store/song/song.reducer';
-
+  
 
 @NgModule({
   declarations: [
@@ -51,7 +51,7 @@ import { songReducer } from './store/song/song.reducer';
     CoreModule,
     FeaturesModule,
     SharedModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule, 
     UserRoutingModule,
     AdminRoutingModule,
     ReactiveFormsModule,
@@ -71,7 +71,7 @@ import { songReducer } from './store/song/song.reducer';
     StoreModule.forFeature('admin', adminReducer),
     StoreModule.forFeature('song', songReducer),
     EffectsModule.forRoot([UserEffects, AdminEffects]),
-    GoogleSigninButtonModule,
+    GoogleSigninButtonModule, 
   ],
   providers: [
     provideHttpClient(withFetch())

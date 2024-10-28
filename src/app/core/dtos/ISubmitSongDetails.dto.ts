@@ -1,6 +1,6 @@
 export interface ISubmitSongDetailsDto {
   title:string;
-  genre:string;
+  genreId:string;
   thumbNailUniqueKey:string;
   songUniqueKey:string;
 }

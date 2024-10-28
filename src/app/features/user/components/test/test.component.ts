@@ -1,100 +1,101 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+interface Video {
+  id: string;
+  title: string;
+  thumbnail: string;
+  channelName: string;
+  channelAvatar: string;
+  views: number;
+  uploadedAt: string;
+}
 @Component({
   selector: 'app-test',
   templateUrl: './test.component.html',
   styleUrls: ['./test.component.css']
 })
 export class TestComponent {
-  // value = "sarath"
-  // ngOnInit() {
-  // this.value = "gffdfdsfds"
-  // }
-// albumForm: FormGroup;
-// albumThumbnailPreview: string | null = null;
-// genres: string[] = [
-//   'Rock', 'Pop', 'Hip Hop', 'R&B', 'Country', 'Jazz', 'Classical', 'Electronic', 'Folk', 'Blues'
-// ];
+ 
+  videos: Video[] = [
+    {
+      id: '1',
+      title: 'Amazing Sunset Timelapse in 4K',
+      thumbnail: '/placeholder.svg?height=180&width=320',
+      channelName: 'Nature Vibes',
+      channelAvatar: '/placeholder.svg?height=36&width=36',
+      views: 1234567,
+      uploadedAt: '2 weeks ago'
+    },
+    {
+      id: '2',
+      title: 'Learn Angular in 60 Minutes - Full Course for Beginners',
+      thumbnail: '/placeholder.svg?height=180&width=320',
+      channelName: 'Code Master',
+      channelAvatar: '/placeholder.svg?height=36&width=36',
+      views: 987654,
+      uploadedAt: '3 days ago'
+    },
+    {
+      id: '3',
+      title: 'Easy 30-Minute Recipes for Busy People',
+      thumbnail: '/placeholder.svg?height=180&width=320',
+      channelName: 'Quick Meals',
+      channelAvatar: '/placeholder.svg?height=36&width=36',
+      views: 567890,
+      uploadedAt: '1 month ago'
+    },
+    {
+      id: '4',
+      title: 'Top 10 Travel Destinations for 2023',
+      thumbnail: '/placeholder.svg?height=180&width=320',
+      channelName: 'Wanderlust Adventures',
+      channelAvatar: '/placeholder.svg?height=36&width=36',
+      views: 2345678,
+      uploadedAt: '5 days ago'
+    },
+    {
+      id: '5',
+      title: 'The Science Behind Climate Change Explained',
+      thumbnail: '/placeholder.svg?height=180&width=320',
+      channelName: 'Science Today',
+      channelAvatar: '/placeholder.svg?height=36&width=36',
+      views: 789012,
+      uploadedAt: '1 week ago'
+    },
+    {
+      id: '6',
+      title: 'Mastering Guitar: From Beginner to Pro',
+      thumbnail: '/placeholder.svg?height=180&width=320',
+      channelName: 'Music Maestro',
+      channelAvatar: '/placeholder.svg?height=36&width=36',
+      views: 456789,
+      uploadedAt: '2 months ago'
+    },
+    {
+      id: '7',
+      title: 'The History of Ancient Rome in 20 Minutes',
+      thumbnail: '/placeholder.svg?height=180&width=320',
+      channelName: 'History Buff',
+      channelAvatar: '/placeholder.svg?height=36&width=36',
+      views: 3456789,
+      uploadedAt: '3 weeks ago'
+    },
+    {
+      id: '8',
+      title: 'DIY Home Decor Ideas on a Budget',
+      thumbnail: '/placeholder.svg?height=180&width=320',
+      channelName: 'Crafty Creator',
+      channelAvatar: '/placeholder.svg?height=36&width=36',
+      views: 678901,
+      uploadedAt: '4 days ago'
+    }
+  ];
 
-// constructor(private fb: FormBuilder, private snackBar: MatSnackBar) {
-//   this.albumForm = this.fb.group({
-//     albumName: ['', Validators.required],
-//     albumThumbnail: [null, Validators.required],
-//     tracks: this.fb.array([])
-//   });
-//   this.addTrack(); // Add one track by default
-// }
+  constructor() { }
 
-// get tracks() {
-//   return this.albumForm.get('tracks') as FormArray;
-// }
+  ngOnInit(): void {
 
-// addTrack() {
-//   const trackForm = this.fb.group({
-//     name: ['', Validators.required],
-//     file: [null, Validators.required],
-//     thumbnail: [null]
-//   });
-//   this.tracks.push(trackForm);
-// }
-
-// removeTrack(index: number) {
-//   this.tracks.removeAt(index);
-// }
-
-// onAlbumThumbnailSelected(event: Event) {
-//   const file = (event.target as HTMLInputElement).files?.[0];
-//   if (file) {
-//     this.albumForm.patchValue({ albumThumbnail: file });
-//     this.albumForm.get('albumThumbnail')?.updateValueAndValidity();
-
-//     const reader = new FileReader();
-//     reader.onload = () => {
-//       this.albumThumbnailPreview = reader.result as string;
-//     };
-//     reader.readAsDataURL(file);
-//   }
-// }
-
-// onTrackFileSelected(event: Event, index: number) {
-//   const file = (event.target as HTMLInputElement).files?.[0];
-//   if (file) {
-//     this.tracks.at(index).patchValue({ file: file });
-//     this.tracks.at(index).get('file')?.updateValueAndValidity();
-//   }
-// }
-
-// onTrackThumbnailSelected(event: Event, index: number) {
-//   const file = (event.target as HTMLInputElement).files?.[0];
-//   if (file) {
-//     this.tracks.at(index).patchValue({ thumbnail: file });
-//     this.tracks.at(index).get('thumbnail')?.updateValueAndValidity();
-//   }
-// }
-
-// getTrackPreviewUrl(index: number): string {
-//   const file = this.tracks.at(index).get('file')?.value;
-//   return file ? URL.createObjectURL(file) : '';
-// }
-
-// getTrackThumbnailPreview(index: number): string | null {
-//   const file = this.tracks.at(index).get('thumbnail')?.value;
-//   if (file) {
-//     return URL.createObjectURL(file);
-//   }
-//   return null;
-// }
-
-// onSubmit() {
-//   if (this.albumForm.valid) {
-//     console.log('Album data:', this.albumForm.value);
-//     // Here you would typically send the data to your backend
-//     this.snackBar.open('Album uploaded successfully!', 'Close', { duration: 3000 });
-//   } else {
-//     this.snackBar.open('Please fill all required fields', 'Close', { duration: 3000 });
-//   }
-// }
+  }
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 
 @Component({

@@ -1,10 +1,12 @@
 import { IAudioData } from "src/app/core/interfaces/IAudioData"
 
 export type Songs = {
-  songs:IAudioData[],
-  index:number|null
+ songId:string;
+ albumId:string;
+ artistName:string
 }
 export const SongInitialState:Songs = {
-  songs: [],
-  index: null
+  songId: "",
+  albumId: "",
+  artistName:''
 }

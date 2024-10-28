@@ -86,6 +86,15 @@ import { ArtistCardsComponent } from './user/components/artist-cards/artist-card
 import { ArtistMediasComponent } from './user/components/artist-medias/artist-medias.component';
 import { TestnavComponent } from './user/components/testnav/testnav.component';
 import { TracksUploadListsComponent } from './user/components/tracks-upload-lists/tracks-upload-lists.component';
+import { NgxAudioComponent } from './user/components/ngx-audio/ngx-audio.component';
+import { CreateLiveComponent } from './user/components/create-live/create-live.component';
+import {WebcamModule} from 'ngx-webcam';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { LiveStreamingComponent } from './user/components/live-streaming/live-streaming.component';
+import { ReplyToReplyComponent } from './user/components/reply-to-reply/reply-to-reply.component';
+const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
+
+
 
 @NgModule({
   declarations: [
@@ -146,6 +155,10 @@ import { TracksUploadListsComponent } from './user/components/tracks-upload-list
     ArtistMediasComponent,
     TestnavComponent,
     TracksUploadListsComponent,
+    NgxAudioComponent,
+    CreateLiveComponent,
+    LiveStreamingComponent,
+    ReplyToReplyComponent,
   ],
   imports: [
     CommonModule,
@@ -180,7 +193,10 @@ import { TracksUploadListsComponent } from './user/components/tracks-upload-list
     MatCardModule,
     MatSnackBarModule,
     PlyrModule,
-],
+    NgxAudioPlayerModule,
+    WebcamModule,
+    SocketIoModule.forRoot(config)
+  ],
   providers:[
     {
       provide: 'SocialAuthServiceConfig',

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IUserData } from 'src/app/core/interfaces/IUserData';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 

@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { IVideoDetails } from 'src/app/core/interfaces/IVideoDetails';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { ICurrentUser } from 'src/app/core/interfaces/ICurrentUser';
 import { IVideoCommentDto } from 'src/app/core/dtos/IVideoComment.dto';
 

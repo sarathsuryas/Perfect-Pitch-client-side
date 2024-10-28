@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { IVideoDetails } from 'src/app/core/interfaces/IVideoDetails';
 import { Store } from '@ngrx/store';
 import { IVideoCommentDto } from 'src/app/core/dtos/IVideoComment.dto';

@@ -1,5 +1,5 @@
 import { Component, DoCheck, Inject, OnChanges, OnInit, SimpleChanges, VERSION } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { IUserData } from 'src/app/core/interfaces/IUserData';
 import { EditUserDto } from 'src/app/core/dtos/editUser.dto';
 import { EditProfileComponent } from '../edit-profile/edit-profile.component';

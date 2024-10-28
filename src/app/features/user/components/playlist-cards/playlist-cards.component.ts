@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 interface Playlist {
   id: number;

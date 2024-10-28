@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 

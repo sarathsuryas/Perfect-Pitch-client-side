@@ -34,6 +34,9 @@ import { SongsListComponent } from './features/user/components/songs-list/songs-
 import { ArtistListingComponent } from './features/user/components/artist-listing/artist-listing.component';
 import { ArtistMediasComponent } from './features/user/components/artist-medias/artist-medias.component';
 import { TestnavComponent } from './features/user/components/testnav/testnav.component';
+import { NgxAudioComponent } from './features/user/components/ngx-audio/ngx-audio.component';
+import { CreateLiveComponent } from './features/user/components/create-live/create-live.component';
+import { LiveStreamingComponent } from './features/user/components/live-streaming/live-streaming.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -61,7 +64,10 @@ const routes: Routes = [
       {path:'audio',component:GlobalAudioPlayerComponent},
       {path:'songs-list/:id',component:SongsListComponent},
       {path:'artist-list',component:ArtistListingComponent},
-      {path:'artist-medias/:id',component:ArtistMediasComponent}
+      {path:'artist-medias/:id',component:ArtistMediasComponent},
+      {path:'ngx',component:NgxAudioComponent},
+      {path:'create-live',component:CreateLiveComponent},
+      {path:'live',component:LiveStreamingComponent}
     ]
   },
   {path:'admin',component:AdminLoginComponent},

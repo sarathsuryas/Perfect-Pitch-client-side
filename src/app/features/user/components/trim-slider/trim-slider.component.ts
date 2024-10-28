@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { IUploadShortsDto } from 'src/app/core/dtos/uploadShorts.dto';
 
 @Component({

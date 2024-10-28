@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/features/user/services/user.service';
+import { UserService } from 'src/app/features/user/services/user/user.service';
 import { AdminService } from '../../services/admin.service';
 import { IGenres } from 'src/app/core/interfaces/IGenres';
 

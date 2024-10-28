@@ -5,7 +5,7 @@
   lg:grid-cols-4 md:p-2 xl:p-4">
     <div *ngFor="let value of albumData" class="item">
          
-    <a routerLink="/home/album-songs/{{value._id}}">  <img src="{{value.thumbNailLink}}" /></a>
+    <a routerLink="/home/album-songs/{{value.uuid}}">  <img src="{{value.thumbNailLink}}" /></a>
       <div class="play">
         <span class="fa fa-play"></span>
       </div>

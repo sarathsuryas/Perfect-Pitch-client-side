@@ -1,52 +1,5 @@
 
-<!-- <mat-toolbar class="fixed top-0 z-20 w-full" style="background-color:#181818;">
-  <button mat-icon-button aria-label="Menu icon" class="" (click)="toggleMenu()">
-    <mat-icon class="text-white">menu</mat-icon>
-  </button>
-  <div class="flex">
-    <a class="font-semibold text-white pt-[5px]">
-      <button class="w-10 h-10  rounded-3xl bg-red-800 focus:outline-none "><i class="fa fa-play w-4  text-white"
-          id="play-btn"></i></button>
-      &nbsp;&nbsp;Perfect Pitch
-    </a>
 
-    <input type="text" class="search ml-44 w-[400px] mt-2 h-[30px] rounded-[100px]">
-    <button class="search-button ml-4 text-white" type="submit"><i class="fa fa-search"></i></button>
-    <div>
-
-      <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" type="button"><span class="material-symbols-outlined ml-[160px] mt-2 text-white">
-        upload_file
-      </span>
-      </button>
-
-     
-      <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-          <li>
-            <a (click)="openDialog()" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload Video</a>
-          </li>
-          <li>
-            <a (click)="openUploadAudioDialog()"
-              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload Audio</a>
-          </li>
-          <li>
-            <a routerLink="/home/shorts-upload"
-              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload Shorts</a>
-          </li>
-          
-        </ul>
-      </div>
-
-      
-    </div>
-
-    <a routerLink="/home/user-profile">
-
-      <mat-icon class="ml-[100px] mt-2 text-white" fontSet="material-symbols-outlined">account_circle</mat-icon>
-    </a>
-
-  </div>
-</mat-toolbar>  -->
 
 
 <nav class="fixed top-0 z-20 w-full bg-gray-900 text-white">
@@ -98,6 +51,9 @@
                 <a routerLink="/home/shorts-upload"
                   class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload Shorts</a>
               </li>
+              <li>
+                <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" routerLink="/home/create-live">Create Live</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -131,12 +87,7 @@
           <span *ngIf="!isCollapsed">Home</span>
         </span>
       </a>
-      <!-- <a mat-list-item>
-        <span class="entry">
-          <mat-icon>post_add</mat-icon>
-          <span *ngIf="!isCollapsed">Posts</span>
-        </span>
-      </a> -->
+      
 
       <a mat-list-item routerLink="music-videos">
         <span class="entry">
@@ -180,6 +131,12 @@
           <span *ngIf="!isCollapsed">Library</span>
         </span>
       </a>
+      <a mat-list-item routerLink="live">
+        <span class="entry">
+          <mat-icon>live_tv</mat-icon>
+          <span *ngIf="!isCollapsed">Live</span>
+        </span>
+      </a>
       <a routerLink="shorts" mat-list-item>
         <span class="entry">
           <mat-icon>play_circle</mat-icon>
@@ -190,6 +147,7 @@
   </mat-sidenav>
   <mat-sidenav-content class="overflow-x-hidden">
     <router-outlet></router-outlet>
+    <app-ngx-audio></app-ngx-audio>
     <!-- <app-global-audio-player></app-global-audio-player> -->
   </mat-sidenav-content>
 </mat-sidenav-container>

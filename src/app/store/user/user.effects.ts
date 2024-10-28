@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { googleLoginFail, googleLoginUser, googleLoginUserSuccess, loginUser, loginUserFail, loginUserSuccess, registerUser, registerUserFail, registerUserSuccess, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
-import { UserService } from "../../features/user/services/user.service";
+import { UserService } from "../../features/user/services/user/user.service";
 import { catchError, exhaustMap, map, mergeMap, of, tap,delay } from "rxjs";
 import { CookieService } from "ngx-cookie-service";
 import { NgxSpinnerService } from "ngx-spinner";

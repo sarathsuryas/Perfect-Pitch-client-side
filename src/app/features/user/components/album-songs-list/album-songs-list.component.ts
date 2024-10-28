@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,16 +13,16 @@ import { IAudioData } from 'src/app/core/interfaces/IAudioData';
   styleUrls: ['./album-songs-list.component.css']
 })
 export class AlbumSongsListComponent {
-  albumData$!:Observable<IAlbumResponse> 
+  albumData$!:Observable<IAlbumResponse[]> 
   id!: string 
-  albumSongs: IAudioData[] = []
-  albumData!:IAlbumData
+
+  albumData:IAlbumResponse[] = []
   constructor(private _userService:UserService,private route: ActivatedRoute,private dialog: MatDialog) {
     this.id = this.route.snapshot.paramMap.get('id') as string
      this.albumData$ = this._userService.getAlbumDetails(this.id)
      this.albumData$.subscribe((data)=>{
-      this.albumData = data.album
-       this.albumSongs = data.songs
+      this.albumData = data
+      console.log(this.albumData)
     })
   }
 

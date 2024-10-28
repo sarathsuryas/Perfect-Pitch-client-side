@@ -51,7 +51,7 @@
     </div>
     <!-- Replies -->
      <div *ngIf="showReplyInput">
-       <app-comment-replies [reply]="reply" *ngFor="let reply of replies"></app-comment-replies>
+       <app-comment-replies [userId]="userId"   [userName]="userName" [userProfileImage]="userProfileImage" [reply]="reply" *ngFor="let reply of replies"></app-comment-replies>
      </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
 import { computedStyle } from 'video.js/dist/types/utils/dom';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { ICommentReply } from 'src/app/core/interfaces/ICommentReply';
 interface Comment {
   replyText: string;
@@ -98,6 +98,7 @@ constructor(private _userService:UserService) {}
 
   
   addReply() {
+ 
     const reply:ICommentReply = {
       _id: '',
       reply: this.reply,
@@ -111,7 +112,7 @@ constructor(private _userService:UserService) {}
     }
     this.replies.unshift(reply)
    
-  this._userService.replyComment({commentId:this.comment._id,reply:this.reply,userId:this.comment.userId._id}).subscribe({
+  this._userService.replyComment({commentId:this.comment._id,reply:this.reply,userId:this.userId}).subscribe({
     next:(data)=>{
        this.reply = ''
       this._userService.getReply(this.commentId).subscribe({

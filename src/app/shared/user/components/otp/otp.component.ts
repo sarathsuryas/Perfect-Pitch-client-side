@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { CookieService } from 'ngx-cookie-service';
 import { CountdownComponent, CountdownConfig } from 'ngx-countdown';
 import { MessageService } from 'primeng/api';
-import { UserService } from 'src/app/features/user/services/user.service';
+import { UserService } from 'src/app/features/user/services/user/user.service';
 import { verifyOtp } from 'src/app/store/user/user.action';
 import { userModel } from 'src/app/store/user/user.model';
 import { selectOtpVerificationFail, selectUserData, } from 'src/app/store/user/user.selector';

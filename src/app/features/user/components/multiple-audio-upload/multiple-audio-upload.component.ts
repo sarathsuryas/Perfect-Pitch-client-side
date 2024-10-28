@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { ISumbitAlbumDetails } from 'src/app/core/dtos/ISubmitAlbumDetails.dto';
 import { MessageService } from 'primeng/api';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -9,12 +9,12 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IAlbumDetails } from 'src/app/core/dtos/ISubmitSongDetails.dto';
 
+
 @Component({
   selector: 'app-multiple-audio-upload',
   templateUrl: './multiple-audio-upload.component.html',
   styleUrls: ['./multiple-audio-upload.component.css']
 })
-
 
 export class MultipleAudioUploadComponent implements OnInit {
 
@@ -128,6 +128,7 @@ export class MultipleAudioUploadComponent implements OnInit {
     private snackBar: MatSnackBar,
     private _userService: UserService,
     private _spinner: NgxSpinnerService,
+    private _router: Router
   ) {
     this.albumForm = this.fb.group({
       albumName: ['', Validators.required],
@@ -224,7 +225,7 @@ export class MultipleAudioUploadComponent implements OnInit {
       for (const value of this.albumData.tracks) {
         this.detailsForPresignedUrls.push({ name: value.songThumbNail.name, type: value.songThumbNail.type, file: value.songThumbNail })
       }
-      this._userService.generatePreSignedUrlsForAlbums(this.detailsForPresignedUrls).subscribe({
+      this._userService.generatePreSignedUrls(this.detailsForPresignedUrls).subscribe({
         next: (data) => {
           this.presignedUrls = data.presignedUrls
           for (let i = 0; i < this.presignedUrls.length; i++) {
@@ -246,9 +247,12 @@ export class MultipleAudioUploadComponent implements OnInit {
                   thumbnailKey: this.albumThumbNailUniqueKey,
                   songs: array
                 }
+                
                 this._userService.submitAlbumDetails(obj).subscribe({
                   next: (value) => {
                     this._spinner.hide()
+                    this.albumForm.reset()
+                    this._router.navigate([`/home/album-songs/${value._id}`])
                     this.snackBar.open('Album uploaded successfully!', 'Close', { duration: 3000 });
                   },
                   error: (err) => {

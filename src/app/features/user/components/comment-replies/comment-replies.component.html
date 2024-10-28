@@ -4,7 +4,7 @@
     <img [src]="reply.userId.profileImage" alt="userProfileImage" class="w-8 h-8 rounded-full">
     <div>
       <div class="flex items-center space-x-2">
-        <!-- reply auhor -->
+        <!-- reply author -->
         <span class="font-semibold">{{reply.userId.fullName}}</span>
         <!-- reply time -->
         <span class="text-gray-500 text-sm">just now</span>
@@ -21,8 +21,30 @@
           <!-- count of replies like -->
           <span>{{likeCount}}</span>
         </button>
-
+        <button (click)="toggleReplyToReply()" >reply</button>
+        <div *ngIf="showReplyToReplyInput" class="mt-4 flex items-start space-x-4">
+          <img [src]="userProfileImage" alt="Current user" class="w-8 h-8 rounded-full">
+          <div class="flex-grow">
+            <input placeholder="Add a public reply..." [(ngModel)]="replyToReply"
+              class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="flex justify-end mt-2 space-x-2">
+    
+              <!-- cancel reply -->
+              <button (click)="cancelReplyToReply()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-full">
+                Cancel
+              </button>
+              <!-- add reply -->
+              <button (click)="addReplyToReply()" class="px-4 py-2 bg-blue-500 text-white rounded-full disabled:opacity-50">
+                Reply
+              </button>
+            </div>
+          </div>
+        </div>
+       
       </div>
     </div>
   </div>
+</div>
+<div *ngIf="showReplyToReplyInput">
+  <app-reply-to-reply [userName]="userName" [userProfileImage]="userProfileImage" [replyToReplayData]="replyToReplayData" *ngFor="let replyToReplayData of replyToReplis" ></app-reply-to-reply>
 </div>

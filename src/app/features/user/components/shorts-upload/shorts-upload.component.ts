@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { IUploadShortsDto } from 'src/app/core/dtos/uploadShorts.dto';
 import { ICustomResponse } from 'src/app/core/interfaces/ICustomResponse';
 import { HttpEvent, HttpEventType } from '@angular/common/http';

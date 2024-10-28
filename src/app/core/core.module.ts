@@ -13,9 +13,7 @@ import { MatListModule } from '@angular/material/list';
     MatToolbarModule,
     MatListModule,
   ],
-  providers:[
-   
-  ],
+  providers:[],
   exports:[ ]
 })
 export class CoreModule { }

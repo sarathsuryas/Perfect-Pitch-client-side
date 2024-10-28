@@ -1,24 +1,31 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ICommentReply } from 'src/app/core/interfaces/ICommentReply';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
+import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
 
 @Component({
   selector: 'app-comment-replies',
   templateUrl: './comment-replies.component.html',
   styleUrls: ['./comment-replies.component.css']
 })
-export class CommentRepliesComponent implements OnChanges,OnInit{
+export class CommentRepliesComponent implements OnChanges, OnInit {
+  replyToReply: string = '';
+  showReplyToReplyInput: boolean = false;
+  @Input() showReplyInput: boolean = false;
+  @Input() reply!: ICommentReply;
+  @Input() userProfileImage: string = ''
+  @Input() userName: string = ''  
+  @Input() userId:string = ''
 
- @Input() showReplyInput:boolean = false
- @Input() reply!:ICommentReply 
- likeCount:number = 0
- like!:boolean
- constructor(private _userService:UserService) {
+  likeCount: number = 0;
+  like!: boolean;
+  replyToReplis: IReplyToReply[] = [];
+  constructor(private _userService: UserService) {
 
- }
+  }
   ngOnInit(): void {
-    if(this.reply.likes.includes(this.reply.userId._id as never)){
-     this.like = true
+    if (this.reply.likes.includes(this.reply.userId._id as never)) {
+      this.like = true
     } else {
       this.like = false
     }
@@ -27,15 +34,69 @@ export class CommentRepliesComponent implements OnChanges,OnInit{
   ngOnChanges(): void {
     this.likeCount = this.reply.likes.length
   }
-  likeReply(replyId:string) {
-     if(this.like) {
+  likeReply(replyId: string) {
+    if (this.like) {
       this.likeCount--
       this._userService.likeReply(replyId).subscribe()
       this.like = false
-     } else {
+    } else {
       this.likeCount++
       this._userService.likeReply(replyId).subscribe()
       this.like = true
-     }
+    }
   }
+
+  toggleReplyToReply() {
+    this.showReplyToReplyInput = !this.showReplyToReplyInput
+    this._userService.getRepliesToReply(this.reply._id).subscribe({
+      next: (value) => {
+        this.replyToReplis = value
+      },
+      error: (err) => {
+        console.error(err)
+      }
+    })
+  }
+  addReplyToReply() {
+    const replyToReplay: IReplyToReply = {
+      _id: '',
+      replyToReply: this.replyToReply,
+      userData: {
+        _id: '',
+        profileImage: this.userProfileImage,
+        fullName: this.userName
+      },
+      likes: [],
+      tag: ''
+    }
+    this.replyToReplis.unshift(replyToReplay)
+
+    this._userService.replyToReply({ replyId: this.reply._id, userId: this.userId, replyToReply: this.replyToReply, likes: [] }).subscribe({
+      next: (value) => {
+        if (value) {
+          this.replyToReply = ''
+          this._userService.getRepliesToReply(this.reply._id).subscribe({
+            next: (value) => {
+              this.replyToReplis = value
+            },
+            error: (err) => {
+              console.error(err)
+            }
+          })
+        }
+      },
+      error: (err) => {
+        console.error(err)
+      }
+    })
+
+
+  }
+  cancelReplyToReply() {
+    this.showReplyToReplyInput = !this.showReplyToReplyInput
+    this.replyToReply = ''
+  }
+
+
+
 }

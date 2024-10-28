@@ -7,7 +7,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
-import { UserService } from 'src/app/features/user/services/user.service';
+import { UserService } from 'src/app/features/user/services/user/user.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';

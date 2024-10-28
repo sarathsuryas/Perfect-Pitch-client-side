@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { debounceTime, forkJoin, map, Observable, tap } from 'rxjs';
-import { userModel } from '../../../store/user/user.model';
+import { userModel } from '../../../../store/user/user.model';
 import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
 import { IUserData } from 'src/app/core/interfaces/IUserData';
@@ -36,11 +36,15 @@ import { ICreatePlaylistDto } from 'src/app/core/dtos/createPlaylist.dto';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { IGenres } from 'src/app/core/interfaces/IGenres';
 import { ISongsSameGenre } from 'src/app/core/interfaces/ISongsSameGenre';
+import { ISongData } from 'src/app/core/interfaces/ISongData';
+import { Socket } from 'ngx-socket-io';
+import { IReplyToReplyDto } from 'src/app/core/dtos/IReplyToReply.dto';
+import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export  class UserService {
 
   private api = `${environment.apiUrl}/users`
   constructor(private readonly _http: HttpClient, private readonly _cookieService: CookieService, private _router: Router, private readonly _store: Store) { }
@@ -169,7 +173,7 @@ export class UserService {
     return this._http.get<IVideoList[]>(`${this.api}/video-list`)
   }
 
-  generatePreSignedUrlsForAlbums(detailsForSignedUrls: { name: string, type: string }[]): Observable<IPreSignedUrls> {
+  generatePreSignedUrls(detailsForSignedUrls: { name: string, type: string }[]): Observable<IPreSignedUrls> {
     const post_params = JSON.stringify(detailsForSignedUrls)
     return this._http.post<IPreSignedUrls>(`${this.api}/generate-pre-signed-urls`, { post_params })
   }
@@ -195,21 +199,17 @@ export class UserService {
 
 
 
-  submitAlbumDetails(data: ISumbitAlbumDetails) {
+  submitAlbumDetails(data: ISumbitAlbumDetails):Observable<{_id:string}> {
     const files = JSON.stringify(data)
-    return this._http.post(`${this.api}/submit-album-details`, { files })
+    return this._http.post<{_id:string}>(`${this.api}/submit-album-details`, { files })
   }
+
   getAlbums(): Observable<IAlbumData[]> {
     return this._http.get<IAlbumData[]>(`${this.api}/get-albums`)
   }
 
-  submitSongDetails(data: ISubmitSongDetailsDto) {
-    const file = JSON.stringify(data)
-    return this._http.post(`${this.api}/submit-audio-details`, { file })
-  }
-
-  getAlbumDetails(id: string): Observable<IAlbumResponse> {
-    return this._http.get<IAlbumResponse>(`${this.api}/album-details?id=${id}`)
+  getAlbumDetails(id: string): Observable<IAlbumResponse[]> {
+    return this._http.get<IAlbumResponse[]>(`${this.api}/album-details?id=${id}`)
   }
 
   getVideoDetails(id: string): Observable<IResponseVideo> {
@@ -313,4 +313,29 @@ export class UserService {
     return this._http.get(`${this.api}/get-medias`)
   }
 
+ getSong(songId:string):Observable<ISongData> {
+  return this._http.get<ISongData>(`${this.api}/get-song?songId=${songId}`);
+ }
+
+ createLive(title:string,description:string,file:File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('title', description);
+  formData.append('title', title);
+
+  return this._http.post(`${this.api}/create-live`,formData)
+ }
+
+ replyToReply(data:IReplyToReplyDto) {
+  return this._http.post(`${this.api}/reply-to-reply`,data)
+ }
+
+ getRepliesToReply(replyId:string):Observable<IReplyToReply[]> {
+  return this._http.get<IReplyToReply[]>(`${this.api}/get-replies-to-reply?replyId=${replyId}`)
+ }
+ likeReplyToReply(replyToReplyId: string) {
+  return this._http.patch(`${this.api}/like-reply-to-reply`, { replyToReplyId })
 }
+
+}
+
