@@ -9,10 +9,7 @@ import Validation from 'src/app/utils/validation';
   styleUrls: ['./reset-password.component.css']
 })
 export class ResetPasswordComponent {
-  
-  
   resetPasswordForm!: FormGroup;
-
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ResetPasswordComponent>

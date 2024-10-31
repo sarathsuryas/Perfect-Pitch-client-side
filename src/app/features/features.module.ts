@@ -92,6 +92,12 @@ import {WebcamModule} from 'ngx-webcam';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { LiveStreamingComponent } from './user/components/live-streaming/live-streaming.component';
 import { ReplyToReplyComponent } from './user/components/reply-to-reply/reply-to-reply.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { LucideAngularModule, Home, Search, Library, PlusCircle, Heart, Mic2, PlayCircle } from 'lucide-angular';
+import { FilterPipe } from '../core/pipes/filter.pipe';
+
+
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
 
 
@@ -159,6 +165,7 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     CreateLiveComponent,
     LiveStreamingComponent,
     ReplyToReplyComponent,
+    FilterPipe
   ],
   imports: [
     CommonModule,
@@ -195,7 +202,10 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     PlyrModule,
     NgxAudioPlayerModule,
     WebcamModule,
-    SocketIoModule.forRoot(config)
+    MatGridListModule,
+    AngularSvgIconModule,
+    LucideAngularModule.pick({ Home, Search, Library, PlusCircle, Heart, Mic2, PlayCircle }),
+    SocketIoModule.forRoot(config),
   ],
   providers:[
     {

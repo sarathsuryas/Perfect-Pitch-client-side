@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SocketService } from '../../services/socket/socket.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
 import { UserService } from '../../services/user/user.service';
 import { io,Socket } from 'socket.io-client';
 import { environment } from 'src/environment/environment';
@@ -13,7 +12,7 @@ import { environment } from 'src/environment/environment';
 })
 export class CreateLiveComponent implements OnInit {
  
-  constructor(private _socketService:SocketService,private _userService:UserService,private fb: FormBuilder) {
+  constructor(private _userService:UserService,private fb: FormBuilder) {
     this.socket = io(environment.apiUrl)
   }
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;

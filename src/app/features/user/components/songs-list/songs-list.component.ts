@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { ISongsSameGenre } from 'src/app/core/interfaces/ISongsSameGenre';
-import { songReducer } from 'src/app/store/song/song.reducer';
 
 @Component({
   selector: 'app-songs-list',

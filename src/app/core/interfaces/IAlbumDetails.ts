@@ -1,6 +1,12 @@
+
 export interface IAlbumDetails {
+  _id:string;
   title:string;
-  artistName:string;
+  uuid:string
+  visibility:boolean;
   thumbNailLink:string;
-  songs:{title:string,link:string,artistName:string}[]
+  artistDetails:{
+    _id:string;
+    fullName:string;
+  }
 }

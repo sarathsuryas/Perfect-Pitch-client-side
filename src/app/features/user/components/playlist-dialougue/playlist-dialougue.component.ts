@@ -22,7 +22,7 @@ playlists:IUserPlaylists[] = []
   constructor(
     public dialogRef: MatDialogRef<PlaylistDialogComponent>,
     private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) private songId:string,
+    @Inject(MAT_DIALOG_DATA) private data:{thumbNailLink:string,songId:string},
     private _userService:UserService,
     private _router:Router
   ) { }
@@ -57,9 +57,10 @@ playlists:IUserPlaylists[] = []
     dRef.afterClosed().subscribe({
       next:(value)=>{
        const obj:ICreatePlaylistDto = {
-         songId: this.songId,
+         songId: this.data.songId,
          title: value.title,
-         visibility: value.visibility
+         visibility: value.visibility,
+         thumbNailLink: this.data.thumbNailLink
        } 
        this._userService.createPlaylist(obj).subscribe({
         next:(data)=>{

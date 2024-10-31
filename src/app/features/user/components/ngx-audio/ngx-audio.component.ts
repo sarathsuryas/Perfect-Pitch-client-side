@@ -2,18 +2,19 @@ import { Component, Input } from '@angular/core';
 import { Track } from '@khajegan/ngx-audio-player';
 import { Store } from '@ngrx/store';
 import { IAudioData } from 'src/app/core/interfaces/IAudioData';
-import { nextSong, playSong, prevSong, setSongId } from 'src/app/store/song/song.action';
-import { selectAlbumId, selectSong } from 'src/app/store/song/song.selector';
-import { Songs } from 'src/app/store/song/song.state';
+import { nextSong, playAlbumSong, prevSong, setAlbumSongId } from 'src/app/store/album/album.action';
+import { selectAlbumId, selectAlbumSong } from 'src/app/store/album/album.selector';
 import { UserService } from '../../services/user/user.service';
+import { selectPlaylistSong } from 'src/app/store/playlist/playlist.selector';
+import { setPlaylistSongId } from 'src/app/store/playlist/playlist.action';
 @Component({
   selector: 'app-ngx-audio',
   templateUrl: './ngx-audio.component.html',
   styleUrls: ['./ngx-audio.component.css']
 })
 export class NgxAudioComponent {
-   songName: string = 'Unknown Song';
-   artistName: string = 'Unknown Artist';
+  songName: string = 'Unknown Song';
+  artistName: string = 'Unknown Artist';
   albumName: string = 'Unknown Album';
   songThumbnail: string = '/placeholder.svg?height=64&width=64';
   currentSongIndex: number = 0;
@@ -23,13 +24,14 @@ export class NgxAudioComponent {
   duration: number = 0;
   link: string = '';
   index: number = 0;
-  songs:string[] = [];
-  songId:string = ''
+  songs: string[] = [];
+  songId: string = ''
   isLiked: boolean = false;
+  isAlbum: boolean = false
   isVoiceControlActive: boolean = false;
-  constructor(private _store: Store<Songs>,private _userService:UserService) { }
+  constructor(private _store: Store, private _userService: UserService) { }
 
-   ngOnInit() {
+  ngOnInit() {
     this.audio = new Audio();
     this.audio.addEventListener('ended', () => this.playNext());
     this.audio.addEventListener('timeupdate', () => {
@@ -38,63 +40,62 @@ export class NgxAudioComponent {
     this.audio.addEventListener('loadedmetadata', () => {
       this.duration = this.audio?.duration || 0;
     });
-    
-   this._store.select(selectSong).subscribe({
-    next:(data)=>{
-      this.artistName = data.artistName
-      this.songId = data.songId
-       this._userService.getSong(data.songId).subscribe({
-        next:(value)=>{
-          this.link = value.link
-          this.songThumbnail = value.thumbNailLink
-          this.songName = value.title
-          this.albumName = value.albumDetails.title
-          this.songs = value.albumDetails.songs
-          
-          this.playSong()
-        },
-        error:(err)=>{
-          console.error(err)
+
+    this._store.select(selectAlbumSong).subscribe({
+      next: (data) => {
+        this.songId = data.songId as string
+        this.isAlbum = data.album
+       
+        if (this.isAlbum) {
+          this._userService.getSong(data.songId as string).subscribe({
+            next: (value) => {
+              
+              this.link = value.link
+              this.songThumbnail = value.thumbNailLink
+              this.songName = value.title
+              this.albumName = value.albumDetails.title
+              this.songs = value.albumDetails.songs
+              this.artistName = value.artistDetails.fullName
+              this.playSong()
+            },
+            error: (err) => {
+              console.error(err)
+            }
+          })
         }
-       })
+      }
+    })
+
+    if (!this.isAlbum) {
+      this._store.select(selectPlaylistSong).subscribe({
+        next: (data) => {
+          this.isAlbum = data.album
+          this.songId = data.songId as string
+          this.songs = data.songs
+  
+          this._userService.getSong(data.songId as string)
+            .subscribe({
+              next: (value) => {
+                this.link = value.link
+                this.songThumbnail = value.thumbNailLink
+                this.songName = value.title
+                this.albumName = value.albumDetails.title
+                this.artistName = value.artistDetails.fullName
+                this.playSong()
+              },
+              error: (err) => {
+                console.error(err)
+              }
+            })
+        }
+      })
     }
-   })
-   
-    //  needed states ==== song: IAudioData; albumData:IAlbumData;
-    // const {songLink,albumLink} = data
-    // let album = false
-    //if(this.albumLink !== albumLink) {
-    // this.albumLink  = albumLink;
-    // album = true
-    // }
-    // if(this.songLink !== songLink) {
-    // this.songLink = songLink;
-    // getSong({songLink,albumLink,album}) API Call  returns {albumData:IAlbumData,song:IAudioData}
-    // }
-    // nextButtonFunction() {
-    // const songIndex = this.albumData.songs.indexOf(this.song.songLink)
-    // const songLink = this.albumData.songs[songIndex+1] || this.albumData.songs[0]
-    // getSong({songLink,albumLink:this.albumData.albumLink,album:false})  API Call returns {albumData:null,song:IAudioData};
-    // }
-
-    // BACKEND++++++++++++++++++++++++++++
-
-
-    // const {songLink,albumLink,album} = req.body;
-    // if(!songLink || !albumLink || albumLink.length < 16 || songLink.length < 16) return {message:"Poda Myree"};
-    // const options:any[] = []
-    // options.push({$match:{"songLink":songLink}})
-    // if(album) options.push({$lookup:{from:"albums",foreignField:"_id",localField:"albumId",as:album}},{$unwind:albums},group them as well);
-    // const data = await audio.aggregate(options);
-    // const album = data.album | null
-    // const song = data.song
-    // 
   }
 
   playSong(index: number = 0) {
     if (this.audio) {
       this.audio.src = this.link
-      this.index = this.songs.findIndex(v=>v === this.songId)
+      this.index = this.songs.findIndex(v => v === this.songId)
       this.audio.play();
       this.isPlaying = true;
     }
@@ -112,17 +113,29 @@ export class NgxAudioComponent {
   }
 
   playNext() {
-    if(this.index < this.songs.length-1) {
-      this.index = this.songs.findIndex(v=>v === this.songId)   
-      this._store.dispatch(setSongId({songId:this.songs[++this.index]}))
+    if (this.index < this.songs.length - 1 && this.isAlbum) {
+      console.log(this.songs,'from the next')
+      this.index = this.songs.findIndex(v => v === this.songId)
+      this._store.dispatch(setAlbumSongId({ songId: this.songs[++this.index],album:true}))
     }
-     
+  
+    if (this.index < this.songs.length - 1 && !this.isAlbum) {
+      this.index = this.songs.findIndex(v => v === this.songId)
+      this._store.dispatch(setPlaylistSongId({ songId: this.songs[++this.index],album:false,songs:this.songs}))
+
+    }
+
   }
 
   playPrevious() {
-    if(this.index > 0) {
-      this.index = this.songs.findIndex(v=>v === this.songId)   
-      this._store.dispatch(setSongId({songId:this.songs[--this.index]}))
+    if (this.index > 0 && this.isAlbum) {
+      console.log(this.songs,'from the prev')
+      this.index = this.songs.findIndex(v => v === this.songId)
+      this._store.dispatch(setAlbumSongId({ songId: this.songs[--this.index],album:true }))
+    }
+    if (this.index > 0 && !this.isAlbum) {
+      this.index = this.songs.findIndex(v => v === this.songId)
+      this._store.dispatch(setPlaylistSongId({ songId: this.songs[--this.index],album:false ,songs:this.songs}))
     }
   }
 

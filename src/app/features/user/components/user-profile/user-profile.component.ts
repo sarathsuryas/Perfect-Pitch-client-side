@@ -7,8 +7,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ResetPasswordComponent } from '../reset-password/reset-password.component';
 import { OldPasswordComponent } from '../old-password/old-password.component';
 import { MessageService } from 'primeng/api';
-import { Store } from '@ngrx/store';
-import { CookieService } from 'ngx-cookie-service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -53,7 +51,6 @@ export class UserProfileComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-
         this._userService.editProfile(result)
       }
     });

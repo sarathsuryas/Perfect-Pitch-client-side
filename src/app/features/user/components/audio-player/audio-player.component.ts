@@ -7,9 +7,10 @@ import { UserService } from '../../services/user/user.service';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { Store } from '@ngrx/store';
-import {  selectSongId} from 'src/app/store/song/song.selector';
-import { IAlbumResponse } from 'src/app/core/interfaces/IAlbumResponse';
-import { playSong } from 'src/app/store/song/song.action';
+import { playAlbumSong } from 'src/app/store/album/album.action';
+import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
+import { selectAlbumSongId } from 'src/app/store/album/album.selector';
+import { playPlaylistSong } from 'src/app/store/playlist/playlist.action';
 
 interface Song {
   id: string;
@@ -27,7 +28,7 @@ interface Song {
   styleUrls: ['./audio-player.component.css']
 })
 export class AudioPlayerComponent {
-  @Input() AlbumDetails: IAlbumResponse[] = []
+  @Input() AlbumDetails!: IAlbumDetails
   @Input() playlistDetails!: IUserPlaylists
   @Input() songs: IAudioData[] = []
   songId: string = ''
@@ -60,9 +61,9 @@ export class AudioPlayerComponent {
     this.audio.addEventListener('loadedmetadata', () => {
       this.duration = this.audio?.duration || 0;
     });
-    this._store.select(selectSongId).subscribe({
+    this._store.select(selectAlbumSongId).subscribe({
       next: (songId) => {
-        this.songId = songId
+        this.songId = songId as string
       },
       error: (err) => {
         console.error(err)
@@ -73,8 +74,18 @@ export class AudioPlayerComponent {
   playSong(index: number) {
     this.currentSongIndex = index;
     this.isPlaying = true;
-    this._store.dispatch(playSong({albumId:this.AlbumDetails[0].uuid,songId:this.AlbumDetails[0].songs[index].uuid,artistName:this.AlbumDetails[0].artistDetails.fullName}))
+    this._store.dispatch(playAlbumSong({albumId:this.AlbumDetails.uuid,songId:this.songs[index].uuid,artistName:this.AlbumDetails.artistDetails.fullName,album:true}))
   }
+
+playlistPlay(index:number) {
+  this.currentSongIndex = index;
+  this.isPlaying = true;
+  const array = []
+  for(const value of this.songs) {
+     array.push(value.uuid)
+  }
+  this._store.dispatch(playPlaylistSong({playlistId:this.playlistDetails.uuid,songId:this.songs[index].uuid,artistName:this.songs[index].artistId.fullName,songs:array,album:false}))
+}
 
   playNext() {
     this.currentSongIndex = (this.currentSongIndex + 1) % this.songs.length;
@@ -100,10 +111,13 @@ export class AudioPlayerComponent {
   }
 
 
-  openPlaylistDialog(songId:string): void {
+  openPlaylistDialog(songId:string,thumbNailLink:string): void {
     const dialogRef = this.dialog.open(PlaylistDialogComponent, {
       width: '350px',
-      data: songId
+      data: {
+        songId,thumbNailLink
+      },
+       
     });
 
     dialogRef.afterClosed().subscribe({

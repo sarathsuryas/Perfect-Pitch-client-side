@@ -26,17 +26,7 @@ export class PlaylistCardsComponent {
   ) { }
 
 
-  playlist: Playlist[] = [
-    {
-      id: 1,
-      title: 'My Favorite Mix',
-      description: 'A mix of all my favorite songs',
-      thumbnailUrl: '/placeholder.svg?height=120&width=120',
-      songCount: 50,
-      totalDuration: '3h 25min'
-    },
-
-  ];
+ 
 
 
   ngOnInit(): void {

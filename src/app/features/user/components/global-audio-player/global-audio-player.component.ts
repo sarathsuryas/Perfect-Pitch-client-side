@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Howl } from 'howler';
 import { IAudioData } from 'src/app/core/interfaces/IAudioData';
-import { Songs } from 'src/app/store/song/song.state';
 
-
+ 
 @Component({
   selector: 'app-global-audio-player',
   templateUrl: './global-audio-player.component.html',

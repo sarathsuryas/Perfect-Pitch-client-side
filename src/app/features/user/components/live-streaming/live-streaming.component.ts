@@ -22,9 +22,11 @@ export class LiveStreamingComponent {
   public latestStream$ = this.streamSubject.asObservable(); 
   constructor() { 
     this.socket = io(environment.apiUrl)
+    console.log("Socket", this.socket)
     this.peerConnection = new RTCPeerConnection({
        iceServers: [{ urls: 'stun:stun.stunprotocol.org' }]
     });
+    console.log("peerConnection", this.peerConnection)
     this.socket.emit('findOffer', { user: "sarath", streamId: '102030' });
 
   }
@@ -54,15 +56,16 @@ export class LiveStreamingComponent {
   ngOnInit(): void {
    
     const videoElement = document.getElementById('test') as HTMLVideoElement;  
-   
+   console.log("videoElement",videoElement)
     this.socket.on("sendOffer", (offer) => {
       if (offer && offer.sdp && offer.type) {
         this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer))
           .then(() => console.log("Remote description set successfully"))
           .catch(error => console.error("Error setting remote description:", error));
         this.peerConnection.ontrack = (event) => {
+          console.log('hekki')
          //  this.localStream = event.streams[0]
-         console.log(event.streams[0].getVideoTracks())
+         console.log(event.streams)
            videoElement.srcObject = event.streams[0]
     
         };

@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
 import { IAlbumResponse } from 'src/app/core/interfaces/IAlbumResponse';
 import { IAudioData } from 'src/app/core/interfaces/IAudioData';
+import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
 
 @Component({
   selector: 'app-album-songs-list',
@@ -13,15 +14,16 @@ import { IAudioData } from 'src/app/core/interfaces/IAudioData';
   styleUrls: ['./album-songs-list.component.css']
 })
 export class AlbumSongsListComponent {
-  albumData$!:Observable<IAlbumResponse[]> 
+  albumData$!:Observable<IAlbumResponse> 
   id!: string 
-
-  albumData:IAlbumResponse[] = []
+  songs:IAudioData[] = []
+  albumData!:IAlbumDetails 
   constructor(private _userService:UserService,private route: ActivatedRoute,private dialog: MatDialog) {
     this.id = this.route.snapshot.paramMap.get('id') as string
      this.albumData$ = this._userService.getAlbumDetails(this.id)
      this.albumData$.subscribe((data)=>{
       this.albumData = data
+      this.songs = data.songs
       console.log(this.albumData)
     })
   }

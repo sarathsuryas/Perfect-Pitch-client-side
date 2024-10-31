@@ -1,5 +1,3 @@
-
-
-:host ::ng-deep .mat-form-field-wrapper {
-  margin-bottom: 0;
+.dot {
+  transition: all 0.3s ease-in-out;
 }

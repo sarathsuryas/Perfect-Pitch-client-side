@@ -14,7 +14,6 @@ export class AlbumListComponent implements OnInit{
   ngOnInit(): void {
    this._userService.getAlbums().subscribe((data)=>{
      this.albumData = data
-     
    })
   }
 

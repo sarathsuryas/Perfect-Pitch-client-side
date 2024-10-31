@@ -40,6 +40,7 @@ import { ISongData } from 'src/app/core/interfaces/ISongData';
 import { Socket } from 'ngx-socket-io';
 import { IReplyToReplyDto } from 'src/app/core/dtos/IReplyToReply.dto';
 import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
+import { removeSongId } from 'src/app/store/playlist/playlist.action';
 
 @Injectable({
   providedIn: 'root'
@@ -161,6 +162,7 @@ export  class UserService {
     this._cookieService.delete('token')
     this._cookieService.delete('refreshToken')
     this._store.dispatch(logOut())
+    this._store.dispatch(removeSongId())
     this._router.navigate([''])
   }
 
@@ -208,8 +210,8 @@ export  class UserService {
     return this._http.get<IAlbumData[]>(`${this.api}/get-albums`)
   }
 
-  getAlbumDetails(id: string): Observable<IAlbumResponse[]> {
-    return this._http.get<IAlbumResponse[]>(`${this.api}/album-details?id=${id}`)
+  getAlbumDetails(id: string): Observable<IAlbumResponse> {
+    return this._http.get<IAlbumResponse>(`${this.api}/album-details?id=${id}`)
   }
 
   getVideoDetails(id: string): Observable<IResponseVideo> {
@@ -282,6 +284,7 @@ export  class UserService {
   }
 
   createPlaylist(data: ICreatePlaylistDto): Observable<{ playlistId: string }> {
+    console.log(data)
     return this._http.post<{ playlistId: string }>(`${this.api}/create-Playlist`, data)
   }
 
@@ -315,6 +318,10 @@ export  class UserService {
 
  getSong(songId:string):Observable<ISongData> {
   return this._http.get<ISongData>(`${this.api}/get-song?songId=${songId}`);
+ }
+
+ getPlaylistSong(playlistId:string) {
+  return this._http.get(`${this.api}/get-playlist-song?songId=${playlistId}`)
  }
 
  createLive(title:string,description:string,file:File) {

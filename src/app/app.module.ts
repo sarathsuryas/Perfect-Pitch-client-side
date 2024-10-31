@@ -34,7 +34,8 @@ import { MatCardModule } from '@angular/material/card';
 import { CoreModule } from './core/core.module';
 import { FeaturesModule } from './features/features.module';
 import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
-import { songReducer } from './store/song/song.reducer';
+import { albumReducer } from './store/album/album.reducer';
+import { playlistReducer } from './store/playlist/playlist.reducer';
   
 
 @NgModule({
@@ -69,7 +70,8 @@ import { songReducer } from './store/song/song.reducer';
     StoreModule.forRoot([]),
     StoreModule.forFeature('user', userReducer),
     StoreModule.forFeature('admin', adminReducer),
-    StoreModule.forFeature('song', songReducer),
+    StoreModule.forFeature('album', albumReducer),
+    StoreModule.forFeature('playlist',playlistReducer),
     EffectsModule.forRoot([UserEffects, AdminEffects]),
     GoogleSigninButtonModule, 
   ],
