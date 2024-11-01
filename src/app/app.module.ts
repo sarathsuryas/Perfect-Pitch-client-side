@@ -36,6 +36,7 @@ import { FeaturesModule } from './features/features.module';
 import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { albumReducer } from './store/album/album.reducer';
 import { playlistReducer } from './store/playlist/playlist.reducer';
+import { membershipReducer } from './store/memberShip/membership.reducer';
   
 
 @NgModule({
@@ -72,6 +73,7 @@ import { playlistReducer } from './store/playlist/playlist.reducer';
     StoreModule.forFeature('admin', adminReducer),
     StoreModule.forFeature('album', albumReducer),
     StoreModule.forFeature('playlist',playlistReducer),
+    StoreModule.forFeature( 'membership', membershipReducer),
     EffectsModule.forRoot([UserEffects, AdminEffects]),
     GoogleSigninButtonModule, 
   ],

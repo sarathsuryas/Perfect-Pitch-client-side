@@ -49,7 +49,6 @@ export class NgxAudioComponent {
         if (this.isAlbum) {
           this._userService.getSong(data.songId as string).subscribe({
             next: (value) => {
-              
               this.link = value.link
               this.songThumbnail = value.thumbNailLink
               this.songName = value.title
@@ -72,7 +71,7 @@ export class NgxAudioComponent {
           this.isAlbum = data.album
           this.songId = data.songId as string
           this.songs = data.songs
-  
+           
           this._userService.getSong(data.songId as string)
             .subscribe({
               next: (value) => {

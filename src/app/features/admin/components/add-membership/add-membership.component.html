@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Add New Membership</h2>
+<mat-dialog-content>
+  <form [formGroup]="membershipForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-full">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" formControlName="price" required>
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Price ID</mat-label>
+      <input matInput formControlName="priceId" required>
+    </mat-form-field>
+
+    <div formArrayName="features">
+      <h3>Features</h3>
+      <div *ngFor="let feature of features.controls; let i = index">
+        <mat-form-field class="w-full">
+          <mat-label>Feature {{ i + 1 }}</mat-label>
+          <input matInput [formControlName]="i">
+        </mat-form-field>
+        <button mat-icon-button color="warn" (click)="removeFeature(i)">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </div>
+      <button mat-button color="primary" type="button" (click)="addFeature()">Add Feature</button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" [disabled]="!membershipForm.valid" (click)="onSubmit()">Add</button>
+</mat-dialog-actions>

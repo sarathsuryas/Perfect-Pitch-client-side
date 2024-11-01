@@ -82,3 +82,8 @@ export const selectUserId  = createSelector(
   selectUserState,
   (userState)=> userState.userId
 )
+
+export const selectIsPremiumUser = createSelector(
+  selectUserState,
+  (userState)=> userState.user?.premiumUser
+)

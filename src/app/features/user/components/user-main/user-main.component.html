@@ -95,12 +95,13 @@
           <span *ngIf="!isCollapsed">Videos</span>
         </span>
       </a>
-      <a mat-list-item>
+      <a mat-list-item routerLink="membership">
         <span class="entry">
-          <mat-icon>subscriptions</mat-icon>
-          <span *ngIf="!isCollapsed">Subscriptions</span>
+          <mat-icon>card_membership</mat-icon>
+          <span *ngIf="!isCollapsed">Memberships</span>
         </span>
       </a>
+      
       <a mat-list-item routerLink="genres">
         <span class="entry">
           <mat-icon>music_note</mat-icon>

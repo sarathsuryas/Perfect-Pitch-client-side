@@ -4,8 +4,10 @@ import { CookieService } from 'ngx-cookie-service';
 import { map, Observable } from 'rxjs';
 import { AddUserDto } from 'src/app/core/dtos/addUser.dto';
 import { EditUserDto } from 'src/app/core/dtos/editUser.dto';
+import { IAddMemberShipDto } from 'src/app/core/dtos/IAddMembership.dto';
 import { IAdminData } from 'src/app/core/interfaces/IAdminData';
 import { IGenres } from 'src/app/core/interfaces/IGenres';
+import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
 import { ITokenData } from 'src/app/core/interfaces/ITokenData';
 import { userModel } from 'src/app/store/user/user.model';
 import { environment } from 'src/environment/environment';
@@ -14,8 +16,6 @@ import { environment } from 'src/environment/environment';
   providedIn: 'root'
 })
 export class AdminService {
-  
- 
   private api = `${environment.apiUrl}/admin`
   constructor(private readonly _http:HttpClient,private _cookieService:CookieService) { }
 
@@ -62,6 +62,18 @@ export class AdminService {
 
 getGenres():Observable<IGenres[]> {
   return this._http.get<IGenres[]>(`${this.api}/get-genres`)
+}
+
+addMemberShip(data:IAddMemberShipDto){
+  return this._http.post(`${this.api}/add-membership`,data)
+}
+
+getMemberShips():Observable<IMemberShip[]> {
+  return this._http.get<IMemberShip[]>(`${this.api}/get-membership`)
+}
+
+blockUnblock(id:string,isBlocked:boolean) {
+  return this._http.post(`${this.api}/block-unblock`,{id,isBlocked})
 }
 
 }

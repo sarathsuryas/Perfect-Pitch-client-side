@@ -8,4 +8,5 @@ export interface IUserData {
     phone:number;
     profileImage:string;
     subscribers:[]
+    premiumUser:boolean
 }

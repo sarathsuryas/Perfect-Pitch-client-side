@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { googleLoginFail, googleLoginUser, googleLoginUserSuccess, loginUser, loginUserFail, loginUserSuccess, registerUser, registerUserFail, registerUserSuccess, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
+import { getUserData, getUserDataFail, googleLoginFail, googleLoginUser, googleLoginUserSuccess, loginUser, loginUserFail, loginUserSuccess, registerUser, registerUserFail, registerUserSuccess, setUserData, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
 import { UserService } from "../../features/user/services/user/user.service";
 import { catchError, exhaustMap, map, mergeMap, of, tap,delay } from "rxjs";
 import { CookieService } from "ngx-cookie-service";
@@ -91,10 +91,8 @@ export class UserEffects {
         tap(data=> this._cookieService.set('token',data.token,{path:''})),
         map((userData)=>loginUserSuccess({userData})),
         tap((data)=>{
-          
            if(data) {
               this._spinner.hide()
-             
               this._router.navigateByUrl('/home')
            }
           }),
@@ -205,6 +203,19 @@ this._actions$.pipe(
     )
   )
 )
+)
+
+
+setUserData$ = createEffect(()=>
+  this._actions$.pipe(
+    ofType(getUserData),
+    exhaustMap( action=>
+      this._userService.userData().pipe(
+        map((user)=> setUserData({userdata:user})),
+        catchError(error=>of(getUserDataFail(error)))
+      )
+    )
+  )
 )
 
 }

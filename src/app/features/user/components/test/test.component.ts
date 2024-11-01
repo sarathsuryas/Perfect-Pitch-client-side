@@ -27,9 +27,7 @@ export class TestComponent {
 
   constructor(private paymentService: PaymentService) {
   }
-async redirectToCheckOut() {
-    await this.paymentService.redirectToCheckout(environment.stripe.priceId)
-}
+
 showOtherMemberships = false;
 
 memberships: Membership[] = [

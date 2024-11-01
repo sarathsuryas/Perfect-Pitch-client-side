@@ -96,6 +96,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { LucideAngularModule, Home, Search, Library, PlusCircle, Heart, Mic2, PlayCircle } from 'lucide-angular';
 import { FilterPipe } from '../core/pipes/filter.pipe';
+import { MembershipComponent } from './user/components/membership/membership.component';
+import { PaymentSuccessComponent } from './user/components/payment-success/payment-success.component';
+import { MembershipManagementComponent } from './admin/components/membership-management/membership-management.component';
+import { AddMembershipComponent } from './admin/components/add-membership/add-membership.component';
+import { MembershipCardsComponent } from './user/components/membership-cards/membership-cards.component';
 
 
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
@@ -165,7 +170,12 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     CreateLiveComponent,
     LiveStreamingComponent,
     ReplyToReplyComponent,
-    FilterPipe
+    FilterPipe,
+    MembershipComponent,
+    PaymentSuccessComponent,
+    MembershipManagementComponent,
+    AddMembershipComponent,
+    MembershipCardsComponent
   ],
   imports: [
     CommonModule,
@@ -186,7 +196,7 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     VgOverlayPlayModule,
     VgBufferingModule,
     MatStepperModule,
-    MatSidenavModule,
+    MatSidenavModule,  
     MatIconModule,
     MatToolbarModule,
     MatListModule,
@@ -201,13 +211,13 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     MatSnackBarModule,
     PlyrModule,
     NgxAudioPlayerModule,
-    WebcamModule,
+    WebcamModule, 
     MatGridListModule,
     AngularSvgIconModule,
     LucideAngularModule.pick({ Home, Search, Library, PlusCircle, Heart, Mic2, PlayCircle }),
     SocketIoModule.forRoot(config),
   ],
-  providers:[
+  providers:[ 
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

@@ -1,0 +1,31 @@
+<div class="container mx-auto p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Membership Listings</h1>
+    <button (click)="openAddMembershipModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Add Membership
+    </button>
+  </div>
+
+  <table class="min-w-full bg-white border border-gray-200 rounded-md shadow-md">
+    <thead>
+      <tr class="bg-gray-200 text-left">
+        <th class="py-3 px-6 font-semibold text-gray-700 border-b border-gray-300 text-center">Membership Name</th>
+        <th class="py-3 px-6 font-semibold text-gray-700 border-b border-gray-300 text-center">Price</th>
+        <th class="py-3 px-6 font-semibold text-gray-700 border-b border-gray-300 text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let membership of memberships" class="hover:bg-gray-100">
+        <td class="py-3 px-6 border-b text-center">{{ membership.name }}</td>
+        <td class="py-3 px-6 border-b text-center">INR {{ membership.price }}</td>
+        <td class="py-3 px-6 border-b text-center">
+          <button (click)="toggleBlockStatus(membership)" 
+                  [ngClass]="{'bg-red-500 hover:bg-red-700': !membership.isBlocked, 'bg-green-500 hover:bg-green-700': membership.isBlocked}"
+                  class="text-white font-bold py-1 px-2 rounded">
+            {{ membership.isBlocked ? 'Unblock' : 'Block' }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

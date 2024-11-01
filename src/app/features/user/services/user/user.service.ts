@@ -41,6 +41,7 @@ import { Socket } from 'ngx-socket-io';
 import { IReplyToReplyDto } from 'src/app/core/dtos/IReplyToReply.dto';
 import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
 import { removeSongId } from 'src/app/store/playlist/playlist.action';
+import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
 
 @Injectable({
   providedIn: 'root'
@@ -343,6 +344,16 @@ export  class UserService {
  likeReplyToReply(replyToReplyId: string) {
   return this._http.patch(`${this.api}/like-reply-to-reply`, { replyToReplyId })
 }
+getMemberShip():Observable<IMemberShip[]> {
+  return this._http.get<IMemberShip[]>(`${this.api}/get-membership`)
+}
+
+checkActiveMemberShip() {
+  return this._http.head(`${this.api}/check-active-membership`)
+    // const active = await firstValueFrom(checkMemberShip)
+}
+
+
 
 }
 

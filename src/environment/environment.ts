@@ -8,7 +8,8 @@ export const environment = {
   whisperApiKey:'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',
   stripe: {
     publicKey: 'pk_test_51QFVHiBtwVv40loNtOl4SUrHZqEO05d1aLPx8M0qfbtVwi9yxgoyaccqURKMW62G00btkf6mb69nHv8w9ZYQgAmS00G22QE6Ka',
-    priceId:'price_1QFfyXBtwVv40loNOXB4zpas'
+    plan1:'price_1QFfzqBtwVv40loNm8ulEegV',
+    plan2:'price_1QFfyXBtwVv40loNOXB4zpas'
   }
 };
   

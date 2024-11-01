@@ -8,6 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { UploadVideoComponent } from '../upload-video/upload-video.component';
 import { AudioUploadDialogComponent } from '../audio-upload-dialog/audio-upload-dialog.component';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectPlaylistSong } from 'src/app/store/playlist/playlist.selector';
 
 @Component({
   selector: 'app-user-main',
@@ -16,17 +18,6 @@ import { Router } from '@angular/router';
 })
 
 export class UserMainComponent implements OnInit {
-  //   sidebar:boolean = true;
-
-  // constructor(public breakpointObserver: BreakpointObserver,private _userService:UserService) {}
-  // ngOnInit(): void {
-  //   this.breakpointObserver.observe(['(max-width:768px)']).subscribe((state:BreakpointState)=>{
-  //     if(state.matches){
-  //       this.sidebar = false
-  //     }
-  //   })
-
-  // }
   
   title = 'material-responsive-sidenav';
   @ViewChild(MatSidenav)
@@ -38,7 +29,13 @@ export class UserMainComponent implements OnInit {
   animal!: string;
   name!: string; 
   isDropdownOpen = false;
-  constructor(private _observer: BreakpointObserver, public dialog: MatDialog,private _router:Router) { }
+  isPlayer:boolean = false
+  constructor(
+    private _observer: BreakpointObserver,
+     public dialog: MatDialog,
+     private _router:Router,
+     private store:Store
+    ) { }
 
   ngOnInit() {
     this._observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
@@ -48,6 +45,17 @@ export class UserMainComponent implements OnInit {
         this.isMobile = false;
       }
     });
+    this.store.select(selectPlaylistSong).subscribe({
+      next:(value)=>{
+         if(value.songId?.length === 0) {
+          this.isPlayer = false
+         } else {
+          this.isPlayer = true
+         }
+      },error:(err)=>{
+        console.log(err)
+      }
+    })
   }
   navigateToShortsUpload() {
     this._router.navigate(['/home/shorts-upload']);

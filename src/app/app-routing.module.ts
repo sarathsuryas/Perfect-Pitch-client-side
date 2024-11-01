@@ -37,6 +37,10 @@ import { TestnavComponent } from './features/user/components/testnav/testnav.com
 import { NgxAudioComponent } from './features/user/components/ngx-audio/ngx-audio.component';
 import { CreateLiveComponent } from './features/user/components/create-live/create-live.component';
 import { LiveStreamingComponent } from './features/user/components/live-streaming/live-streaming.component';
+import { MembershipComponent } from './features/user/components/membership/membership.component';
+import { PaymentSuccessComponent } from './features/user/components/payment-success/payment-success.component';
+import { MembershipManagementComponent } from './features/admin/components/membership-management/membership-management.component';
+import { memberShipGuard } from './core/user/guards/member-ship.guard';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -49,8 +53,8 @@ const routes: Routes = [
       {path:'user-profile',component:UserProfileComponent},
       {path:'music-videos',component:VideosListComponent},
       {path:'upload-audio',component:UploadAudioComponent},
-      {path:"single-audio-upload",component:SingleAudioUploadComponent},
-      {path:"multiple-audio-upload",component:MultipleAudioUploadComponent},
+      {path:"single-audio-upload",component:SingleAudioUploadComponent,canActivate:[memberShipGuard]},
+      {path:"multiple-audio-upload",component:MultipleAudioUploadComponent,canActivate:[memberShipGuard]},
       {path:'albums',component:AlbumListComponent},
       {path:"landing",component:UserHomeComponent},
       {path:"album-songs/:id",component:AlbumSongsListComponent},
@@ -66,8 +70,10 @@ const routes: Routes = [
       {path:'artist-list',component:ArtistListingComponent},
       {path:'artist-medias/:id',component:ArtistMediasComponent},
       {path:'ngx',component:NgxAudioComponent},
-      {path:'create-live',component:CreateLiveComponent},
-      {path:'live',component:LiveStreamingComponent}
+      {path:'create-live',component:CreateLiveComponent,canActivate:[memberShipGuard]},
+      {path:'live',component:LiveStreamingComponent},
+      {path:'membership',component:MembershipComponent},
+      {path:'payment-success',component:PaymentSuccessComponent}
     ]
   },
   {path:'admin',component:AdminLoginComponent},
@@ -78,7 +84,8 @@ const routes: Routes = [
   {path:'admin/home',component:AdminMainComponent,canActivate:[AdminAuthGuard],
   children:[
     {path:'user-management',component:UserManagementComponent},
-    {path:'add-genres',component:AddGenresComponent}
+    {path:'add-genres',component:AddGenresComponent},
+    {path:'list-memberships',component:MembershipManagementComponent}
   ]
   },
 ];

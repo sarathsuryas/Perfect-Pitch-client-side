@@ -1,0 +1,8 @@
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl font-extrabold text-center text-gray-900 mb-12">Choose Your Membership Plan</h1>
+    <div class="grid md:grid-cols-3 gap-8">
+      <app-membership-cards [plan]="value" [userId]="userId" *ngFor="let value of plans"></app-membership-cards>
+    </div>
+  </div>
+</div>
