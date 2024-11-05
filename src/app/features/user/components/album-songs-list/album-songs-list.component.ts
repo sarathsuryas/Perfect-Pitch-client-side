@@ -24,7 +24,6 @@ export class AlbumSongsListComponent {
      this.albumData$.subscribe((data)=>{
       this.albumData = data
       this.songs = data.songs
-      console.log(this.albumData)
     })
   }
 

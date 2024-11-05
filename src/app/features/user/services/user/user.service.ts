@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { debounceTime, forkJoin, map, Observable, tap } from 'rxjs';
+import { debounceTime, forkJoin, map, Observable, of, tap, throwError } from 'rxjs';
 import { userModel } from '../../../../store/user/user.model';
 import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
@@ -42,11 +42,12 @@ import { IReplyToReplyDto } from 'src/app/core/dtos/IReplyToReply.dto';
 import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
 import { removeSongId } from 'src/app/store/playlist/playlist.action';
 import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
+import { IUserMedia } from 'src/app/core/interfaces/IUserMedia';
 
 @Injectable({
   providedIn: 'root'
 })
-export  class UserService {
+export class UserService {
 
   private api = `${environment.apiUrl}/users`
   constructor(private readonly _http: HttpClient, private readonly _cookieService: CookieService, private _router: Router, private readonly _store: Store) { }
@@ -85,6 +86,7 @@ export  class UserService {
     return this._http.post(`${this.api}/new-password`, { password, UserId });
   }
   userData(): Observable<IUserData> {
+
     return this._http.get<IUserData>(`${this.api}/get-user-data`)
   }
 
@@ -172,8 +174,8 @@ export  class UserService {
     return this._http.post<{ videoId: string }>(`${this.api}/post-video-details`, data)
   }
 
-  getVideoList(): Observable<IVideoList[]> {
-    return this._http.get<IVideoList[]>(`${this.api}/video-list`)
+  getVideoList(query:string=''): Observable<IVideoList[]> {
+    return this._http.get<IVideoList[]>(`${this.api}/video-list?video=${query}`)
   }
 
   generatePreSignedUrls(detailsForSignedUrls: { name: string, type: string }[]): Observable<IPreSignedUrls> {
@@ -202,14 +204,15 @@ export  class UserService {
 
 
 
-  submitAlbumDetails(data: ISumbitAlbumDetails):Observable<{_id:string}> {
+  submitAlbumDetails(data: ISumbitAlbumDetails): Observable<{ _id: string }> {
     const files = JSON.stringify(data)
-    return this._http.post<{_id:string}>(`${this.api}/submit-album-details`, { files })
+    return this._http.post<{ _id: string }>(`${this.api}/submit-album-details`, { files })
   }
 
-  getAlbums(): Observable<IAlbumData[]> {
-    return this._http.get<IAlbumData[]>(`${this.api}/get-albums`)
+  getAlbums(query:string=''): Observable<IAlbumData[]> {
+    return this._http.get<IAlbumData[]>(`${this.api}/get-albums?album=${query}`)
   }
+ 
 
   getAlbumDetails(id: string): Observable<IAlbumResponse> {
     return this._http.get<IAlbumResponse>(`${this.api}/album-details?id=${id}`)
@@ -226,7 +229,7 @@ export  class UserService {
   likeVideo(videoId: string): Observable<string> {
     return this._http.put<string>(`${this.api}/like-video`, { videoId })
   }
-  
+
   subscribeUser(artistId: string) {
     return this._http.put(`${this.api}/subscribe-user`, { artistId })
   }
@@ -289,8 +292,8 @@ export  class UserService {
     return this._http.post<{ playlistId: string }>(`${this.api}/create-Playlist`, data)
   }
 
-  getUserPlalists(): Observable<IUserPlaylists[]> {
-    return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlist`)
+  getUserPlalists(query:string=''): Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlist?playlist=${query}`)
   }
 
   addToPlaylsit(songId: string, playlistId: string): Observable<{ success: boolean, exist: boolean }> {
@@ -309,51 +312,65 @@ export  class UserService {
     return this._http.get<ISongsSameGenre[]>(`${this.api}/get-genre-songs?genreId=${genreId}`)
   }
 
-  getArtists(): Observable<{ artists: IUserData[], userId: string }> {
-    return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists`)
+  getArtists(query:string=''): Observable<{ artists: IUserData[], userId: string }> {
+    return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists?artist=${query}`)
   }
 
   getArtistMedias() {
     return this._http.get(`${this.api}/get-medias`)
   }
 
- getSong(songId:string):Observable<ISongData> {
-  return this._http.get<ISongData>(`${this.api}/get-song?songId=${songId}`);
- }
+  getSong(songId: string): Observable<ISongData> {
+    if(!this._cookieService.get('token')) {
+      return throwError(() => new Error('User is not authenticated'));
+    }
+    return this._http.get<ISongData>(`${this.api}/get-song?songId=${songId}`);
+    
+  }
 
- getPlaylistSong(playlistId:string) {
-  return this._http.get(`${this.api}/get-playlist-song?songId=${playlistId}`)
- }
+  getPlaylistSong(playlistId: string) {
+    return this._http.get(`${this.api}/get-playlist-song?songId=${playlistId}`)
+  }
 
- createLive(title:string,description:string,file:File) {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('title', description);
-  formData.append('title', title);
+  createLive(title: string, description: string, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', description);
+    formData.append('title', title);
 
-  return this._http.post(`${this.api}/create-live`,formData)
- }
+    return this._http.post(`${this.api}/create-live`, formData)
+  }
 
- replyToReply(data:IReplyToReplyDto) {
-  return this._http.post(`${this.api}/reply-to-reply`,data)
- }
+  replyToReply(data: IReplyToReplyDto) {
+    return this._http.post(`${this.api}/reply-to-reply`, data)
+  }
 
- getRepliesToReply(replyId:string):Observable<IReplyToReply[]> {
-  return this._http.get<IReplyToReply[]>(`${this.api}/get-replies-to-reply?replyId=${replyId}`)
- }
- likeReplyToReply(replyToReplyId: string) {
-  return this._http.patch(`${this.api}/like-reply-to-reply`, { replyToReplyId })
+  getRepliesToReply(replyId: string): Observable<IReplyToReply[]> {
+    return this._http.get<IReplyToReply[]>(`${this.api}/get-replies-to-reply?replyId=${replyId}`)
+  }
+  likeReplyToReply(replyToReplyId: string) {
+    return this._http.patch(`${this.api}/like-reply-to-reply`, { replyToReplyId })
+  }
+  getMemberShip(): Observable<IMemberShip[]> {
+    return this._http.get<IMemberShip[]>(`${this.api}/get-membership`)
+  }
+
+  checkActiveMemberShip() {
+    return this._http.head(`${this.api}/check-active-membership`)
+  }
+
+ 
+getArtistMedia(artistId:string):Observable<IUserMedia> {
+  return this._http.get<IUserMedia>(`${this.api}/get-artist-media?artistId=${artistId}`)
 }
-getMemberShip():Observable<IMemberShip[]> {
-  return this._http.get<IMemberShip[]>(`${this.api}/get-membership`)
+
+broadcast(payload:any) {
+  return this._http.post(`${this.api}/broadcast`,payload).toPromise()
 }
 
-checkActiveMemberShip() {
-  return this._http.head(`${this.api}/check-active-membership`)
-    // const active = await firstValueFrom(checkMemberShip)
+consumer(payload:any) {
+  return this._http.post(`${this.api}/consumer`,payload).toPromise()
 }
-
-
 
 }
 

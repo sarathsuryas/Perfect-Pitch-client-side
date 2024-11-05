@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
+import { ActivatedRoute } from '@angular/router';
+import { IVideoList } from 'src/app/core/interfaces/IVideoList';
+import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 
 interface Album {
   id: number;
@@ -46,45 +49,30 @@ interface Playlist {
 export class ArtistMediasComponent {
   albumData:IAlbumData[] = []
   artistName = 'Taylor Swift';
+  artistId:string = ''
+  videos: IVideoList[] = []
+  playlists:IUserPlaylists[] = []
+
+
+  
  
 
-  songs: Song[] = [
-    { id: 1, title: 'Cardigan', duration: '3:59', albumId: 1 },
-    { id: 2, title: 'The 1', duration: '3:30', albumId: 1 },
-    { id: 3, title: 'Lover', duration: '3:41', albumId: 2 },
-    { id: 4, title: 'Cruel Summer', duration: '2:58', albumId: 2 },
-    { id: 5, title: 'Look What You Made Me Do', duration: '3:31', albumId: 3 },
-  ];
+  
 
-  videos: Video[] = [
-    { id: 1, title: 'Cardigan - Official Music Video', thumbnailUrl: '/placeholder.svg?height=120&width=200', views: 150000000 },
-    { id: 2, title: 'Lover - Official Music Video', thumbnailUrl: '/placeholder.svg?height=120&width=200', views: 120000000 },
-    { id: 3, title: 'You Need To Calm Down', thumbnailUrl: '/placeholder.svg?height=120&width=200', views: 200000000 },
-  ];
+  constructor(private _userService:UserService,private _activatedRoute: ActivatedRoute) {
+    this.artistId = this._activatedRoute.snapshot.params['id'];
 
-  livePerformances: LivePerformance[] = [
-    { id: 1, title: 'Reputation Stadium Tour', date: '2018-05-08', venue: 'University of Phoenix Stadium, Glendale, AZ' },
-    { id: 2, title: 'City of Lover Concert', date: '2019-09-09', venue: 'LOlympia Bruno Coquatrix, Paris, France' },
-    { id: 3, title: 'NPR Tiny Desk Concert', date: '2020-10-16', venue: 'NPR Music' },
-  ];
-
-  playlists: Playlist[] = [
-    { id: 1, title: 'Taylor Swift Essentials', songCount: 50, coverUrl: '/placeholder.svg?height=200&width=200' },
-    { id: 2, title: 'Taylor\'s Version', songCount: 30, coverUrl: '/placeholder.svg?height=200&width=200' },
-    { id: 3, title: 'Acoustic Sessions', songCount: 20, coverUrl: '/placeholder.svg?height=200&width=200' },
-  ];
-
-  constructor(private _userService:UserService) { }
+   }
 
   ngOnInit(): void {
-    this._userService.getAlbums().subscribe({
+    this._userService.getArtistMedia(this.artistId).subscribe({
       next:(value)=>{
-        this.albumData = value
-      },
-      error:(err)=>{
-        console.error(err)
+        this.videos = value.videos
+        this.playlists = value.playlists
+        this.albumData = value.albums
       }
     })
+
   }
 
   formatViews(views: number): string {

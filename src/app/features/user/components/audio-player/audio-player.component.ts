@@ -71,6 +71,8 @@ export class AudioPlayerComponent {
     })
   }
 
+
+
   playSong(index: number) {
     this.currentSongIndex = index;
     this.isPlaying = true;
@@ -92,11 +94,7 @@ playlistPlay(index:number) {
     this.playSong(this.currentSongIndex);
   }
 
-  playPrevious() {
-    this.currentSongIndex = (this.currentSongIndex - 1 + this.songs.length) % this.songs.length;
-    this.playSong(this.currentSongIndex);
-  }
-
+  
   formatTime(time: number): string {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);

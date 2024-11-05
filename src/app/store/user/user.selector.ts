@@ -87,3 +87,8 @@ export const selectIsPremiumUser = createSelector(
   selectUserState,
   (userState)=> userState.user?.premiumUser
 )
+
+export const selctIsBlocked = createSelector(
+  selectUserState,
+  (userState)=>userState.user?.isBlocked
+)

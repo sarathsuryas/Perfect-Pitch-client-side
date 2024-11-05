@@ -18,8 +18,5 @@ export const albumReducer = createReducer(
     songId:action.songId,
     album:action.album
   })),
-  on(removeSongId,(state)=>({
-    ...state,
-    songId:null
-  }))
+
 )

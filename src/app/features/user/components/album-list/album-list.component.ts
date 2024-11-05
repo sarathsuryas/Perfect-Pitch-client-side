@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
+import { Store } from '@ngrx/store';
+import { selectSearchQuery } from 'src/app/store/search/search.selector';
 
 @Component({
   selector: 'app-album-list',
@@ -9,12 +11,25 @@ import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
 })
 export class AlbumListComponent implements OnInit{
   albumData:IAlbumData[] = []
-
-  constructor(private _userService:UserService) { }
+  search:boolean = false
+  constructor(private _userService:UserService,private _store:Store) { }
   ngOnInit(): void {
-   this._userService.getAlbums().subscribe((data)=>{
-     this.albumData = data
-   })
+  this._store.select(selectSearchQuery).subscribe({
+    next:(value)=>{
+      if(value){
+        this.search = true
+      }
+      this._userService.getAlbums(value).subscribe((data)=>{
+        this.albumData = data
+      })
+    }
+  })  
+  
+  if(!this.search) {
+    this._userService.getAlbums().subscribe((data)=>{
+      this.albumData = data
+    })
+  }
   }
 
 }

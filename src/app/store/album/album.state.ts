@@ -1,6 +1,6 @@
 
 export type Album = {
- songId:string | null;
+ songId:string ;
  albumId:string;
  artistName:string
  album:boolean

@@ -41,6 +41,9 @@ import { MembershipComponent } from './features/user/components/membership/membe
 import { PaymentSuccessComponent } from './features/user/components/payment-success/payment-success.component';
 import { MembershipManagementComponent } from './features/admin/components/membership-management/membership-management.component';
 import { memberShipGuard } from './core/user/guards/member-ship.guard';
+import { LiveVideosListingComponent } from './features/user/components/live-videos-listing/live-videos-listing.component';
+import { LiveVideoPageComponent } from './features/user/components/live-video-page/live-video-page.component';
+import { UserBlockedComponent } from './features/user/components/user-blocked/user-blocked.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -48,6 +51,7 @@ const routes: Routes = [
   {path:'register',component:UserRegisterComponent},
   {path:'otp-verify',component:OtpComponent},
   {path:'test-nav',component:TestnavComponent},
+  {path:'user-blocked',component:UserBlockedComponent},
   {path:'home',component:UserMainComponent, canActivate:[UserAuthGuard],
     children:[
       {path:'user-profile',component:UserProfileComponent},
@@ -71,7 +75,8 @@ const routes: Routes = [
       {path:'artist-medias/:id',component:ArtistMediasComponent},
       {path:'ngx',component:NgxAudioComponent},
       {path:'create-live',component:CreateLiveComponent,canActivate:[memberShipGuard]},
-      {path:'live',component:LiveStreamingComponent},
+      {path:'live',component:LiveVideosListingComponent},
+      {path:'live-video',component:LiveVideoPageComponent},
       {path:'membership',component:MembershipComponent},
       {path:'payment-success',component:PaymentSuccessComponent}
     ]

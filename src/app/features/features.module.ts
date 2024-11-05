@@ -101,6 +101,11 @@ import { PaymentSuccessComponent } from './user/components/payment-success/payme
 import { MembershipManagementComponent } from './admin/components/membership-management/membership-management.component';
 import { AddMembershipComponent } from './admin/components/add-membership/add-membership.component';
 import { MembershipCardsComponent } from './user/components/membership-cards/membership-cards.component';
+import { LiveVideosListingComponent } from './user/components/live-videos-listing/live-videos-listing.component';
+import { LiveVideoCardsComponent } from './user/components/live-video-cards/live-video-cards.component';
+import { LiveVideoPageComponent } from './user/components/live-video-page/live-video-page.component';
+import { SafePipe } from '../core/pipes/safe.pipe';
+import { UserBlockedComponent } from './user/components/user-blocked/user-blocked.component';
 
 
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
@@ -171,14 +176,19 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     LiveStreamingComponent,
     ReplyToReplyComponent,
     FilterPipe,
+    SafePipe,
     MembershipComponent,
     PaymentSuccessComponent,
     MembershipManagementComponent,
     AddMembershipComponent,
-    MembershipCardsComponent
+    MembershipCardsComponent,
+    LiveVideosListingComponent,
+    LiveVideoCardsComponent,
+    LiveVideoPageComponent,
+    UserBlockedComponent
   ],
-  imports: [
-    CommonModule,
+  imports: [ 
+    CommonModule, 
     MatPaginatorModule,
     FormsModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),

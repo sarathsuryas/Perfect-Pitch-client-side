@@ -28,7 +28,7 @@ export class AdminLoginComponent {
     })
     this._store.select(selectIsAuthAdmin).subscribe(isAuthenticated=> {
       if(isAuthenticated) {
-        this._router.navigate(['admin/home']);
+        this._router.navigate(['admin/home/user-management']);
       }
     })
 
@@ -43,7 +43,6 @@ export class AdminLoginComponent {
      
     if(error) {
       this._messageService.add({ severity: 'error', summary: 'Error', detail: error })
-
     }
      })
     }

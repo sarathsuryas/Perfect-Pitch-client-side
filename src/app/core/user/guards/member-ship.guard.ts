@@ -10,7 +10,7 @@ export const memberShipGuard: CanActivateFn = (route, state) => {
   const router = inject(Router)
   const toast = inject(MessageService)
   store.select(selectIsPremiumUser).subscribe({
-    next:(value)=>{
+     next:(value)=>{
     if(!value) {
       router.navigate(['home/membership'])
       toast.add( {severity: 'warn', 

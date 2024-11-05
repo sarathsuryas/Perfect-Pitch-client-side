@@ -10,15 +10,21 @@ import { AudioUploadDialogComponent } from '../audio-upload-dialog/audio-upload-
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectPlaylistSong } from 'src/app/store/playlist/playlist.selector';
+import { getUserData } from 'src/app/store/user/user.action';
+import { CookieService } from 'ngx-cookie-service';
+import { search } from 'src/app/store/search/search.action';
+import { debounce, debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-user-main',
-  templateUrl:  './user-main.component.html',
+  templateUrl: './user-main.component.html',
   styleUrls: ['./user-main.component.css']
 })
 
 export class UserMainComponent implements OnInit {
-  
+  searchQuery: any;
+  selectedFilter: any;
   title = 'material-responsive-sidenav';
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
@@ -27,36 +33,63 @@ export class UserMainComponent implements OnInit {
   searchBar: boolean = false
   show: boolean = true
   animal!: string;
-  name!: string; 
+  name!: string;
   isDropdownOpen = false;
-  isPlayer:boolean = false
+  isPlayer: boolean = false
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
   constructor(
     private _observer: BreakpointObserver,
-     public dialog: MatDialog,
-     private _router:Router,
-     private store:Store
-    ) { }
+    public dialog: MatDialog,
+    private _router: Router,
+    private _store: Store,
+    private _messageService: MessageService
+  ) { }
 
   ngOnInit() {
-    this._observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
-      if (screenSize.matches) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
-    });
-    this.store.select(selectPlaylistSong).subscribe({
-      next:(value)=>{
-         if(value.songId?.length === 0) {
+    this._store.dispatch(getUserData())
+    // this._observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
+    //   if (screenSize.matches) {
+    //     this.isMobile = true;
+    //   } else {
+    //     this.isMobile = false;
+    //   }
+    // });
+    this._store.select(selectPlaylistSong).subscribe({
+      next: (value) => {
+        if (value.songId?.length === 0) {
           this.isPlayer = false
-         } else {
+        } else {
           this.isPlayer = true
-         }
-      },error:(err)=>{
+        }
+      }, error: (err) => {
         console.log(err)
       }
     })
+
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(query => {
+        this._store.dispatch(search({ query }));
+        if (this.selectedFilter === 'album') {
+          this._router.navigate([`home/albums`]);
+        } else if (this.selectedFilter === 'playlist') {
+          this._router.navigate([`home/music-playlist`])
+        } else if (this.selectedFilter === 'artist') {
+          this._router.navigate(['home/artist-list'])
+        } else if (this.selectedFilter === 'video') {
+          this._router.navigate(['home/music-videos'])
+        }
+      });
+
   }
+
+
   navigateToShortsUpload() {
     this._router.navigate(['/home/shorts-upload']);
   }
@@ -64,14 +97,8 @@ export class UserMainComponent implements OnInit {
   navigateToUserProfile() {
     this._router.navigate(['/home/user-profile']);
   }
-
-  onSearch(event: Event) {
-    const searchTerm = (event.target as HTMLInputElement).value;
-    console.log('Searching for:', searchTerm);
-    // Implement your search logic here
-  }
   toggleMenu() {
-   
+
     if (this.isMobile) {
       this.sidenav.toggle();
       this.isCollapsed = false;
@@ -101,14 +128,28 @@ export class UserMainComponent implements OnInit {
     });
   }
   openUploadAudioDialog() {
-   const dialogRef = this.dialog.open(AudioUploadDialogComponent,{
-    height:'auto',
-    width:'400px'
-   })
-   dialogRef.afterClosed().subscribe(result => {
-    console.log('The dialog was closed');
-  });
+    const dialogRef = this.dialog.open(AudioUploadDialogComponent, {
+      height: 'auto',
+      width: '400px'
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
-
+  performSearch() {
+    if (!this.selectedFilter) {
+      this._messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'You have to select a filter for Search',
+      });
+      return
+    }
+    this.searchSubject.next(this.searchQuery);
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }

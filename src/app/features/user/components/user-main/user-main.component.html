@@ -1,6 +1,6 @@
 
 
-
+<p-toast/>
 
 <nav class="fixed top-0 z-20 w-full bg-gray-900 text-white">
   <div class="container mx-auto px-4">
@@ -10,7 +10,7 @@
         <button mat-icon-button aria-label="Menu icon" class="" (click)="toggleMenu()">
           <mat-icon class="text-white">menu</mat-icon>
         </button>
-      
+
         <a class="flex items-center font-semibold">
           <button class="w-10 h-10 rounded-full bg-red-800 flex items-center justify-center focus:outline-none mr-2">
             <i class="fa fa-play text-white" id="play-btn"></i>
@@ -19,18 +19,35 @@
         </a>
       </div>
 
-      <!-- Center: Search (hidden on small screens) -->
+      <!-- Center: Search with Filter Dropdown -->
       <div class="hidden md:flex items-center flex-1 max-w-xl mx-4">
         <div class="relative w-full">
-          <input type="text" placeholder="Search" class="w-full bg-gray-800 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-600">
-          <button type="submit" class="absolute left-3 top-2.5 text-gray-400">
-            <i class="fa fa-search"></i>
-          </button>
+          <!-- Dropdown Filter -->
+          <div class="absolute inset-y-0 left-0 flex items-center">
+            <select [(ngModel)]="selectedFilter" class="bg-gray-800 text-white rounded-l-full pl-3 pr-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+              <option value="playlist">Playlist</option>
+              <option value="artist">Artist</option>
+              <option value="album">Album</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+
+          <!-- Search Input -->
+          <input
+            [(ngModel)]="searchQuery"
+            (input)="performSearch()"
+            type="text"
+            placeholder="Search"
+            class="w-full ml-4 bg-gray-800 text-white rounded-full py-2 pl-24 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          />
+
+         
         </div>
       </div>
 
       <!-- Right side: Upload and Profile -->
       <div class="flex items-center">
+        <!-- Upload Button with Dropdown -->
         <div class="relative mr-4">
           <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
             <span class="material-symbols-outlined text-white">
@@ -38,6 +55,7 @@
             </span>
           </button>
           
+          <!-- Dropdown Menu for Uploads -->
           <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
               <li>
@@ -58,23 +76,15 @@
           </div>
         </div>
 
+        <!-- Profile Icon -->
         <a routerLink="/home/user-profile" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
           <mat-icon fontSet="material-symbols-outlined">account_circle</mat-icon>
         </a>
       </div>
     </div>
   </div>
-
-  <!-- Mobile search (visible on small screens) -->
-  <div class="md:hidden px-4 pb-4">
-    <div class="relative">
-      <input type="text" placeholder="Search" class="w-full bg-gray-800 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-600">
-      <button type="submit" class="absolute left-3 top-2.5 text-gray-400">
-        <i class="fa fa-search"></i>
-      </button>
-    </div>
-  </div>
 </nav>
+
 
 
 <mat-sidenav-container autosize="true" class="h-fit delay-300 transition-all animate-popup">
@@ -149,7 +159,6 @@
   <mat-sidenav-content class="overflow-x-hidden">
     <router-outlet></router-outlet>
     <app-ngx-audio></app-ngx-audio>
-    <!-- <app-global-audio-player></app-global-audio-player> -->
   </mat-sidenav-content>
 </mat-sidenav-container>
 

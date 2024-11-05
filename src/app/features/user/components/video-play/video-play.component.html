@@ -1,20 +1,20 @@
  
 
- <div class="container mx-auto p-4 space-y-8">
+ <div class="container mx-auto p-4 bg-black text-white  space-y-8">
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
     <div class="lg:col-span-2 space-y-4">
-      <div class="aspect-video bg-gray-200 rounded-lg overflow-hidden">
+      <div class="aspect-video bg-black rounded-lg overflow-hidden">
         <app-video-player *ngIf="videoData" [link]="currentVideo?currentVideo.link:videoData.link"></app-video-player>
       </div>
       <h1 #title class="text-2xl font-bold"></h1>
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
-          <div class="h-10 w-10 rounded-full bg-gray-300">
+          <div class="h-10 w-10 rounded-full bg-black">
             <img *ngIf="artistImage" src="{{artistImage}}" alt="Channel" class="rounded-full" />
           </div>
           <div>
             <h2 #artist class="font-semibold"></h2>
-            <p class="text-sm text-gray-500">1.2M subscribers</p>
+            <p class="text-sm text-gray-500"></p>
           </div>
         </div>
         <button
@@ -25,34 +25,31 @@
           {{ isSubscribed ? 'Subscribed' : 'Subscribe' }}
         </button>
       </div>
-      <div class="bg-gray-100 p-4 rounded-lg flex items-center justify-between">
+      <div class="bg-gray-500 p-4 rounded-lg flex items-center justify-between">
         <div class="flex items-center space-x-4">
-          <button class="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-full" (click)="toggle()">
+          <button class="flex items-center space-x-2 bg-black px-4 py-2 rounded-full" (click)="toggle()">
             <span class="material-icons">thumb_up</span>
             <span>{{ likeCount | number }}</span>
           </button>
-          <button class="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-full" (click)="incrementDislikes()">
-            <span class="material-icons">thumb_down</span>
-            <span>{{ dislikes | number }}</span>
-          </button>
+          
         </div>
         <div class="flex items-center space-x-4">
-          <button class="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-full">
+          <!-- <button class="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-full">
             <span class="material-icons">share</span>
             <span>Share</span>
-          </button>
-          <button class="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-full">
+          </button> -->
+          <!-- <button class="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-full">
             <span class="material-icons">download</span>
             <span>Download</span>
-          </button>
-          <button class="bg-gray-200 p-2 rounded-full">
+          </button> -->
+          <!-- <button class="bg-gray-200 p-2 rounded-full">
             <span class="material-icons">more_horiz</span>
-          </button>
+          </button> -->
         </div>
       </div>
-      <div class="bg-gray-100 p-4 rounded-lg">
+      <div class="bg-gray-500 p-4 rounded-lg">
         <p class="font-semibold">Description</p>
-        <p #description class="mt-2 text-sm text-gray-600">
+        <p #description class="mt-2 text-sm text-white">
         </p>
       </div>
        <div id="comments">

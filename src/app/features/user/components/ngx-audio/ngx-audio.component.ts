@@ -112,13 +112,14 @@ export class NgxAudioComponent {
   }
 
   playNext() {
-    if (this.index < this.songs.length - 1 && this.isAlbum) {
-      console.log(this.songs,'from the next')
+    // console.log('index:',this.index,'songLength:',this.songs.length,'isAlbum:',this.isAlbum)
+    if (this.index < this.songs.length  && this.isAlbum) {
       this.index = this.songs.findIndex(v => v === this.songId)
       this._store.dispatch(setAlbumSongId({ songId: this.songs[++this.index],album:true}))
     }
   
     if (this.index < this.songs.length - 1 && !this.isAlbum) {
+      
       this.index = this.songs.findIndex(v => v === this.songId)
       this._store.dispatch(setPlaylistSongId({ songId: this.songs[++this.index],album:false,songs:this.songs}))
 
@@ -128,7 +129,6 @@ export class NgxAudioComponent {
 
   playPrevious() {
     if (this.index > 0 && this.isAlbum) {
-      console.log(this.songs,'from the prev')
       this.index = this.songs.findIndex(v => v === this.songId)
       this._store.dispatch(setAlbumSongId({ songId: this.songs[--this.index],album:true }))
     }

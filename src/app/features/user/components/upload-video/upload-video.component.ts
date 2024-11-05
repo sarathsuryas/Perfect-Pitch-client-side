@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../../services/user/user.service';
 import { ICustomResponse } from 'src/app/core/interfaces/ICustomResponse';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-video',
@@ -22,7 +25,7 @@ export class UploadVideoComponent implements OnInit{
   uniqueKeyThumbNail!: string;
   thirdFormGroup!:FormGroup 
 
-  constructor(public dialogRef: MatDialogRef<UploadVideoComponent>, private _formBuilder: FormBuilder, private _userService: UserService) { }
+  constructor(public dialogRef: MatDialogRef<UploadVideoComponent>, private _formBuilder: FormBuilder, private _userService: UserService,private _spinner: NgxSpinnerService,private _messageService:MessageService,private _router:Router) { }
  
   videoFile(event: Event) {
     const FILE = event.target as HTMLInputElement
@@ -63,6 +66,7 @@ export class UploadVideoComponent implements OnInit{
     try {
     if(this.thirdFormGroup.valid) {
       this.dialogRef.close();
+      this._spinner.show()
       const videoData = await this._userService.generatePresignedUrlMedia(this.videoData.name, this.videoData.type) as ICustomResponse
       this.presignedUrlVideo = videoData.presignedUrl.url
       this.uniqueKeyVideo = videoData.presignedUrl.uniqueKey
@@ -79,7 +83,13 @@ export class UploadVideoComponent implements OnInit{
 
       this._userService.submitVideoDetails({ videoName: title, genre: genre, thumbNailName: this.thumbNailData.name, videoDescription: description, uniqueKeyThumbNail: this.uniqueKeyThumbNail, uniqueKeyVideo: this.uniqueKeyVideo , shorts:false}).subscribe((data) => {
         if (data) {
-          alert("success")
+          this._spinner.hide()
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Video uploaded successfully',
+          });
+          this._router.navigate([`/home/play-video/${data.videoId}`])
         }
       },
         (error) => {

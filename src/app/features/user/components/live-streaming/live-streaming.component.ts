@@ -74,9 +74,8 @@ export class LiveStreamingComponent {
       }
     });
   }
+
   
-
-
   sendMessage(message: string): void { 
     console.log('Sending message:', message);
   }

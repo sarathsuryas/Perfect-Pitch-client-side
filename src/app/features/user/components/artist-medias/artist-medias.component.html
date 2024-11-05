@@ -1,4 +1,4 @@
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 py-8 bg-black">
   <h1 class="text-4xl font-bold mb-8 text-gray-800">{{ artistName }}</h1>
 
   <!-- Albums -->
@@ -7,35 +7,27 @@
   </section>
 
   <!-- Songs -->
-  <section class="mb-12">
+  <!-- <section class="mb-12">
     <h2 class="text-2xl font-semibold mb-4 text-gray-700">Popular Songs</h2>
     <ul class="bg-white rounded-lg shadow-md divide-y divide-gray-200">
       <li *ngFor="let song of songs" class="flex justify-between items-center p-4 hover:bg-gray-50">
         <div>
           <h3 class="font-medium text-gray-800">{{ song.title }}</h3>
-          <!-- <p class="text-sm text-gray-600">{{ albums[song.albumId - 1].title }}</p> -->
+          <p class="text-sm text-gray-600">{{ albums[song.albumId - 1].title }}</p> 
         </div>
         <span class="text-sm text-gray-500">{{ song.duration }}</span>
       </li>
     </ul>
-  </section>
+  </section> -->
 
   <!-- Videos -->
   <section class="mb-12">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Music Videos</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      <div *ngFor="let video of videos" class="bg-white rounded-lg shadow-md overflow-hidden">
-        <img [src]="video.thumbnailUrl" [alt]="video.title" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h3 class="font-semibold text-gray-800">{{ video.title }}</h3>
-          <p class="text-sm text-gray-600">{{ formatViews(video.views) }} views</p>
-        </div>
-      </div>
-    </div>
+    <app-video-card [videos]="videos"></app-video-card>
+
   </section>
 
   <!-- Live Performances -->
-  <section class="mb-12">
+  <!-- <section class="mb-12">
     <h2 class="text-2xl font-semibold mb-4 text-gray-700">Live Performances</h2>
     <ul class="bg-white rounded-lg shadow-md divide-y divide-gray-200">
       <li *ngFor="let performance of livePerformances" class="p-4 hover:bg-gray-50">
@@ -43,19 +35,11 @@
         <p class="text-sm text-gray-600">{{ performance.date }} - {{ performance.venue }}</p>
       </li>
     </ul>
-  </section>
+  </section> -->
 
   <!-- Playlists -->
   <section class="mb-12">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Playlists</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      <div *ngFor="let playlist of playlists" class="bg-white rounded-lg shadow-md overflow-hidden">
-        <img [src]="playlist.coverUrl" [alt]="playlist.title" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h3 class="font-semibold text-gray-800">{{ playlist.title }}</h3>
-          <p class="text-sm text-gray-600">{{ playlist.songCount }} songs</p>
-        </div>
-      </div>
-    </div>
+    <playlist-cards *ngIf="playlists.length" [playlists]="playlists"></playlist-cards>
+
   </section>
 </div>

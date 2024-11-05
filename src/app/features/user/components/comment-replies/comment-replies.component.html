@@ -26,7 +26,7 @@
           <img [src]="userProfileImage" alt="Current user" class="w-8 h-8 rounded-full">
           <div class="flex-grow">
             <input placeholder="Add a public reply..." [(ngModel)]="replyToReply"
-              class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black">
             <div class="flex justify-end mt-2 space-x-2">
     
               <!-- cancel reply -->
@@ -45,6 +45,6 @@
     </div>
   </div>
 </div>
-<div *ngIf="showReplyToReplyInput">
+<div class="ml-32" *ngIf="showReplyToReplyInput">
   <app-reply-to-reply [userName]="userName" [userProfileImage]="userProfileImage" [replyToReplayData]="replyToReplayData" *ngFor="let replyToReplayData of replyToReplis" ></app-reply-to-reply>
 </div>

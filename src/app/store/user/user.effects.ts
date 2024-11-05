@@ -147,7 +147,7 @@ $googleLogin = createEffect(()=>
  getUsersData$ = createEffect(()=>
   this._actions$.pipe(
     ofType(getUsers),
-    mergeMap(()=>
+    exhaustMap(()=>
       this._adminService.getUsersData().pipe(
         map(user=>getUsersSuccess({users:user})),
         catchError(error=> of(getUsersFail({error})))
@@ -209,7 +209,7 @@ this._actions$.pipe(
 setUserData$ = createEffect(()=>
   this._actions$.pipe(
     ofType(getUserData),
-    exhaustMap( action=>
+    exhaustMap(action=>
       this._userService.userData().pipe(
         map((user)=> setUserData({userdata:user})),
         catchError(error=>of(getUserDataFail(error)))

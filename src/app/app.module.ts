@@ -37,6 +37,7 @@ import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { albumReducer } from './store/album/album.reducer';
 import { playlistReducer } from './store/playlist/playlist.reducer';
 import { membershipReducer } from './store/memberShip/membership.reducer';
+import { searchReducer } from './store/search/search.reducer';
   
 
 @NgModule({
@@ -56,7 +57,7 @@ import { membershipReducer } from './store/memberShip/membership.reducer';
     BrowserAnimationsModule, 
     UserRoutingModule,
     AdminRoutingModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule, 
     HttpClientModule,
     FormsModule, 
     RouterModule,
@@ -74,6 +75,7 @@ import { membershipReducer } from './store/memberShip/membership.reducer';
     StoreModule.forFeature('album', albumReducer),
     StoreModule.forFeature('playlist',playlistReducer),
     StoreModule.forFeature( 'membership', membershipReducer),
+    StoreModule.forFeature('search',searchReducer),
     EffectsModule.forRoot([UserEffects, AdminEffects]),
     GoogleSigninButtonModule, 
   ],
