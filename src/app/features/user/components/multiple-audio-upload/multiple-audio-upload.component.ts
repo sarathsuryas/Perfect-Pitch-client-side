@@ -252,7 +252,7 @@ export class MultipleAudioUploadComponent implements OnInit {
                   next: (value) => {
                     this._spinner.hide()
                     this.albumForm.reset()
-                    this._router.navigate([`/home/album-songs/${value._id}`])
+                    this._router.navigate([`/home/album-songs/${value.uuid}`])
                     this.snackBar.open('Album uploaded successfully!', 'Close', { duration: 3000 });
                   },
                   error: (err) => {

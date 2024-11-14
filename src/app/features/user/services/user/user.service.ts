@@ -43,6 +43,8 @@ import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
 import { removeSongId } from 'src/app/store/playlist/playlist.action';
 import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
 import { IUserMedia } from 'src/app/core/interfaces/IUserMedia';
+import { ICreateLiveStreamDto } from 'src/app/core/dtos/ICreateLiveStream.dto';
+import { ILiveStreams } from 'src/app/core/interfaces/ILiveStreams';
 
 @Injectable({
   providedIn: 'root'
@@ -204,9 +206,9 @@ export class UserService {
 
 
 
-  submitAlbumDetails(data: ISumbitAlbumDetails): Observable<{ _id: string }> {
+  submitAlbumDetails(data: ISumbitAlbumDetails): Observable<{ uuid: string }> {
     const files = JSON.stringify(data)
-    return this._http.post<{ _id: string }>(`${this.api}/submit-album-details`, { files })
+    return this._http.post<{ uuid: string }>(`${this.api}/submit-album-details`, { files })
   }
 
   getAlbums(query:string=''): Observable<IAlbumData[]> {
@@ -332,13 +334,13 @@ export class UserService {
     return this._http.get(`${this.api}/get-playlist-song?songId=${playlistId}`)
   }
 
-  createLive(title: string, description: string, file: File) {
+  createLive(data:ICreateLiveStreamDto):Observable<{success:boolean,streamId:string}> {
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('title', description);
-    formData.append('title', title);
-
-    return this._http.post(`${this.api}/create-live`, formData)
+    formData.append('file', data.thumbNail);
+    formData.append('description', data.description);
+    formData.append('title', data.title);
+    formData.append('genreId',data.genreId)
+    return this._http.post<{success:boolean,streamId:string}>(`${this.api}/create-live`, formData)
   }
 
   replyToReply(data: IReplyToReplyDto) {
@@ -370,6 +372,10 @@ broadcast(payload:any) {
 
 consumer(payload:any) {
   return this._http.post(`${this.api}/consumer`,payload).toPromise()
+}
+
+getStreamings():Observable<ILiveStreams[]> {
+  return this._http.get<ILiveStreams[]>(`${this.api}/get-streams`)
 }
 
 }

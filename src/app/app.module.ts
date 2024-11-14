@@ -44,10 +44,6 @@ import { searchReducer } from './store/search/search.reducer';
   declarations: [
     AppComponent,
     AddUserComponent,
-    EmailValidationDirective,
-    AlphabetValidatorDirective,
-    NumberValidatorDirective,
-    PasswordValidatorDirective,
   ],
   imports: [ 
     BrowserModule,

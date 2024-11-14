@@ -35,7 +35,6 @@ export class UserLoginComponent implements OnInit {
     private readonly _messageService: MessageService,
     private readonly _router:Router,
   ) { }
-  private readonly onDestroy: Subject<any> = new Subject<any>();
   ngOnInit(): void {
     this.loginForm = this._fb.group({
       email: ['',Validators.compose([Validators.required])],

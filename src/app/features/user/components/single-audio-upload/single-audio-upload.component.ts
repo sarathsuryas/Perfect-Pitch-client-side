@@ -98,7 +98,7 @@ export class SingleAudioUploadComponent implements OnInit {
               this._userService.submitAlbumDetails(obj).subscribe({
                 next:(value)=>{
                   this.singleForm.reset()
-                  this._router.navigate([`/home/album-songs/${value._id}`])
+                  this._router.navigate([`/home/album-songs/${value.uuid}`])
                   this._spinner.hide()
                   this.snackBar.open('Single uploaded successfully!', 'Close', { duration: 3000 });
                 },

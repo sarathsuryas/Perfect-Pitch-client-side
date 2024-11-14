@@ -21,8 +21,6 @@ export class AppComponent implements OnInit{
     this._store.dispatch(setAdminTokenCookie())
     const token = this._cookieService.get('token')
     this._store.dispatch(userSetTokenFromCookie({token}))
-    
-    
   }
  
 

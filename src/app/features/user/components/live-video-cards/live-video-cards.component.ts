@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ILiveStreams } from 'src/app/core/interfaces/ILiveStreams';
 interface MusicVideo {
   id: number;
   title: string;
@@ -15,8 +16,8 @@ interface MusicVideo {
   styleUrls: ['./live-video-cards.component.css']
 })
 export class LiveVideoCardsComponent {
- @Input() video!:MusicVideo 
- selectedVideo: MusicVideo | null = null;
+ @Input() video!:ILiveStreams 
+ selectedVideo: ILiveStreams | null = null;
 
  ngOnInit(): void {}
 
@@ -24,7 +25,7 @@ export class LiveVideoCardsComponent {
    return views >= 1000000 ? (views / 1000000).toFixed(1) + 'M' : (views / 1000).toFixed(1) + 'K';
  }
 
- playVideo(video: MusicVideo): void {
+ playVideo(video: ILiveStreams): void {
    this.selectedVideo = video;
  }
 

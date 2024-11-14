@@ -44,6 +44,7 @@ import { memberShipGuard } from './core/user/guards/member-ship.guard';
 import { LiveVideosListingComponent } from './features/user/components/live-videos-listing/live-videos-listing.component';
 import { LiveVideoPageComponent } from './features/user/components/live-video-page/live-video-page.component';
 import { UserBlockedComponent } from './features/user/components/user-blocked/user-blocked.component';
+import { LivePreviewComponent } from './features/user/components/live-preview/live-preview.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -54,7 +55,7 @@ const routes: Routes = [
   {path:'user-blocked',component:UserBlockedComponent},
   {path:'home',component:UserMainComponent, canActivate:[UserAuthGuard],
     children:[
-      {path:'user-profile',component:UserProfileComponent},
+      {path:'user-profile',component:UserProfileComponent,canActivate:[UserAuthGuard]},
       {path:'music-videos',component:VideosListComponent},
       {path:'upload-audio',component:UploadAudioComponent},
       {path:"single-audio-upload",component:SingleAudioUploadComponent,canActivate:[memberShipGuard]},
@@ -74,7 +75,7 @@ const routes: Routes = [
       {path:'artist-list',component:ArtistListingComponent},
       {path:'artist-medias/:id',component:ArtistMediasComponent},
       {path:'ngx',component:NgxAudioComponent},
-      {path:'create-live',component:CreateLiveComponent,canActivate:[memberShipGuard]},
+      {path:'create-live',component:LivePreviewComponent,canActivate:[memberShipGuard]},
       {path:'live',component:LiveVideosListingComponent},
       {path:'live-video',component:LiveVideoPageComponent},
       {path:'membership',component:MembershipComponent},

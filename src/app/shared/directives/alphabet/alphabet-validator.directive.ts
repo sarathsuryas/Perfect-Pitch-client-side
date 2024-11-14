@@ -12,5 +12,5 @@ export class AlphabetValidatorDirective implements Validators{
     const alphabetRegex = /^[a-zA-Z ]*$/
     const valid = alphabetRegex.test(control.value)
     return valid ? null : {invalidAlphabet:true}
-  }
+  } 
 }

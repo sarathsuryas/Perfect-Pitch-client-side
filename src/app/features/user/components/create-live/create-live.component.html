@@ -1,107 +1,63 @@
-<div class="container mx-auto p-4">
-  <div class="flex space-x-4 mb-4">
-    <button (click)="toggleCamera()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      {{ isCameraOn ? 'Camera Off' : 'Camera On' }}
-    </button>
-    <button (click)="openModal()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-      Create Live
-    </button>
-  </div>
+<div class="p-6 max-w-2xl mx-auto">
+  <h2 mat-dialog-title class="text-2xl font-bold mb-4">Create Live Stream</h2>
+  <mat-dialog-content>
+    <form [formGroup]="streamForm" (ngSubmit)="onSubmit()" class="space-y-4">
 
-  <div class="relative aspect-video bg-black rounded-lg overflow-hidden shadow-lg max-w-2xl mx-auto">
-    <video 
-      #videoElement
-      id="preview" 
-      class="w-full h-full object-contain"
-      [class.hidden]="!isCameraOn"
-      autoplay 
-      muted 
-      playsinline
-    ></video>
-    <div 
-      *ngIf="!isCameraOn" 
-      class="absolute inset-0 flex items-center justify-center text-white text-xl font-bold"
-    >
-      Camera is off
-    </div>
-    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
-      <div class="flex items-center justify-between">
-        <div class="text-white font-semibold">Live Preview</div>
-        <div class="flex space-x-2">
-          <button 
-            (click)="toggleMute()" 
-            class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-full p-1.5 focus:outline-none"
-            [attr.aria-label]="isMuted ? 'Unmute' : 'Mute'"
-          >
-            <svg *ngIf="!isMuted" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+      <div>
+        <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-2">Thumbnail</label>
+        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+          <div class="space-y-1 text-center">
+            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-            <svg *ngIf="isMuted" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-            </svg>
-          </button>
-          <button 
-            (click)="toggleFullscreen()" 
-            class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-full p-1.5 focus:outline-none"
-            aria-label="Toggle fullscreen"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-            </svg>
-          </button>
+            <div class="flex text-sm text-gray-600">
+              <label for="thumbnail" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                <span>Upload a file</span>
+                <input id="thumbnail" name="thumbnail" type="file" class="sr-only" (change)="onFileSelected($event)">
+              </label>
+              <p class="pl-1">or drag and drop</p>
+            </div>
+            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+          </div>
+        </div>
+        <div *ngIf="thumbnailPreview" class="mt-4">
+          <img [src]="thumbnailPreview" alt="Thumbnail preview" class="max-w-full h-auto rounded-lg shadow-md">
         </div>
       </div>
-    </div>
-  </div>
 
-  <div *ngIf="isModalOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
-    <div class="bg-white p-5 rounded-lg shadow-xl w-full max-w-md">
-      <h2 class="text-xl font-bold mb-4">Create Live Event</h2>
-  
-      <form [formGroup]="liveForm" (ngSubmit)="createLive()">
-        <div class="mb-4">
-          <label for="thumbnail" class="block text-gray-700 text-sm font-bold mb-2">Thumbnail:</label>
-          <div class="flex items-center space-x-4">
-            <div class="w-32 h-32 bg-gray-200 rounded-lg overflow-hidden">
-              <img *ngIf="thumbnailPreview" [src]="thumbnailPreview" alt="Thumbnail preview" class="w-full h-full object-cover">
-              <div *ngIf="!thumbnailPreview" class="w-full h-full flex items-center justify-center text-gray-500">
-                No image
-              </div>
-            </div>
-            <input type="file" (change)="onFileSelected($event)" accept="image/*" class="hidden" #fileInput>
-            <button type="button" (click)="fileInput.click()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Upload Image
-            </button>
-          </div>
-        </div>
-  
-        <div class="mb-4">
-          <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
-          <input formControlName="title" type="text" id="title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-          <div *ngIf="liveForm.get('title')?.invalid && liveForm.get('title')?.touched" class="text-red-500 text-xs mt-1">
-            Title is required.
-          </div>
-        </div>
-  
-        <div class="mb-4">
-          <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description:</label>
-          <textarea formControlName="description" id="description" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="3"></textarea>
-          <div *ngIf="liveForm.get('description')?.invalid && liveForm.get('description')?.touched" class="text-red-500 text-xs mt-1">
-            Description is required.
-          </div>
-        </div>
-  
-        <div class="flex items-center justify-between">
-          <button type="submit" [disabled]="liveForm.invalid" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            Create
-          </button>
-          <button type="button" (click)="closeModal()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-  
+      <div>
+        <mat-form-field  class="w-full">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter stream title" AlphabetValidator>
+          <mat-error *ngIf="streamForm.get('title')?.hasError('required')">Title is required</mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div>
+        <mat-form-field  class="w-full">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" placeholder="Enter stream description" rows="3" ></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field  class="w-full">
+          <mat-label>Genre</mat-label>
+          <mat-select formControlName="genreId" required>
+            <mat-option *ngFor="let genre of genres" [value]="genre._id">
+              {{genre.Genre}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="streamForm.get('genreId')?.hasError('required')">
+            Genre is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <mat-dialog-actions align="end" class="mt-6">
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="streamForm.invalid">Create</button>
+      </mat-dialog-actions>
+    </form>
+  </mat-dialog-content>
+ 
 </div>

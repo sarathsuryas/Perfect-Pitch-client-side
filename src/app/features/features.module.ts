@@ -106,6 +106,11 @@ import { LiveVideoCardsComponent } from './user/components/live-video-cards/live
 import { LiveVideoPageComponent } from './user/components/live-video-page/live-video-page.component';
 import { SafePipe } from '../core/pipes/safe.pipe';
 import { UserBlockedComponent } from './user/components/user-blocked/user-blocked.component';
+import { LivePreviewComponent } from './user/components/live-preview/live-preview.component';
+import { EmailValidationDirective } from '../shared/directives/email/email-valdation.directive';
+import { AlphabetValidatorDirective } from '../shared/directives/alphabet/alphabet-validator.directive';
+import { NumberValidatorDirective } from '../shared/directives/number/number-validator.directive';
+import { PasswordValidatorDirective } from '../shared/directives/password/password-validator.directive';
 
 
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
@@ -185,9 +190,14 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     LiveVideosListingComponent,
     LiveVideoCardsComponent,
     LiveVideoPageComponent,
-    UserBlockedComponent
-  ],
-  imports: [ 
+    UserBlockedComponent,
+    LivePreviewComponent,
+    EmailValidationDirective,
+    AlphabetValidatorDirective,
+    NumberValidatorDirective,
+    PasswordValidatorDirective,
+  ], 
+  imports: [
     CommonModule, 
     MatPaginatorModule,
     FormsModule,
