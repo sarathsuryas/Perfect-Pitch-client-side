@@ -5,6 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreateLiveComponent } from '../create-live/create-live.component';
 import { DialogRef } from '@angular/cdk/dialog';
 import { MessageService } from 'primeng/api';
+import { SocketService } from '../../services/socket/socket.service';
 
 @Component({
   selector: 'app-live-preview',
@@ -15,10 +16,17 @@ export class LivePreviewComponent {
   isCameraOn: boolean = false;
   success:boolean = false
   private stream: MediaStream | null = null;
+  streamKey:string =''
   @ViewChild('videoElement', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
 
 
-  constructor(private _userService:UserService,private fb: FormBuilder,private dialog: MatDialog,private _messageService:MessageService) {
+  constructor(
+    private _userService:UserService,
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private _messageService:MessageService,
+    private _socketService:SocketService
+  ) {
   } 
   ngOnInit(): void {
    
@@ -63,6 +71,7 @@ export class LivePreviewComponent {
             next:(value)=>{
               if(value.success) {
              this.success = value.success
+             this.streamKey = value.streamId
               }
             }
           })
@@ -96,13 +105,21 @@ async handleNegotiationNeededEvent(peer:any) {
   const offer = await peer.createOffer();
   await peer.setLocalDescription(offer);
   const payload = {
-      sdp: peer.localDescription
+      sdp: peer.localDescription,
+      key:this.streamKey
   };
 
-  const data = await  this._userService.broadcast(payload) as any
-
-  const desc = new RTCSessionDescription(data.sdp); 
+  this._socketService.broadCast(payload) as any
+  this._socketService.on().subscribe({
+    next:(payload:any)=>{
+  const desc = new RTCSessionDescription(payload.sdp); 
   peer.setRemoteDescription(desc).catch((e: Error) => console.log(e.message));
+    },
+    error:(err)=>{
+      console.error(err)
+    }
+  })
+ 
 
 }
 

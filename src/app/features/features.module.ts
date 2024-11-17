@@ -196,7 +196,7 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     AlphabetValidatorDirective,
     NumberValidatorDirective,
     PasswordValidatorDirective,
-  ], 
+  ],  
   imports: [
     CommonModule, 
     MatPaginatorModule,

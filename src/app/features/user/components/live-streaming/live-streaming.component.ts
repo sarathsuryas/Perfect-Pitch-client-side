@@ -3,6 +3,7 @@ import { SocketService } from '../../services/socket/socket.service';
 import { environment } from 'src/environment/environment';
 import { io,Socket } from 'socket.io-client';
 import { Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-live-streaming',
@@ -10,72 +11,78 @@ import { Subject } from 'rxjs';
   styleUrls: ['./live-streaming.component.css']
 })
 export class LiveStreamingComponent {
-  streamTitle: string = 'My Awesome Live Stream';
   viewerCount: number = 1234;
-  streamerName: string = 'CoolStreamer123';
-  socket!:Socket
+  streamerName:string = 'cool'
   peerConnection!:RTCPeerConnection
+  streamTitle:string = 'that wanna be beautiful'
   localStream!: MediaStream;
   rtcTrackEvent!:RTCTrackEvent
-  @ViewChild('remoteVideo') remoteVideo!: ElementRef;
-  private streamSubject = new Subject<MediaStream>();  // Subject to hold the latest stream
-  public latestStream$ = this.streamSubject.asObservable(); 
-  constructor() { 
-    this.socket = io(environment.apiUrl)
-    console.log("Socket", this.socket)
-    this.peerConnection = new RTCPeerConnection({
-       iceServers: [{ urls: 'stun:stun.stunprotocol.org' }]
-    });
-    console.log("peerConnection", this.peerConnection)
-    this.socket.emit('findOffer', { user: "sarath", streamId: '102030' });
-
-  }
+  private uuid:string | null = null
+  @ViewChild('live') live!: ElementRef<HTMLVideoElement>;
+  constructor(private route: ActivatedRoute,private _socketService:SocketService) {  }
  
-
-  // ngOnInit(): void {
-  //   const videoElement = document.getElementById('test') as HTMLVideoElement;
-
-    
-
-  //   this.socket.emit('findOffer', { user: "sarath", streamId: '102030' });
-  //   this.socket.on("sendOffer", (offer) => {
-  //     this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer.sdp));
-  //   });
-    
-  //   this.peerConnection.ontrack = (event) => {
-  //     if (videoElement) {
-  //       console.log(event,'///////////////////////////////////////////')
-  //       videoElement.srcObject = event.streams[0];  // Attach the incoming stream to the video element
-  //     }
-  //   };
-  
-
-  //  console.log('///////',this.localStream)
-  // } 
-
   ngOnInit(): void {
-   
-    const videoElement = document.getElementById('test') as HTMLVideoElement;  
-   console.log("videoElement",videoElement)
-    this.socket.on("sendOffer", (offer) => {
-      if (offer && offer.sdp && offer.type) {
-        this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer))
-          .then(() => console.log("Remote description set successfully"))
-          .catch(error => console.error("Error setting remote description:", error));
-        this.peerConnection.ontrack = (event) => {
-          console.log('hekki')
-         //  this.localStream = event.streams[0]
-         console.log(event.streams)
-           videoElement.srcObject = event.streams[0]
-    
-        };
-      } else {
-        console.error("Received offer is not a valid RTCSessionDescriptionInit object:", offer);
+    this.route.paramMap.subscribe({
+      next:(params)=>{
+        this.uuid = params.get('uuid');
+        const peer = this.createPeer();
+        peer.addTransceiver("video", { direction: "recvonly" })
+        peer.addTransceiver("audio", { direction: "recvonly" })
+      },
+      error:(err)=>{
+        console.error(err)
       }
     });
   }
 
+  createPeer() {
+    const peer = new RTCPeerConnection({
+      iceServers: [
+          {
+              urls: "stun:stun.stunprotocol.org"
+          }
+      ]
+  })
+    peer.ontrack = this.handleTrackEvent
+    peer.onnegotiationneeded = () => this.handleNegotiationNeededEvent(peer);
+    return peer
+  }
+
+
+  async  handleNegotiationNeededEvent(peer: RTCPeerConnection) {
+    const offer = await peer.createOffer()
+    await peer.setLocalDescription(offer)
+    const payload = {
+      sdp: peer.localDescription,
+      key:this.uuid
+    };
+    this._socketService.watchLive(payload)
+     this._socketService.on().subscribe({
+      next:(payload:any)=>{
+        const desc = new RTCSessionDescription(payload.sdp);
+        peer.setRemoteDescription(desc).catch(e => console.log(e));
+      },
+      error:(err)=>{
+        console.error(err)
+      }
+     })
+    // socket.on('result',(data)=>{
+    //   console.log(data)
+    //   const desc = new RTCSessionDescription(data.sdp);
+    //   peer.setRemoteDescription(desc).catch(e => console.log(e));
+    // })
+  }
+  // socket.on('invalid',(message)=>{
+  //   alert(message)
+  // })
   
+  
+   handleTrackEvent(event:any) {
+    const videoElement = document.getElementById('video') as HTMLVideoElement
+    videoElement.srcObject = event.streams[0]
+  }
+
+
   sendMessage(message: string): void { 
     console.log('Sending message:', message);
   }

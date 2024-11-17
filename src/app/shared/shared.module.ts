@@ -16,7 +16,6 @@ import {  CountdownModule } from 'ngx-countdown';
     ToastModule,
     NgOtpInputModule,
     CountdownModule, 
-    
   ],
   
 })

@@ -77,7 +77,7 @@ const routes: Routes = [
       {path:'ngx',component:NgxAudioComponent},
       {path:'create-live',component:LivePreviewComponent,canActivate:[memberShipGuard]},
       {path:'live',component:LiveVideosListingComponent},
-      {path:'live-video',component:LiveVideoPageComponent},
+      {path:'live-video/:uuid',component:LiveStreamingComponent},
       {path:'membership',component:MembershipComponent},
       {path:'payment-success',component:PaymentSuccessComponent}
     ]

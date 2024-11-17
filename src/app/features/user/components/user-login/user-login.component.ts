@@ -44,7 +44,7 @@ export class UserLoginComponent implements OnInit {
     this._store.select(selectIsAuthUser).subscribe(isAuthenticated=>{
       if(isAuthenticated) {
         this.isLoggedin = false
-        this._router.navigate(['home/landing'])
+         this._router.navigate(['home/landing'])
       }
     })
     

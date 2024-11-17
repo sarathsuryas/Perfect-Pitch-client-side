@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { ILiveStreams } from 'src/app/core/interfaces/ILiveStreams';
 interface MusicVideo {
   id: number;
@@ -18,7 +19,7 @@ interface MusicVideo {
 export class LiveVideoCardsComponent {
  @Input() video!:ILiveStreams 
  selectedVideo: ILiveStreams | null = null;
-
+ constructor(private _router:Router) {}
  ngOnInit(): void {}
 
  formatViews(views: number): string {
@@ -27,6 +28,7 @@ export class LiveVideoCardsComponent {
 
  playVideo(video: ILiveStreams): void {
    this.selectedVideo = video;
+   this._router.navigate([`home/live-video/${this.selectedVideo.uuid}`])
  }
 
 
