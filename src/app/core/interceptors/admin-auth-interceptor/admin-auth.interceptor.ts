@@ -8,7 +8,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { catchError, Observable, switchMap, tap, throwError } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie';
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/features/admin/services/admin.service';
 import { Store } from '@ngrx/store';
@@ -34,8 +34,8 @@ export class AdminAuthInterceptor implements HttpInterceptor {
         if(error.status === 401) {
               return this._adminService.refreshToken().pipe(
                 switchMap((newToken:string)=>{
-                  this._cookieService.delete('adminToken')
-                   this._cookieService.set('adminToken',newToken)
+                  this._cookieService.remove('adminToken')
+                   this._cookieService.put('adminToken',newToken)
                   const retriedReq = request.clone ({
                     setHeaders:{Authorization:`Bearer ${newToken}`}
                   })
@@ -43,7 +43,7 @@ export class AdminAuthInterceptor implements HttpInterceptor {
                 })
               )
         } else if (error.status === 403) {
-          this._cookieService.delete('adminToken')
+          this._cookieService.remove('adminToken')
           console.log('token expired')
            this._store.dispatch(removeToken())
            this._router.navigate(['admin'])

@@ -3,6 +3,8 @@ import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
 import { computedStyle } from 'video.js/dist/types/utils/dom';
 import { UserService } from '../../services/user/user.service';
 import { ICommentReply } from 'src/app/core/interfaces/ICommentReply';
+import { Store } from '@ngrx/store';
+import { selectUserData } from 'src/app/store/user/user.selector';
 interface Comment {
   replyText: string;
   id: number;
@@ -13,7 +15,7 @@ interface Comment {
   dislikes: number;
   timestamp: string;
   replies: Comment[];
-  showReplyInput:boolean
+  showReplyInput: boolean
 }
 
 @Component({
@@ -23,83 +25,91 @@ interface Comment {
 })
 export class CommentSectionComponent implements OnChanges {
 
-  @Input() comment!:ICommentResponse
-  @Input() userId:string = ''
-  @Input() userProfileImage:string = ''
-  @Input() userName:string = ''
-  commentId:string = ''
-  replies:ICommentReply[] = []
-  like:number = 0 
-  showReplyInput:boolean = false
-  liked!:boolean
-  reply:string = ''
-constructor(private _userService:UserService) {}
+  @Input() comment!: ICommentResponse
+   userId: string = ''
+  userProfileImage: string = ''
+   userName: string = ''
+  commentId: string = ''
+  replies: ICommentReply[] = []
+  like: number = 0
+  showReplyInput: boolean = false
+  liked!: boolean
+  reply: string = ''
+  constructor(private _userService: UserService,private _store:Store) { 
+    this._store.select(selectUserData).subscribe({
+      next:(value)=>{
+        this.userId = value?._id as string
+        this.userName = value?.fullName as string
+        this.userProfileImage = value?.profileImage as string
+      }
+    })
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
-   
-    if(this.comment.likes.includes(this.userId as never)) {
+
+    if (this.comment.likes.includes(this.userId as never)) {
       this.liked = true
     } else {
       this.liked = false
     }
     this.like = this.comment.likes.length
-    
+
   }
- 
-  
-  
+
+
+
   likeComment() {
-   if(this.liked) {
-    this.liked = false
-    this.like--
-    this._userService.likeComment(this.comment._id).subscribe({
-      next:(response)=>{
-        console.log(response)
-      },
-      error:(error)=>{
-        console.error(error)
-      }
-     })
-   } else {
-    this.liked = true
-    this.like++
-    this._userService.likeComment(this.comment._id).subscribe({
-      next:(response)=>{
-        console.log(response)
-      },
-      error:(error)=>{
-        console.error(error)
-      }
-     })
-   }
-   
+    if (this.liked) {
+      this.liked = false
+      this.like--
+      this._userService.likeComment(this.comment._id).subscribe({
+        next: (response) => {
+          console.log(response)
+        },
+        error: (error) => {
+          console.error(error)
+        }
+      })
+    } else {
+      this.liked = true
+      this.like++
+      this._userService.likeComment(this.comment._id).subscribe({
+        next: (response) => {
+          console.log(response)
+        },
+        error: (error) => {
+          console.error(error)
+        }
+      })
+    }
+
   }
 
- 
 
-  toggleReplyInput(commentId:string) {
+
+  toggleReplyInput(commentId: string) {
     this.showReplyInput = !this.showReplyInput
     this.commentId = commentId
     this._userService.getReply(this.commentId).subscribe({
-      next:(data)=>{
+      next: (data) => {
         this.replies = data
       },
-      error:(err)=>{
+      error: (err) => {
         console.error(err)
       }
     })
   }
 
   cancelReply() {
-      this.showReplyInput = false;
-      this.reply = ''
+    this.showReplyInput = false;
+    this.reply = ''
   }
 
 
-  
+
   addReply() {
- 
-    const reply:ICommentReply = {
+
+    const reply: ICommentReply = {
       _id: '',
       reply: this.reply,
       userId: {
@@ -111,23 +121,23 @@ constructor(private _userService:UserService) {}
       tag: ''
     }
     this.replies.unshift(reply)
-   
-  this._userService.replyComment({commentId:this.comment._id,reply:this.reply,userId:this.userId}).subscribe({
-    next:(data)=>{
-       this.reply = ''
-      this._userService.getReply(this.commentId).subscribe({
-        next:(data)=>{
-          this.replies = data
-        },
-        error:(err)=>{
-          console.error(err)
-        }
-      })
-    },
-    error:(err)=>{
-      console.error(err)
-    }
-  })
+
+    this._userService.replyComment({ commentId: this.comment._id, reply: this.reply, userId: this.userId }).subscribe({
+      next: (data) => {
+        this.reply = ''
+        this._userService.getReply(this.commentId).subscribe({
+          next: (data) => {
+            this.replies = data
+          },
+          error: (err) => {
+            console.error(err)
+          }
+        })
+      },
+      error: (err) => {
+        console.error(err)
+      }
+    })
   }
 
 }

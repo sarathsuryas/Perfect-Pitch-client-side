@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie';
 import { map, Observable } from 'rxjs';
 import { AddUserDto } from 'src/app/core/dtos/addUser.dto';
 import { EditUserDto } from 'src/app/core/dtos/editUser.dto';
@@ -53,7 +53,7 @@ export class AdminService {
     return this._http.post(`${this.api}/new-password`, {password,AdminId});
   }
  logOut() {
-  this._cookieService.delete('adminToken')
+  this._cookieService.remove('adminToken')
  }
 
  addGenres(genre:string,newId:number,color:string) {

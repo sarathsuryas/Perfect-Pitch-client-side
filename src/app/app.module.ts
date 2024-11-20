@@ -11,7 +11,6 @@ import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } fro
 import { RouterModule } from '@angular/router';
 import { UserRoutingModule } from './core/routes/user-routing.module';
 import { AdminRoutingModule } from './core/routes/admin-routing.module';
-import { CookieService } from 'ngx-cookie-service';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BrowserAnimationsModule, provideAnimations } from "@angular/platform-browser/animations";
@@ -38,6 +37,9 @@ import { albumReducer } from './store/album/album.reducer';
 import { playlistReducer } from './store/playlist/playlist.reducer';
 import { membershipReducer } from './store/memberShip/membership.reducer';
 import { searchReducer } from './store/search/search.reducer';
+import { ToastModule } from 'primeng/toast';
+import { CookieModule } from 'ngx-cookie';
+import { playerReducer } from './store/player/player.reducer';
   
 
 @NgModule({
@@ -63,6 +65,7 @@ import { searchReducer } from './store/search/search.reducer';
     DialogModule,
     AppRoutingModule,
     MatSlideToggleModule,
+    ToastModule,
     InputTextModule,
     MatCardModule,
     StoreModule.forRoot([]),
@@ -72,12 +75,14 @@ import { searchReducer } from './store/search/search.reducer';
     StoreModule.forFeature('playlist',playlistReducer),
     StoreModule.forFeature( 'membership', membershipReducer),
     StoreModule.forFeature('search',searchReducer),
+    StoreModule.forFeature('player',playerReducer),
     EffectsModule.forRoot([UserEffects, AdminEffects]),
     GoogleSigninButtonModule, 
+    CookieModule.withOptions() 
   ],
   providers: [
     provideHttpClient(withFetch())
-    , CookieService, MessageService,
+    , MessageService,
     provideAnimations(),
     {
       provide: HTTP_INTERCEPTORS,

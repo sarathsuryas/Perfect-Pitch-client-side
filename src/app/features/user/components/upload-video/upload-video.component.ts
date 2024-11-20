@@ -6,6 +6,8 @@ import { ICustomResponse } from 'src/app/core/interfaces/ICustomResponse';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { IGenres } from 'src/app/core/interfaces/IGenres';
 
 @Component({
   selector: 'app-upload-video',
@@ -14,58 +16,63 @@ import { Router } from '@angular/router';
 })
 export class UploadVideoComponent implements OnInit{
 
-  video: File | null = null; // Variable to store file
+  video: File | null = null; 
   url: string | ArrayBuffer | null | undefined
   videoData!: File;
-  videoName!: string;
   thumbNailData!: File
   presignedUrlVideo!: string
   presignedUrlThumbNail!: string
   uniqueKeyVideo!: string;
   uniqueKeyThumbNail!: string;
-  thirdFormGroup!:FormGroup 
 
-  constructor(public dialogRef: MatDialogRef<UploadVideoComponent>, private _formBuilder: FormBuilder, private _userService: UserService,private _spinner: NgxSpinnerService,private _messageService:MessageService,private _router:Router) { }
- 
-  videoFile(event: Event) {
-    const FILE = event.target as HTMLInputElement
-    if (FILE.files && FILE.files[0]) {
-      this.videoData = FILE.files[0];
-      this.videoName = this.videoData.name
-    }
-  }
+  uploadForm!: FormGroup;
+  videoPreviewUrl: string | null = null;
+  thumbnailPreviewUrl: string | null = null;
+  genres: IGenres[] = []
 
-  thumbNail(event: Event) {
-    const FILE = event.target as HTMLInputElement
-    if (FILE.files && FILE.files[0]) {
-      this.thumbNailData = FILE.files[0];
-    }
+  constructor(private _fb: FormBuilder, private _userService: UserService,private _spinner: NgxSpinnerService,private _messageService:MessageService,private _router:Router,  private _snackBar: MatSnackBar) { 
+    
   }
-  isLinear = true;
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-  firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['',],
-  });
-  secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['',],
-  });
  
+
   ngOnInit(): void {
-     this.thirdFormGroup = this._formBuilder.group({
+    this._userService.getGenres().subscribe({
+      next: (value) => {
+        this.genres = value
+      },
+      error: (err) => {
+        console.error(err)
+      }
+    })
+    this.uploadForm = this._fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      genre: ['', Validators.required]
-    })
+      genreId: ['', Validators.required],
+    });
+  }
+
+
+  onVideoSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.videoData = file
+      this.videoPreviewUrl = URL.createObjectURL(file);
+    }
+  }
+
+  onThumbnailSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.thumbNailData = file
+      this.thumbnailPreviewUrl = URL.createObjectURL(file);
+    }
   }
 
 
   
   async submit() {
     try {
-    if(this.thirdFormGroup.valid) {
-      this.dialogRef.close();
+    if(this.uploadForm.valid && this.videoData && this.thumbNailData) {
       this._spinner.show()
       const videoData = await this._userService.generatePresignedUrlMedia(this.videoData.name, this.videoData.type) as ICustomResponse
       this.presignedUrlVideo = videoData.presignedUrl.url
@@ -77,11 +84,11 @@ export class UploadVideoComponent implements OnInit{
       console.log(data,"data")
       const result = await this._userService.mediaThumbNailUpload(this.presignedUrlThumbNail, this.thumbNailData.type, this.thumbNailData)
       console.log(result,"result")
-      const title = this.thirdFormGroup.controls['title'].value as string
-      const genre = this.thirdFormGroup.controls['genre'].value as string
-      const description = this.thirdFormGroup.controls['description'].value as string
+      const title = this.uploadForm.controls['title'].value as string
+      const genreId = this.uploadForm.controls['genreId'].value as string
+      const description = this.uploadForm.controls['description'].value as string
 
-      this._userService.submitVideoDetails({ videoName: title, genre: genre, thumbNailName: this.thumbNailData.name, videoDescription: description, uniqueKeyThumbNail: this.uniqueKeyThumbNail, uniqueKeyVideo: this.uniqueKeyVideo , shorts:false}).subscribe((data) => {
+      this._userService.submitVideoDetails({ videoName: title, genreId: genreId, thumbNailName: this.thumbNailData.name, videoDescription: description, uniqueKeyThumbNail: this.uniqueKeyThumbNail, uniqueKeyVideo: this.uniqueKeyVideo , shorts:false}).subscribe((data) => {
         if (data) {
           this._spinner.hide()
           this._messageService.add({
@@ -103,4 +110,22 @@ export class UploadVideoComponent implements OnInit{
     }
 
   }
+
+  
+
+  onSubmit(): void {
+    if (this.uploadForm.valid && this.videoPreviewUrl && this.thumbnailPreviewUrl) {
+      // Here you would typically send the form data and files to your server
+      console.log('Form data:', this.uploadForm.value);
+      console.log('Video file:', this.videoPreviewUrl);
+      console.log('Thumbnail file:', this.thumbnailPreviewUrl);
+      
+      this._snackBar.open('Video uploaded successfully!', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+      });
+    }
+  }
+
 }

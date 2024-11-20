@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 import { Track } from '@khajegan/ngx-audio-player';
 import { Store } from '@ngrx/store';
 import { IAudioData } from 'src/app/core/interfaces/IAudioData';
@@ -6,13 +6,16 @@ import { nextSong, playAlbumSong, prevSong, setAlbumSongId } from 'src/app/store
 import { selectAlbumId, selectAlbumSong } from 'src/app/store/album/album.selector';
 import { UserService } from '../../services/user/user.service';
 import { selectPlaylistSong } from 'src/app/store/playlist/playlist.selector';
-import { setPlaylistSongId } from 'src/app/store/playlist/playlist.action';
+import { removeSongId, setPlaylistSongId } from 'src/app/store/playlist/playlist.action';
+import { closePlayer } from 'src/app/store/player/player.action';
+import { SharedService } from '../../services/shared/shared.service';
 @Component({
   selector: 'app-ngx-audio',
   templateUrl: './ngx-audio.component.html',
   styleUrls: ['./ngx-audio.component.css']
 })
 export class NgxAudioComponent {
+
   songName: string = 'Unknown Song';
   artistName: string = 'Unknown Artist';
   albumName: string = 'Unknown Album';
@@ -25,11 +28,11 @@ export class NgxAudioComponent {
   link: string = '';
   index: number = 0;
   songs: string[] = [];
-  songId: string = ''
+  @Input() songId: string = ''
   isLiked: boolean = false;
   isAlbum: boolean = false
   isVoiceControlActive: boolean = false;
-  constructor(private _store: Store, private _userService: UserService) { }
+  constructor(private _store: Store, private _userService: UserService,private _sharedService:SharedService) { }
 
   ngOnInit() {
     this.audio = new Audio();
@@ -45,7 +48,7 @@ export class NgxAudioComponent {
       next: (data) => {
         this.songId = data.songId as string
         this.isAlbum = data.album
-       
+
         if (this.isAlbum) {
           this._userService.getSong(data.songId as string).subscribe({
             next: (value) => {
@@ -71,21 +74,23 @@ export class NgxAudioComponent {
           this.isAlbum = data.album
           this.songId = data.songId as string
           this.songs = data.songs
-           
-          this._userService.getSong(data.songId as string)
-            .subscribe({
-              next: (value) => {
-                this.link = value.link
-                this.songThumbnail = value.thumbNailLink
-                this.songName = value.title
-                this.albumName = value.albumDetails.title
-                this.artistName = value.artistDetails.fullName
-                this.playSong()
-              },
-              error: (err) => {
-                console.error(err)
-              }
-            })
+          if (this.songId) {
+            this._userService.getSong(data.songId as string)
+              .subscribe({
+                next: (value) => {
+                  this.link = value.link
+                  this.songThumbnail = value.thumbNailLink
+                  this.songName = value.title
+                  this.albumName = value.albumDetails.title
+                  this.artistName = value.artistDetails.fullName
+                  this.playSong()
+                },
+                error: (err) => {
+                  console.error(err)
+                }
+              }) 
+          }
+
         }
       })
     }
@@ -113,15 +118,15 @@ export class NgxAudioComponent {
 
   playNext() {
     // console.log('index:',this.index,'songLength:',this.songs.length,'isAlbum:',this.isAlbum)
-    if (this.index < this.songs.length  && this.isAlbum) {
+    if (this.index < this.songs.length && this.isAlbum) {
       this.index = this.songs.findIndex(v => v === this.songId)
-      this._store.dispatch(setAlbumSongId({ songId: this.songs[++this.index],album:true}))
+      this._store.dispatch(setAlbumSongId({ songId: this.songs[++this.index], album: true }))
     }
-  
+
     if (this.index < this.songs.length - 1 && !this.isAlbum) {
-      
+
       this.index = this.songs.findIndex(v => v === this.songId)
-      this._store.dispatch(setPlaylistSongId({ songId: this.songs[++this.index],album:false,songs:this.songs}))
+      this._store.dispatch(setPlaylistSongId({ songId: this.songs[++this.index], album: false, songs: this.songs }))
 
     }
 
@@ -130,11 +135,11 @@ export class NgxAudioComponent {
   playPrevious() {
     if (this.index > 0 && this.isAlbum) {
       this.index = this.songs.findIndex(v => v === this.songId)
-      this._store.dispatch(setAlbumSongId({ songId: this.songs[--this.index],album:true }))
+      this._store.dispatch(setAlbumSongId({ songId: this.songs[--this.index], album: true }))
     }
     if (this.index > 0 && !this.isAlbum) {
       this.index = this.songs.findIndex(v => v === this.songId)
-      this._store.dispatch(setPlaylistSongId({ songId: this.songs[--this.index],album:false ,songs:this.songs}))
+      this._store.dispatch(setPlaylistSongId({ songId: this.songs[--this.index], album: false, songs: this.songs }))
     }
   }
 
@@ -158,6 +163,10 @@ export class NgxAudioComponent {
     if (this.audio) {
       this.audio.currentTime = seekTime;
     }
+  }
+
+  closePlayer() {
+    this._sharedService.changePlayerState(false)
   }
 
 }

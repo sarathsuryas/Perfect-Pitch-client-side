@@ -1,45 +1,52 @@
-<div class="container mx-auto p-4">
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <!-- Video Player -->
-    <div class="md:col-span-2">
-      <div class="bg-black aspect-video rounded-lg flex items-center justify-center">
-         <video id="video"   
-        autoplay
-          class="w-full h-full rounded-lg"
+<div class="container mx-auto p-4 bg-[#0f0f0f] text-white">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <!-- Video Player and Info -->
+    <div class="lg:col-span-2">
+      <div class="bg-black aspect-video rounded-lg overflow-hidden">
+        <video id="video"   
+          autoplay
+          class="w-full h-full"
           controls
           muted
         ></video>  
       </div>
       <div class="mt-4">
-        <h1 class="text-2xl font-bold">{{ streamTitle }}</h1>
-        <p class="text-gray-600">{{ streamerName }} • {{ viewerCount }} viewers</p>
+        <h1 class="text-xl font-bold">{{ streamTitle }}</h1>
+        <div class="flex items-center justify-between mt-2">
+          <div class="flex items-center space-x-2">
+            <div>
+              <img class="w-10 h-10 rounded-full bg-gray-600" src="{{artistImage}}" alt="">
+            </div>
+            <div>
+              <p class="font-semibold">{{ streamerName }}</p>
+              <p class="text-sm text-gray-400">{{ subscriberCount }} subscribers</p>
+            </div>
+          </div>
+          <button
+          class="px-4 py-2 rounded-full"
+          [ngClass]="{'bg-red-600 text-white': !isSubscribed, 'bg-gray-200 text-gray-800': isSubscribed}"
+          (click)="toggleSubscribe()"
+        >
+          {{ isSubscribed ? 'Subscribed' : 'Subscribe' }}
+        </button>
+        </div>
+        <div class="flex items-center space-x-4 mt-4">
+          <button
+            class="flex items-center space-x-1 bg-[#272727] hover:bg-[#3f3f3f] px-4 py-2 rounded-full"
+            (click)="copyCurrentUrl()"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"
+              />
+            </svg>
+            <span>Share</span>
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Chat -->
-    <div class="bg-gray-100 rounded-lg p-4">
-      <h2 class="text-xl font-semibold mb-4">Live Chat</h2>
-      <div class="h-96 overflow-y-auto mb-4 bg-white rounded p-2">
-        <!-- Chat messages would go here -->
-        <p class="mb-2"><span class="font-bold">User1:</span> Hello everyone!</p>
-        <p class="mb-2"><span class="font-bold">User2:</span> Great stream!</p>
-      </div>
-      <form (ngSubmit)="sendMessage(messageInput.value); messageInput.value = ''">
-        <div class="flex">
-          <input
-            #messageInput
-            type="text"
-            class="flex-grow rounded-l-lg p-2 border-t border-b border-l text-gray-800 border-gray-200 bg-white"
-            placeholder="Type your message..."
-          />
-          <button
-            type="submit"
-            class="px-4 rounded-r-lg bg-blue-500 text-white font-semibold p-2 uppercase border-blue-500 border-t border-b border-r"
-          >
-            Send
-          </button>
-        </div>
-      </form>
-    </div>
+    <!-- Live Chat -->
+    <app-live-chat [streamKey]="uuid"></app-live-chat>
   </div>
 </div>

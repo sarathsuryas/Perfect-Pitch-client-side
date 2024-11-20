@@ -4,7 +4,9 @@ export type userModel = {
   email:string;
   isAdmin:boolean;
   isBlocked:boolean;
-  premiumUser:boolean
+  premiumUser:boolean;
+  subscribers:string[];
+  profileImage:string;
 }
 
 

@@ -111,7 +111,11 @@ import { EmailValidationDirective } from '../shared/directives/email/email-valda
 import { AlphabetValidatorDirective } from '../shared/directives/alphabet/alphabet-validator.directive';
 import { NumberValidatorDirective } from '../shared/directives/number/number-validator.directive';
 import { PasswordValidatorDirective } from '../shared/directives/password/password-validator.directive';
-
+import { NgOtpInputModule } from  'ng-otp-input';
+import { CountdownModule } from 'ngx-countdown';
+import { OtpComponent } from './user/components/otp/otp.component';
+import { LiveChatComponent } from './user/components/live-chat/live-chat.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
 
@@ -196,6 +200,8 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     AlphabetValidatorDirective,
     NumberValidatorDirective,
     PasswordValidatorDirective,
+    OtpComponent,
+    LiveChatComponent,
   ],  
   imports: [
     CommonModule, 
@@ -220,6 +226,7 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     MatIconModule,
     MatToolbarModule,
     MatListModule,
+    CountdownModule,
     SocialLoginModule,
     GoogleSigninButtonModule,
     MatDialogModule,
@@ -227,6 +234,7 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     MatInputModule,
     MatProgressBarModule,
     MatSelectModule,
+    NgOtpInputModule, 
     MatCardModule,
     MatSnackBarModule,
     PlyrModule,
@@ -236,6 +244,7 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     AngularSvgIconModule,
     LucideAngularModule.pick({ Home, Search, Library, PlusCircle, Heart, Mic2, PlayCircle }),
     SocketIoModule.forRoot(config),
+    MatMenuModule
   ],
   providers:[ 
     {
@@ -256,8 +265,6 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
       } as SocialAuthServiceConfig,
     },
   ],
-  exports:[
-    ToastModule,
-  ]
+  exports:[]
 })
 export class FeaturesModule { }

@@ -6,7 +6,7 @@ import { AdminAuthGuard } from './core/admin/guards/admin-auth.guard';
 import { UserManagementComponent } from './features/admin/components/user-management/user-management.component';
 import { UserLoginComponent } from './features/user/components/user-login/user-login.component';
 import { UserRegisterComponent } from './features/user/components/user-register/user-register.component';
-import { OtpComponent } from './shared/user/components/otp/otp.component';
+import { OtpComponent } from './features/user/components/otp/otp.component';
 import { UserHomeComponent } from './features/user/components/user-home/user-home.component';
 import { UserMainComponent } from './features/user/components/user-main/user-main.component';
 import { UserAuthGuard } from './core/user/guards/user-auth.guard';
@@ -45,6 +45,7 @@ import { LiveVideosListingComponent } from './features/user/components/live-vide
 import { LiveVideoPageComponent } from './features/user/components/live-video-page/live-video-page.component';
 import { UserBlockedComponent } from './features/user/components/user-blocked/user-blocked.component';
 import { LivePreviewComponent } from './features/user/components/live-preview/live-preview.component';
+import { LiveChatComponent } from './features/user/components/live-chat/live-chat.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -55,7 +56,7 @@ const routes: Routes = [
   {path:'user-blocked',component:UserBlockedComponent},
   {path:'home',component:UserMainComponent, canActivate:[UserAuthGuard],
     children:[
-      {path:'user-profile',component:UserProfileComponent,canActivate:[UserAuthGuard]},
+      {path:'user-profile',component:UserProfileComponent},
       {path:'music-videos',component:VideosListComponent},
       {path:'upload-audio',component:UploadAudioComponent},
       {path:"single-audio-upload",component:SingleAudioUploadComponent,canActivate:[memberShipGuard]},
@@ -79,7 +80,8 @@ const routes: Routes = [
       {path:'live',component:LiveVideosListingComponent},
       {path:'live-video/:uuid',component:LiveStreamingComponent},
       {path:'membership',component:MembershipComponent},
-      {path:'payment-success',component:PaymentSuccessComponent}
+      {path:'payment-success',component:PaymentSuccessComponent},
+      {path:'chat',component:LiveChatComponent}
     ]
   },
   {path:'admin',component:AdminLoginComponent},
@@ -96,7 +98,7 @@ const routes: Routes = [
   },
 ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { CookieService } from "ngx-cookie-service";
+import { CookieService } from "ngx-cookie";
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError, debounceTime, exhaustMap, map, of, tap } from "rxjs";
 import { adminLogin, adminLoginFail, adminLoginSuccess, adminLogout, getUsersFail, getUsersSuccess, removeToken, searchUser, setAdminTokenCookie, setTokenAdmin } from "./admin.action";
@@ -24,7 +24,7 @@ export class AdminEffects {
      tap(() =>this._spinner.show()),
      exhaustMap(action=>
        this._adminService.login(action.email,action.password).pipe(
-         tap(data=>  {this._cookieService.set('adminToken',data.accessToken)
+         tap(data=>  {this._cookieService.put('adminToken',data.accessToken)
          
          }),
          map((admin)=>adminLoginSuccess({adminData:admin.adminData,token:admin.accessToken})),
@@ -57,7 +57,7 @@ export class AdminEffects {
       this._actions$.pipe(
         ofType(setAdminTokenCookie),
         map(() => {
-          const token = this._cookieService.get('adminToken');
+          const token = this._cookieService.get('adminToken') as string; 
           return setTokenAdmin({ token });
         })
       )

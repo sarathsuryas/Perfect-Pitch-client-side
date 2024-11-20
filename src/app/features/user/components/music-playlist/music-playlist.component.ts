@@ -22,9 +22,11 @@ export class MusicPlaylistComponent implements OnInit {
         if(value){
           this.search = true
         }
-        this._userService.getUserPlalists(value).subscribe((data)=>{
-          this.playlists = data
-        })
+        if(this.search) {
+          this._userService.getUserPlalists(value).subscribe((data)=>{
+            this.playlists = data
+          })
+        }
       }
     })  
     if(!this.search) {

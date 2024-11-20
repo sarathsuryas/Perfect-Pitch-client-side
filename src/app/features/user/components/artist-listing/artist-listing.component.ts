@@ -30,15 +30,18 @@ currentUserId:string = ''
         if(value){
           this.search = true
         }
-        this._userService.getArtists(value).subscribe({
-          next:(value)=>{
-            this.artistData = value.artists
-           this.currentUserId = value.userId
-          },
-          error:(err)=>{
-            console.error(err)
-          }
-        })
+        if(this.search) {
+          this._userService.getArtists(value).subscribe({
+            next:(value)=>{
+              this.artistData = value.artists
+             this.currentUserId = value.userId
+            },
+            error:(err)=>{
+              console.error(err)
+            }
+          })
+        }
+       
        
       }
     })  

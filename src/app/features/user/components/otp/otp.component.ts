@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/co
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CookieService } from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie';
 import { CountdownComponent, CountdownConfig } from 'ngx-countdown';
 import { MessageService } from 'primeng/api';
 import { UserService } from 'src/app/features/user/services/user/user.service';
@@ -56,7 +56,7 @@ export class OtpComponent implements OnInit {
      return this._messageService.add({ severity: 'error', summary: 'Time Out', detail: "Time Out" })
     }
     this._userService.resendOtp(userData).subscribe((data)=>{
-      this._cookieService.set('userData',data)
+      this._cookieService.put('userData',data)
     })
     setTimeout(()=>{
        this.disable = false
@@ -77,7 +77,7 @@ export class OtpComponent implements OnInit {
 
 
   OnSubmit(otp: string) {
-    const userData = this._cookieService.get('userData')
+    const userData = this._cookieService.get('userData') as string
     if (!userData) {
       this._messageService.add({ severity: 'error', summary: 'Time Out', detail: "Time Out" })
     }

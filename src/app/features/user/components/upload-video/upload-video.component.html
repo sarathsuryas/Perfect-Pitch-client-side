@@ -4,74 +4,94 @@
   <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
 
-<h1 mat-dialog-title class="text-lg font-bold">Upload Video</h1>
 
-<div mat-dialog-content class="h-full">
-  <mat-stepper [linear]="isLinear" #stepper>
-
-    <!-- Step 1: File Upload -->
-    <mat-step [stepControl]="firstFormGroup" label="Upload Video File">
-      <div class="flex flex-col items-center justify-center h-[150px]">
-        <label for="dropzone-file"
-          class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition ease-in-out">
-          <div class="flex flex-col items-center justify-center">
-            <svg class="w-10 h-10 mb-4 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-              viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 10l4.586-4.586A2 2 0 0 0 17.586 3H6.414A2 2 0 0 0 4.586 5.414L9 10m6 0v10M9 10v10m12-10v5m-6 5v2m-2-2v2M3 16h5M3 20h5" />
-            </svg>
-            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span>
-              or drag and drop</p>
-            <p  class="text-xs text-gray-500 dark:text-gray-400" >{{videoName}} </p>
+<div class="container mx-auto p-4 max-w-4xl bg-blue-gray-900">
+  <mat-card class="mb-6">
+    <mat-card-header>
+      <mat-card-title class="text-2xl font-bold mb-4">Upload Video</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="uploadForm" (ngSubmit)="submit()" class="space-y-6">
+        <!-- Video Upload -->
+        <div>
+          <label for="video-upload" class="block text-sm font-medium text-gray-700 dark:text-gray-900 mb-2">
+            Video Upload
+          </label>
+          <div class="flex items-center justify-center w-full">
+            <label for="video-upload" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">MP4, WebM, Ogg (MAX. 800MB)</p>
+              </div>
+              <input id="video-upload" type="file" class="hidden" (change)="onVideoSelected($event)" accept="video/*" />
+            </label>
           </div>
-          <input id="dropzone-file" type="file" class="hidden" (change)="videoFile($event)"/>
-        </label>
-      </div>
-      <div class="mt-4 flex justify-end">
-        <button mat-button matStepperNext color="primary">Next</button>
-      </div>
-    </mat-step>
-
-    <!-- Step 2: Thumbnail Upload -->
-    <mat-step [stepControl]="secondFormGroup" label="Upload Thumbnail">
-      <form [formGroup]="secondFormGroup" class="space-y-4">
-        <label for="thumbnail_input" class="block text-sm font-medium text-gray-900 dark:text-white">Upload Thumbnail</label>
-        <input
-          class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-          id="thumbnail_input" type="file" (change)="thumbNail($event)">
-        <div class="flex justify-between mt-4">
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext color="primary">Next</button>
+          <div *ngIf="videoPreviewUrl" class="mt-4">
+            <video [src]="videoPreviewUrl" controls class="w-full h-auto rounded-lg"></video>
+          </div>
         </div>
-      </form>
-    </mat-step>
 
-    <!-- Step 3: Video Details -->
-    <mat-step [stepControl]="thirdFormGroup" label="Video Details" >
-      <form [formGroup]="thirdFormGroup" class="flex flex-col items-center" (ngSubmit)="submit()">
-        <mat-form-field class="w-full">
+        <!-- Thumbnail Upload -->
+        <div>
+          <label for="thumbnail-upload" class="block text-sm font-medium text-gray-700 dark:text-gray-900 mb-2">
+            Thumbnail Upload
+          </label>
+          <div class="flex items-center justify-center w-full">
+            <label for="thumbnail-upload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 ">
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg class="w-8 h-8 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF up to 5MB</p>
+              </div>
+              <input id="thumbnail-upload" type="file" class="hidden" (change)="onThumbnailSelected($event)" accept="image/*" />
+            </label>
+          </div>
+          <div *ngIf="thumbnailPreviewUrl" class="mt-4">
+            <img [src]="thumbnailPreviewUrl" alt="Thumbnail preview" class="w-full h-auto rounded-lg" />
+          </div>
+        </div>
+
+        <!-- Title Input -->
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label>Title</mat-label>
-          <input matInput formControlName="title" AlphabetValidator>
+          <input matInput formControlName="title" placeholder="Enter video title" AlphabetValidator>
+          <mat-error *ngIf="uploadForm.get('title')?.hasError('required')">Title is required</mat-error>
+          <mat-error *ngIf="uploadForm.controls['title'].invalid && uploadForm.controls['title'].value.length !== 0">
+            Title can only contain alphabets.
+          </mat-error>
         </mat-form-field>
-        <mat-form-field class="w-full">
-          <mat-label>Genre</mat-label>
-          <input matInput formControlName="genre" AlphabetValidator>
-        </mat-form-field>
-        <mat-form-field  class="w-full">
+
+        <!-- Description Input -->
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label>Description</mat-label>
-          <textarea matInput formControlName="description" AlphabetValidator></textarea>
-        </mat-form-field>         
-        <div class="flex justify-between w-full">
-          <button mat-button matStepperPrevious>Back</button>
-          <div mat-dialog-actions class="flex">
-            <div>
-              <button mat-button (click)="onNoClick()">Cancel</button>
-              <button type="submit" mat-button color="primary" cdkFocusInitial>Submit</button>
-            </div>
-          </div>
+          <textarea matInput formControlName="description" rows="3" placeholder="Enter video description" AlphabetValidator></textarea>
+          <mat-error *ngIf="uploadForm.get('description')?.hasError('required')" >Description is required</mat-error>
+          <mat-error *ngIf="uploadForm.controls['description'].invalid && uploadForm.controls['description'].value.length !== 0">
+            Description only contain alphabets.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Genre Select -->
+        <mat-form-field appearance="fill" class="w-full">
+         <mat-label>Genre</mat-label>
+          <mat-select formControlName="genreId" required>
+            <mat-option *ngFor="let genre of genres" [value]="genre._id">
+              {{genre.Genre}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="uploadForm.controls['genreId'].invalid">
+            Genre is required
+          </mat-error>
+        </mat-form-field>
+
+
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!uploadForm.valid || !videoPreviewUrl || !thumbnailPreviewUrl">
+            Upload Video
+          </button>
         </div>
       </form>
-    </mat-step>
-  </mat-stepper>
+    </mat-card-content>
+  </mat-card>
 </div>
-

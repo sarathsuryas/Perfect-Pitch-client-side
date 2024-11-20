@@ -1,3 +1,4 @@
-.dot {
-  transition: all 0.3s ease-in-out;
+:host {
+  display: block;
+  padding: 20px;
 }

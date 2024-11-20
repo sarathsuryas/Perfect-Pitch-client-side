@@ -1,0 +1,48 @@
+<!-- toaster -->
+<p-toast />
+
+<!-- spinner -->
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+
+<!-- component -->
+<div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12">
+  <div class="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
+    <div class="mx-auto flex w-full max-w-md flex-col space-y-16">
+      <div class="flex flex-col items-center justify-center text-center space-y-2">
+        <div class="font-semibold text-3xl">
+          <p>Email Verification</p>
+        </div>
+        <div class="flex flex-row text-sm font-medium text-gray-400">
+          <p>We have sent a code to your email </p>
+        </div>
+      </div>
+
+      <div>
+        <form id="otp-form">
+          <div class="flex flex-col space-y-16">
+            <div class="flex items-center justify-center mx-auto w-full max-w-xs">
+              <ng-otp-input class="center-otp-input" (onInputChange)="onOtpChange($event)"
+                [config]="{length:5,allowNumbersOnly: true}"></ng-otp-input>
+
+            </div>
+
+            <div class="flex flex-col space-y-5">
+
+              <countdown class="flex justify-center" [ngStyle]="{'color':TimerColor}" #cd [config]="config"></countdown>
+              <div
+                class="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
+                <p>Didn't recieve code?</p> <button id="timerButton" [disabled]="disable" (click)="start($event)"
+                  class="text-blue-600" target="_blank">
+                  <p [ngStyle]="{ 'color': color }">Resend</p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

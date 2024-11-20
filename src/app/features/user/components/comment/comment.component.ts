@@ -3,18 +3,7 @@ import { ICommentDetails } from 'src/app/core/interfaces/ICommentDetails';
 import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
 import { UserService } from '../../services/user/user.service';
 
-// interface Comment {
-//   showReplyInput: boolean;
-//   replyText: any;
-//   id: number;
-//   author: string;
-//   avatar: string;
-//   content: string;
-//   likes: number;
-//   dislikes: number;
-//   timestamp: string;
-//   replies: Comment[];
-// }
+
 
 @Component({
   selector: 'app-comment',

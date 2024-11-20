@@ -1,7 +1,7 @@
 export interface IVideoUploadDto {
   videoName:string;
   videoDescription:string;
-  genre:string;
+  genreId:string;
   thumbNailName:string;
   uniqueKeyVideo:string;
   uniqueKeyThumbNail:string;

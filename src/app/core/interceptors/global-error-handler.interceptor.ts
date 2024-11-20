@@ -17,7 +17,9 @@ export class GlobalErrorHandlerInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error:HttpErrorResponse)=>{
-        this._messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
+         if(error.status !== 401) {
+           this._messageService.add({ severity: 'error', summary: 'Error', detail: error.message });
+         }
         return throwError(error)
       })
     )

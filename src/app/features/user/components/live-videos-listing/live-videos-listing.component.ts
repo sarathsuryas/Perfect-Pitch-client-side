@@ -19,59 +19,17 @@ interface MusicVideo {
 })
 export class LiveVideosListingComponent implements OnInit {
   selectedVideo: MusicVideo | null = null;
-videos:ILiveStreams[] = [];
+  videos: ILiveStreams[] = [];
 
-  constructor(private _userService:UserService) {}
+  constructor(private _userService: UserService) { }
   ngOnInit(): void {
     this._userService.getStreamings().subscribe({
-      next:(value)=>{
-      this.videos = value
+      next: (value) => {
+        this.videos = value
       },
-      error:(err)=>{
+      error: (err) => {
         console.error(err)
       }
     })
   }
-
-  
-
-
-
-// async initView() {
-//   const peer = this.createPeers();
-//   peer.addTransceiver("video", { direction: "recvonly" })
-// }
-
-// createPeers() {
-//   const peer = new RTCPeerConnection({
-//       iceServers: [
-//           {
-//               urls: "stun:stun.stunprotocol.org"
-//           }
-//       ]
-//   });
-//   peer.ontrack = this.handleTrackEvent;
-//   peer.onnegotiationneeded = () => this.handleNegotiationNeededEvents(peer);
-
-//   return peer;
-// }
-
-// async handleNegotiationNeededEvents(peer:any) {
-//   const offer = await peer.createOffer();
-//   await peer.setLocalDescription(offer);
-//   const payload = {
-//       sdp: peer.localDescription
-//   };
-
-//   const data = await this._userService.consumer(payload) as any
-//   const desc = new RTCSessionDescription(data.sdp);
-//   peer.setRemoteDescription(desc).catch((e: Error) => console.log(e.message));
-
-// }
-// handleTrackEvent(e: RTCTrackEvent): void {
-//   const videoElement = document.getElementById("preview") as HTMLVideoElement;
-//   videoElement.srcObject = e.streams[0];
-// }
-
-  
 }

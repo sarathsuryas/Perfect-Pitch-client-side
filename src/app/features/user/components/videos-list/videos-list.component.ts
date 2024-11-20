@@ -19,18 +19,22 @@ export class VideosListComponent implements OnInit {
         if (value) {
           this.search = true
         }
-        this._userService.getVideoList(value).subscribe({
-          next: (value) => {
-            this.videos = value
-          },
-          error: (err) => {
-            console.error(err)
-          }
-        })
+        if (this.search) {
+        
+          this._userService.getVideoList(value).subscribe({
+            next: (value) => {
+              this.videos = value
+            },
+            error: (err) => {
+              console.error(err)
+            }
+          })
 
+        }
       }
     })
     if (!this.search) {
+    
       this._userService.getVideoList().subscribe((data) => {
         this.videos = data
       })

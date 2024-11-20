@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { UserService } from 'src/app/features/user/services/user/user.service';
-import { CookieService } from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { removeToken } from 'src/app/store/user/user.action';
@@ -24,8 +24,12 @@ export class UserAuthInterceptor implements HttpInterceptor {
     } else if(request.url.includes('//s3.ap-south-1.amazonaws.com')) {
       return next.handle(request);
     }
+    if(!localStorage.getItem('token')) {
+      this._store.dispatch(removeToken())
+      this._router.navigate([''])
+    }
      
-    const token = this._cookieService.get('token')
+    const token = localStorage.getItem('token')
     const authReq = request.clone({
       setHeaders:{Authorization:`Bearer ${token}`}
     })
@@ -33,12 +37,12 @@ export class UserAuthInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((error:HttpErrorResponse)=>{
         console.log('errror handler inside dnsdk',error.status,'///')
-        if(error.status === 401) {
+        if(error.status === 401 && localStorage.getItem('token')) {
           return this._userService.refreshToken().pipe(
            switchMap((newToken:string)=>{
             console.log('newToken',newToken)
-            this._cookieService.delete('token')
-            this._cookieService.set('token',newToken)
+            localStorage.getItem('token')
+            localStorage.setItem('token',newToken)
             const retriedReq  = request.clone({
               setHeaders:{Authorization:`Bearer ${newToken}`}
             })
@@ -47,7 +51,7 @@ export class UserAuthInterceptor implements HttpInterceptor {
           )
         } else if (error.status === 403) {
         
-          this._cookieService.delete('token')
+          localStorage.removeItem('token')
           this._store.dispatch(removeToken())
          this._router.navigate([''])
         }

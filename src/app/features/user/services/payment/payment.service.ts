@@ -42,6 +42,10 @@ async redirectToCheckout(priceId:string,userId:string) {
   }
 }
 
+checkPaid(userId:string) {
+
+}
+
 paymentSuccess(sessionId:string,memberShipId:string) {
  return this._http.post(`${this.api}/payment-success`,{sessionId,memberShipId})
 }

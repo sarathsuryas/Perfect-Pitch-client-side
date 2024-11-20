@@ -12,6 +12,7 @@ import {
 } from '@abacritt/angularx-social-login';
 import { Subject, Subscription } from 'rxjs';
 import { GoogleSigninComponent } from '../google-signin/google-signin.component';
+import { CookieService } from 'ngx-cookie';
 
 declare global {
   interface Window {
@@ -34,7 +35,10 @@ export class UserLoginComponent implements OnInit {
     private readonly _store: Store<UserState>,
     private readonly _messageService: MessageService,
     private readonly _router:Router,
-  ) { }
+    private readonly _cookieService:CookieService
+  ) { 
+    console.log(localStorage.getItem('token'),'token from the login page')
+   }
   ngOnInit(): void {
     this.loginForm = this._fb.group({
       email: ['',Validators.compose([Validators.required])],

@@ -24,12 +24,15 @@ export class UserProfileComponent implements OnInit {
   fileObj!: File;
   userId!:string | undefined
   uniqueKey:string = ''
-
+ 
   constructor(
     private _userService: UserService,
     private dialog: MatDialog,
     private _messageService: MessageService,
-  ) { }
+  ) { 
+
+  }
+  
 
 
 

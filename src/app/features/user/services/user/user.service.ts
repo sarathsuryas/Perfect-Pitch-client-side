@@ -4,7 +4,7 @@ import { userModel } from '../../../../store/user/user.model';
 import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
 import { IUserData } from 'src/app/core/interfaces/IUserData';
-import { CookieService } from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie';
 import { environment } from 'src/environment/environment';
 import { ITokenData } from 'src/app/core/interfaces/ITokenData';
 import { EditUserDto } from 'src/app/core/dtos/editUser.dto';
@@ -45,6 +45,8 @@ import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
 import { IUserMedia } from 'src/app/core/interfaces/IUserMedia';
 import { ICreateLiveStreamDto } from 'src/app/core/dtos/ICreateLiveStream.dto';
 import { ILiveStreams } from 'src/app/core/interfaces/ILiveStreams';
+import { IChats } from 'src/app/core/interfaces/IChats';
+import { ILive } from 'src/app/core/interfaces/ILive';
 
 @Injectable({
   providedIn: 'root'
@@ -88,7 +90,6 @@ export class UserService {
     return this._http.post(`${this.api}/new-password`, { password, UserId });
   }
   userData(): Observable<IUserData> {
-
     return this._http.get<IUserData>(`${this.api}/get-user-data`)
   }
 
@@ -164,8 +165,7 @@ export class UserService {
   }
 
   logOut() {
-    this._cookieService.delete('token')
-    this._cookieService.delete('refreshToken')
+    localStorage.removeItem('token')
     this._store.dispatch(logOut())
     this._store.dispatch(removeSongId())
     this._router.navigate([''])
@@ -176,7 +176,8 @@ export class UserService {
     return this._http.post<{ videoId: string }>(`${this.api}/post-video-details`, data)
   }
 
-  getVideoList(query:string=''): Observable<IVideoList[]> {
+  getVideoList(query: string = ''): Observable<IVideoList[]> {
+
     return this._http.get<IVideoList[]>(`${this.api}/video-list?video=${query}`)
   }
 
@@ -211,10 +212,11 @@ export class UserService {
     return this._http.post<{ uuid: string }>(`${this.api}/submit-album-details`, { files })
   }
 
-  getAlbums(query:string=''): Observable<IAlbumData[]> {
+  getAlbums(query: string = ''): Observable<IAlbumData[]> {
+
     return this._http.get<IAlbumData[]>(`${this.api}/get-albums?album=${query}`)
   }
- 
+
 
   getAlbumDetails(id: string): Observable<IAlbumResponse> {
     return this._http.get<IAlbumResponse>(`${this.api}/album-details?id=${id}`)
@@ -294,7 +296,7 @@ export class UserService {
     return this._http.post<{ playlistId: string }>(`${this.api}/create-Playlist`, data)
   }
 
-  getUserPlalists(query:string=''): Observable<IUserPlaylists[]> {
+  getUserPlalists(query: string = ''): Observable<IUserPlaylists[]> {
     return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlist?playlist=${query}`)
   }
 
@@ -314,7 +316,7 @@ export class UserService {
     return this._http.get<ISongsSameGenre[]>(`${this.api}/get-genre-songs?genreId=${genreId}`)
   }
 
-  getArtists(query:string=''): Observable<{ artists: IUserData[], userId: string }> {
+  getArtists(query: string = ''): Observable<{ artists: IUserData[], userId: string }> {
     return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists?artist=${query}`)
   }
 
@@ -323,24 +325,24 @@ export class UserService {
   }
 
   getSong(songId: string): Observable<ISongData> {
-    if(!this._cookieService.get('token')) {
+    if (!localStorage.getItem('token')) {
       return throwError(() => new Error('User is not authenticated'));
     }
     return this._http.get<ISongData>(`${this.api}/get-song?songId=${songId}`);
-    
+
   }
 
   getPlaylistSong(playlistId: string) {
     return this._http.get(`${this.api}/get-playlist-song?songId=${playlistId}`)
   }
 
-  createLive(data:ICreateLiveStreamDto):Observable<{success:boolean,streamId:string}> {
+  createLive(data: ICreateLiveStreamDto): Observable<{ success: boolean, streamId: string }> {
     const formData = new FormData();
     formData.append('file', data.thumbNail);
     formData.append('description', data.description);
     formData.append('title', data.title);
-    formData.append('genreId',data.genreId)
-    return this._http.post<{success:boolean,streamId:string}>(`${this.api}/create-live`, formData)
+    formData.append('genreId', data.genreId)
+    return this._http.post<{ success: boolean, streamId: string }>(`${this.api}/create-live`, formData)
   }
 
   replyToReply(data: IReplyToReplyDto) {
@@ -361,22 +363,34 @@ export class UserService {
     return this._http.head(`${this.api}/check-active-membership`)
   }
 
- 
-getArtistMedia(artistId:string):Observable<IUserMedia> {
-  return this._http.get<IUserMedia>(`${this.api}/get-artist-media?artistId=${artistId}`)
-}
 
-broadcast(payload:any) {
-  return this._http.post(`${this.api}/broadcast`,payload).toPromise()
-}
+  getArtistMedia(artistId: string): Observable<IUserMedia> {
+    return this._http.get<IUserMedia>(`${this.api}/get-artist-media?artistId=${artistId}`)
+  }
 
-consumer(payload:any) {
-  return this._http.post(`${this.api}/consumer`,payload).toPromise()
-}
+  broadcast(payload: any) {
+    return this._http.post(`${this.api}/broadcast`, payload).toPromise()
+  }
 
-getStreamings():Observable<ILiveStreams[]> {
-  return this._http.get<ILiveStreams[]>(`${this.api}/get-streams`)
-}
+  consumer(payload: any) {
+    return this._http.post(`${this.api}/consumer`, payload).toPromise()
+  }
+
+  getStreamings(): Observable<ILiveStreams[]> {
+    return this._http.get<ILiveStreams[]>(`${this.api}/get-streams`)
+  }
+
+  stopStreaming(streamKey: string) {
+    return this._http.delete(`${this.api}/stop-stream`, { body: { streamKey } })
+  }
+
+  getChats(streamKey: string): Observable<IChats[]> {
+    return this._http.get<IChats[]>(`${this.api}/get-chats?streamKey=${streamKey}`)
+  }
+
+  getLiveVideoDetails(streamKey: string): Observable<ILive> {
+    return this._http.get<ILive>(`${this.api}/get-live-video-details?streamKey=${streamKey}`)
+  }
 
 }
 

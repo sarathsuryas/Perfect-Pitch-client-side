@@ -1,13 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { PaymentService } from '../../services/payment/payment.service';
 import { environment } from 'src/environment/environment';
-interface Membership {
-  name: string;
-  price: number;
-  interval: string;
-  features: string[];
-  current: boolean;
-}
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-test',
@@ -15,58 +11,50 @@ interface Membership {
   styleUrls: ['./test.component.css']
 })
 export class TestComponent {
-  email: string = '';
-  firstName: string = '';
-  lastName: string = '';
-  address: string = '';
-  amount: number = 0;
+ 
+  uploadForm!: FormGroup;
+  videoPreviewUrl: string | null = null;
+  thumbnailPreviewUrl: string | null = null;
 
-  private stripe: any;
-  private elements: any;
-  private paymentElement: any;
-
-  constructor(private paymentService: PaymentService) {
+  constructor(
+    private fb: FormBuilder,
+    private snackBar: MatSnackBar
+  ) {
+    this.uploadForm = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      genre: ['', Validators.required],
+    });
   }
 
-showOtherMemberships = false;
-
-memberships: Membership[] = [
-  {
-    name: 'Basic',
-    price: 9.99,
-    interval: 'month',
-    features: [
-      'Ad-free music streaming',
-      'Offline playback',
-      'Unlimited skips'
-    ],
-    current: true
-  },
-  {
-    name: 'Premium',
-    price: 14.99,
-    interval: 'month',
-    features: [
-      'All Basic features',
-      'High-quality audio',
-      'Lyrics display',
-      'Exclusive content'
-    ],
-    current: false
-  },
-  {
-    name: 'Family',
-    price: 19.99,
-    interval: 'month',
-    features: [
-      'All Premium features',
-      'Up to 6 accounts',
-      'Parental controls',
-      'Shared playlists'
-    ],
-    current: false
+  onVideoSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.videoPreviewUrl = URL.createObjectURL(file);
+    }
   }
-];
+
+  onThumbnailSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.thumbnailPreviewUrl = URL.createObjectURL(file);
+    }
+  }
+
+  onSubmit(): void {
+    if (this.uploadForm.valid && this.videoPreviewUrl && this.thumbnailPreviewUrl) {
+      // Here you would typically send the form data and files to your server
+      console.log('Form data:', this.uploadForm.value);
+      console.log('Video file:', this.videoPreviewUrl);
+      console.log('Thumbnail file:', this.thumbnailPreviewUrl);
+      
+      this.snackBar.open('Video uploaded successfully!', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+      });
+    }
+  }
  
 }
 

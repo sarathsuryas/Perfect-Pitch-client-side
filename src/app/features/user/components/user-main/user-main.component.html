@@ -1,13 +1,11 @@
-
-
-<p-toast/>
+<p-toast />
 
 <nav class="fixed top-0 z-20 w-full bg-gray-900 text-white">
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-between h-16">
       <!-- Left side: Menu, Logo, and Brand -->
       <div class="flex items-center">
-        <button mat-icon-button aria-label="Menu icon" class="" (click)="toggleMenu()">
+        <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
           <mat-icon class="text-white">menu</mat-icon>
         </button>
 
@@ -19,12 +17,13 @@
         </a>
       </div>
 
-      <!-- Center: Search with Filter Dropdown -->
+      <!-- Center: Search with Filter Dropdown (visible on larger screens) -->
       <div class="hidden md:flex items-center flex-1 max-w-xl mx-4">
         <div class="relative w-full">
           <!-- Dropdown Filter -->
           <div class="absolute inset-y-0 left-0 flex items-center">
-            <select [(ngModel)]="selectedFilter" class="bg-gray-800 text-white rounded-l-full pl-3 pr-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <select [(ngModel)]="selectedFilter"
+              class="bg-gray-800 text-white rounded-l-full pl-3 pr-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
               <option value="playlist">Playlist</option>
               <option value="artist">Artist</option>
               <option value="album">Album</option>
@@ -33,63 +32,78 @@
           </div>
 
           <!-- Search Input -->
-          <input
-            [(ngModel)]="searchQuery"
-            (input)="performSearch()"
-            type="text"
-            placeholder="Search"
-            class="w-full ml-4 bg-gray-800 text-white rounded-full py-2 pl-24 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-600"
-          />
-
-         
+          <input [(ngModel)]="searchQuery" (input)="performSearch()" type="text" placeholder="Search"
+            class="w-full ml-4 bg-gray-800 text-white rounded-full py-2 pl-24 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-600" />
         </div>
       </div>
-
-      <!-- Right side: Upload and Profile -->
+      <div class="block md:hidden mr-2" >
+        <button mat-icon-button aria-label="Search" (click)="toggleMobileSearch()" >
+          <mat-icon>search</mat-icon>
+        </button>
+      </div>
+      <!-- Right side: Search (mobile only), Upload and Profile -->
       <div class="flex items-center">
+        <!-- Mobile Search Button (visible only on small screens) -->
+      
+
         <!-- Upload Button with Dropdown -->
         <div class="relative mr-4">
-          <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-            <span class="material-symbols-outlined text-white">
-              upload_file
-            </span>
+          <button mat-icon-button [matMenuTriggerFor]="uploadMenu"
+            class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+            <mat-icon>upload_file</mat-icon>
           </button>
-          
+
           <!-- Dropdown Menu for Uploads -->
-          <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-              <li>
-                <a (click)="openDialog()" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload Video</a>
-              </li>
-              <li>
-                <a (click)="openUploadAudioDialog()"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload Audio</a>
-              </li>
-              <li>
-                <a routerLink="/home/shorts-upload"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload Shorts</a>
-              </li>
-              <li>
-                <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" routerLink="/home/create-live">Create Live</a>
-              </li>
-            </ul>
-          </div>
+          <mat-menu #uploadMenu="matMenu">
+            <button mat-menu-item (click)="uploadVideo()">
+              <mat-icon>video_library</mat-icon>
+              <span>Upload Video</span>
+            </button>
+            <button mat-menu-item (click)="openUploadAudioDialog()">
+              <mat-icon>audiotrack</mat-icon>
+              <span>Upload Audio</span>
+            </button>
+            <button mat-menu-item [routerLink]="'/home/shorts-upload'">
+              <mat-icon>videocam</mat-icon>
+              <span>Upload Shorts</span>
+            </button>
+            <button mat-menu-item [routerLink]="'/home/create-live'">
+              <mat-icon>live_tv</mat-icon>
+              <span>Create Live</span>
+            </button>
+          </mat-menu>
         </div>
 
         <!-- Profile Icon -->
-        <a routerLink="/home/user-profile" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+        <a routerLink="/home/user-profile"
+          class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
           <mat-icon fontSet="material-symbols-outlined">account_circle</mat-icon>
         </a>
+      </div>
+    </div>
+
+    <!-- Mobile Search Input (conditionally rendered) -->
+    <div *ngIf="showMobileSearch" class="md:hidden py-2">
+      <div class="relative w-full">
+        <select [(ngModel)]="selectedFilter"
+          class="absolute inset-y-0 left-0 bg-gray-800 text-white rounded-l-full pl-3 pr-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <option value="playlist">Playlist</option>
+          <option value="artist">Artist</option>
+          <option value="album">Album</option>
+          <option value="video">Video</option>
+        </select>
+        <input [(ngModel)]="searchQuery" (input)="performSearch()" type="text" placeholder="Search"
+          class="w-full bg-gray-800 text-white rounded-full py-2 pl-24 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-600" />
       </div>
     </div>
   </div>
 </nav>
 
 
-
 <mat-sidenav-container autosize="true" class="h-fit delay-300 transition-all animate-popup">
-  <mat-sidenav class="no-scrollbar" [ngClass]="!isCollapsed ? 'expanded animate-slideInFromLeft' : 'animate-slideInFromRight'" [mode]="isMobile ? 'over' : 'side'"
-    [opened]="isMobile ? 'false' : 'true'">
+  <mat-sidenav class="no-scrollbar"
+    [ngClass]="!isCollapsed ? 'expanded animate-slideInFromLeft' : 'animate-slideInFromRight'"
+    [mode]="isMobile ? 'over' : 'side'" [opened]="isMobile ? 'false' : 'true'">
     <mat-nav-list>
       <a mat-list-item routerLink="landing">
         <span class="entry">
@@ -97,7 +111,7 @@
           <span *ngIf="!isCollapsed">Home</span>
         </span>
       </a>
-      
+
 
       <a mat-list-item routerLink="music-videos">
         <span class="entry">
@@ -111,7 +125,7 @@
           <span *ngIf="!isCollapsed">Memberships</span>
         </span>
       </a>
-      
+
       <a mat-list-item routerLink="genres">
         <span class="entry">
           <mat-icon>music_note</mat-icon>
@@ -161,4 +175,3 @@
     <app-ngx-audio></app-ngx-audio>
   </mat-sidenav-content>
 </mat-sidenav-container>
-

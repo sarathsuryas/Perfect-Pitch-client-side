@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { getUserData, getUserDataFail, googleLoginFail, googleLoginUser, googleLoginUserSuccess, loginUser, loginUserFail, loginUserSuccess, registerUser, registerUserFail, registerUserSuccess, setUserData, verifyOtp, verifyOtpFail, verifyOtpSuccess } from "./user.action";
 import { UserService } from "../../features/user/services/user/user.service";
 import { catchError, exhaustMap, map, mergeMap, of, tap,delay } from "rxjs";
-import { CookieService } from "ngx-cookie-service";
+import { CookieService } from 'ngx-cookie';
 import { NgxSpinnerService } from "ngx-spinner";
 import { Router } from "@angular/router";
 import { addUser, addUserFail, addUserSuccess, blockUser, blockUserFail, blockUserSuccess, editUser, editUserFail, editUserSuccess, getUsers, getUsersFail, getUsersSuccess } from "../admin/admin.action";
@@ -31,7 +31,7 @@ export class UserEffects {
       tap(() => this._spinner.show()),
       exhaustMap(action =>
         this._userService.userRegister(action.userData).pipe(
-          tap(data => this._cookieService.set('userData', JSON.stringify(data), { expires: 1 / 24 })),
+          tap(data => this._cookieService.put('userData', JSON.stringify(data), { expires: '1h' })),
           tap((data) => {
             if (data) {
               this._spinner.hide();
@@ -59,12 +59,12 @@ export class UserEffects {
       tap(() =>this._spinner.show()),
       exhaustMap(action=>
         this._userService.verifyOtp(action.userData,action.otp).pipe(
-          tap(data=> this._cookieService.set('token',data.token,{path:''})),
+          tap(data=> localStorage.setItem('token',data.token)),
            map((userData:IUserData)=>verifyOtpSuccess({userData})),
            tap((data)=>{
             if(data) {
               this._router.navigateByUrl('home')
-              this._cookieService.delete('userData')
+              this._cookieService.remove('userData')
                this._spinner.hide()
             }
            }),
@@ -88,7 +88,7 @@ export class UserEffects {
     tap(() =>this._spinner.show()),
     exhaustMap(action=>
       this._userService.userLogin(action.email,action.password).pipe(
-        tap(data=> this._cookieService.set('token',data.token,{path:''})),
+        tap(data=> localStorage.setItem('token',data.token)),
         map((userData)=>loginUserSuccess({userData})),
         tap((data)=>{
            if(data) {
@@ -117,7 +117,7 @@ $googleLogin = createEffect(()=>
     tap(() =>this._spinner.show()),
     exhaustMap((action)=>
       this._userService.googleLogin(action.userData).pipe(
-        tap(data=> this._cookieService.set('token',data.token,{path:''})),
+        tap(data=> localStorage.setItem('token',data.token)),
         map((data)=>googleLoginUserSuccess({userData:data})),
         tap((data)=>{
           if(data) {

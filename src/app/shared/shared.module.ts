@@ -1,22 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OtpComponent } from './user/components/otp/otp.component';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { OtpComponent } from '../features/user/components/otp/otp.component';
 import { ToastModule } from 'primeng/toast';
-import { NgOtpInputModule } from 'ng-otp-input';
-import {  CountdownModule } from 'ngx-countdown';
+import { NgxSpinnerModule } from 'ngx-spinner';
+
+import { BrowserModule } from '@angular/platform-browser';
 
 
 
 @NgModule({
-  declarations: [OtpComponent],
+  declarations: [],
   imports: [
-    CommonModule,
-    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
+    CommonModule, 
     ToastModule,
-    NgOtpInputModule,
-    CountdownModule, 
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
+    
   ],
-  
+  exports:[]
 })
 export class SharedModule { }
