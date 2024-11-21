@@ -3,6 +3,7 @@ export interface ISongsSameGenre {
   title: string
   link:string
   visibility: true,
+  thumbNailLink:string
   artistId: {
     _id: string
     fullName: string
@@ -13,4 +14,5 @@ export interface ISongsSameGenre {
     thumbNailLink:string
   },
   genreId: string
+  uuid:string;
 } 

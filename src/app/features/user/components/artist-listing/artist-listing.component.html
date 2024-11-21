@@ -1,6 +1,29 @@
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-6 text-gray-800">Popular Artists</h1>
+  <!-- Page Header -->
+  <h1 class="text-3xl font-bold mb-8 text-gray-200 text-center md:text-left">
+    Popular Artists
+  </h1>
+
+  <!-- Artist Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <app-artist-cards [currentUserId]="currentUserId" [artist]="artist" *ngFor="let artist of artistData"></app-artist-cards>
+    <!-- Artist Card Component -->
+    <app-artist-cards
+      [currentUserId]="currentUserId"
+      [artist]="artist"
+      *ngFor="let artist of artistData"
+      class="group bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
+    >
+      <!-- Card Styles if Needed -->
+    </app-artist-cards>
+  </div>
+
+  <!-- Load More Button -->
+  <div class="flex justify-center mt-8">
+    <button
+      (click)="loadMore()"
+      class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
+    >
+      Load More
+    </button>
   </div>
 </div>

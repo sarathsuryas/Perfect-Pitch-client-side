@@ -9,15 +9,11 @@ import { UploadVideoComponent } from '../upload-video/upload-video.component';
 import { AudioUploadDialogComponent } from '../audio-upload-dialog/audio-upload-dialog.component';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectPlaylistSong } from 'src/app/store/playlist/playlist.selector';
 import { getUserData, userSetTokenFromCookie } from 'src/app/store/user/user.action';
-import { CookieService } from 'ngx-cookie';
 import { search } from 'src/app/store/search/search.action';
 import { debounce, debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { selectIsPlayer } from 'src/app/store/player/player.selector';
 import { SharedService } from '../../services/shared/shared.service';
-import { selectAlbumSongId } from 'src/app/store/album/album.selector';
 
 @Component({
   selector: 'app-user-main',
@@ -42,7 +38,7 @@ export class UserMainComponent implements OnInit {
   private searchSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
   showMobileSearch: boolean = false;
-  songId:string = ''
+  
   constructor(
     private _observer: BreakpointObserver,
     public dialog: MatDialog,
@@ -58,7 +54,6 @@ export class UserMainComponent implements OnInit {
     this._store.dispatch(getUserData())
    this._sharedService.data$.subscribe({
     next:(status)=>{
-      
       this.isPlayer = status
     }
    })
@@ -73,14 +68,7 @@ export class UserMainComponent implements OnInit {
     //   }
     // });
 
-    this._store.select(selectAlbumSongId).subscribe({
-      next: (songId) => {
-        this.songId = songId as string
-      },
-      error: (err) => {
-        console.error(err)
-      }
-    })
+    
     //   this._store.select(selectPlaylistSong).subscribe({
     //    next: (value) => {
     //     if (value.songId?.length === 0) {

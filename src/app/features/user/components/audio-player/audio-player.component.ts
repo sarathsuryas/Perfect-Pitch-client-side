@@ -1,4 +1,4 @@
-import {  Component, Input, Output } from '@angular/core';
+import {  Component, Input } from '@angular/core';
 import { PlaylistDialogComponent } from '../playlist-dialougue/playlist-dialougue.component';
 import { MatDialog } from '@angular/material/dialog';
 import { IAudioData } from 'src/app/core/interfaces/IAudioData';
@@ -7,11 +7,7 @@ import { UserService } from '../../services/user/user.service';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { Store } from '@ngrx/store';
-import { playAlbumSong } from 'src/app/store/album/album.action';
 import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
-import { selectAlbumSongId } from 'src/app/store/album/album.selector';
-import { playPlaylistSong } from 'src/app/store/playlist/playlist.action';
-import { startPlayer } from 'src/app/store/player/player.action';
 import { SharedService } from '../../services/shared/shared.service';
 
 interface Song {
@@ -45,7 +41,7 @@ export class AudioPlayerComponent {
     private _store: Store<Song>,
     private _sharedService:SharedService
   ) {
-   
+    
   }
 
   currentSongIndex: number = 0;
@@ -54,7 +50,7 @@ export class AudioPlayerComponent {
   currentTime: number = 0;
   duration: number = 0;
   index: number = 0
-  
+
   ngOnInit() {
     this.audio = new Audio();
     this.audio.addEventListener('ended', () => this.playNext());
@@ -64,14 +60,17 @@ export class AudioPlayerComponent {
     this.audio.addEventListener('loadedmetadata', () => {
       this.duration = this.audio?.duration || 0;
     });
-    this._store.select(selectAlbumSongId).subscribe({
-      next: (songId) => {
-        this.songId = songId as string
-      },
-      error: (err) => {
-        console.error(err)
-      }
-    })
+   this._sharedService.albumSong$.subscribe({
+    next:(value)=>{
+      this.songId = value.songId
+    }
+   })
+   this._sharedService.playlistSong$.subscribe({
+    next:(value)=>{
+      this.songId = value.songId
+    }
+   })
+
   }
 
 
@@ -79,9 +78,9 @@ export class AudioPlayerComponent {
   playSong(index: number) {
     this.currentSongIndex = index;
     this.isPlaying = true;
+    this._sharedService.playAlbumSong({albumId:this.AlbumDetails.uuid,songId:this.songs[index].uuid,artistName:this.AlbumDetails.artistDetails.fullName,album:true,isGenre:false})
     this._sharedService.changePlayerState(true)
-     this._sharedService.setSongId(this.songs[index].uuid)
-    this._store.dispatch(playAlbumSong({albumId:this.AlbumDetails.uuid,songId:this.songs[index].uuid,artistName:this.AlbumDetails.artistDetails.fullName,album:true}))
+   
   }
 
 playlistPlay(index:number) {
@@ -91,12 +90,10 @@ playlistPlay(index:number) {
   for(const value of this.songs) {
      array.push(value.uuid)
   }
-  this._sharedService.setSongId(this.songs[index].uuid)
   this._sharedService.changePlayerState(true)
-
-  this._store.dispatch(playPlaylistSong({playlistId:this.playlistDetails.uuid,songId:this.songs[index].uuid,artistName:this.songs[index].artistId.fullName,songs:array,album:false}))
+  this._sharedService.playPlaylistSong({playlistId:this.playlistDetails.uuid,songId:this.songs[index].uuid,artistName:this.songs[index].artistId.fullName,songs:array,album:false,isGenre:false})
 }
-
+ 
   playNext() {
     this.currentSongIndex = (this.currentSongIndex + 1) % this.songs.length;
     this.playSong(this.currentSongIndex);

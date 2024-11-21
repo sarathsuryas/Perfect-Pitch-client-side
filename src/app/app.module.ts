@@ -33,13 +33,10 @@ import { MatCardModule } from '@angular/material/card';
 import { CoreModule } from './core/core.module';
 import { FeaturesModule } from './features/features.module';
 import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
-import { albumReducer } from './store/album/album.reducer';
-import { playlistReducer } from './store/playlist/playlist.reducer';
 import { membershipReducer } from './store/memberShip/membership.reducer';
 import { searchReducer } from './store/search/search.reducer';
 import { ToastModule } from 'primeng/toast';
 import { CookieModule } from 'ngx-cookie';
-import { playerReducer } from './store/player/player.reducer';
   
 
 @NgModule({
@@ -71,11 +68,8 @@ import { playerReducer } from './store/player/player.reducer';
     StoreModule.forRoot([]),
     StoreModule.forFeature('user', userReducer),
     StoreModule.forFeature('admin', adminReducer),
-    StoreModule.forFeature('album', albumReducer),
-    StoreModule.forFeature('playlist',playlistReducer),
     StoreModule.forFeature( 'membership', membershipReducer),
     StoreModule.forFeature('search',searchReducer),
-    StoreModule.forFeature('player',playerReducer),
     EffectsModule.forRoot([UserEffects, AdminEffects]),
     GoogleSigninButtonModule, 
     CookieModule.withOptions() 

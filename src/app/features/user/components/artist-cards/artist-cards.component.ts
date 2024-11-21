@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IUserData } from 'src/app/core/interfaces/IUserData';
 import { UserService } from '../../services/user/user.service';
 import { Store } from '@ngrx/store';
@@ -50,4 +50,6 @@ formatSubscribers(subscribers: number): string {
   }
   return subscribers.toString();
 }  
+
+
 }

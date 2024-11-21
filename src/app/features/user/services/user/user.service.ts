@@ -40,7 +40,6 @@ import { ISongData } from 'src/app/core/interfaces/ISongData';
 import { Socket } from 'ngx-socket-io';
 import { IReplyToReplyDto } from 'src/app/core/dtos/IReplyToReply.dto';
 import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
-import { removeSongId } from 'src/app/store/playlist/playlist.action';
 import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
 import { IUserMedia } from 'src/app/core/interfaces/IUserMedia';
 import { ICreateLiveStreamDto } from 'src/app/core/dtos/ICreateLiveStream.dto';
@@ -167,7 +166,6 @@ export class UserService {
   logOut() {
     localStorage.removeItem('token')
     this._store.dispatch(logOut())
-    this._store.dispatch(removeSongId())
     this._router.navigate([''])
   }
 
@@ -176,9 +174,8 @@ export class UserService {
     return this._http.post<{ videoId: string }>(`${this.api}/post-video-details`, data)
   }
 
-  getVideoList(query: string = ''): Observable<IVideoList[]> {
-
-    return this._http.get<IVideoList[]>(`${this.api}/video-list?video=${query}`)
+  getVideoList(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IVideoList[]> {
+    return this._http.get<IVideoList[]>(`${this.api}/video-list?video=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
   generatePreSignedUrls(detailsForSignedUrls: { name: string, type: string }[]): Observable<IPreSignedUrls> {
@@ -212,9 +209,11 @@ export class UserService {
     return this._http.post<{ uuid: string }>(`${this.api}/submit-album-details`, { files })
   }
 
-  getAlbums(query: string = ''): Observable<IAlbumData[]> {
+  
 
-    return this._http.get<IAlbumData[]>(`${this.api}/get-albums?album=${query}`)
+  getAlbums(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IAlbumData[]> {
+
+    return this._http.get<IAlbumData[]>(`${this.api}/get-albums?album=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
 
@@ -296,8 +295,10 @@ export class UserService {
     return this._http.post<{ playlistId: string }>(`${this.api}/create-Playlist`, data)
   }
 
-  getUserPlalists(query: string = ''): Observable<IUserPlaylists[]> {
-    return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlist?playlist=${query}`)
+ 
+
+  getUserPlalists(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlist?playlist=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
   addToPlaylsit(songId: string, playlistId: string): Observable<{ success: boolean, exist: boolean }> {
@@ -315,9 +316,11 @@ export class UserService {
   getSameGenreSongs(genreId: string): Observable<ISongsSameGenre[]> {
     return this._http.get<ISongsSameGenre[]>(`${this.api}/get-genre-songs?genreId=${genreId}`)
   }
+  
 
-  getArtists(query: string = ''): Observable<{ artists: IUserData[], userId: string }> {
-    return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists?artist=${query}`)
+
+  getArtists(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<{ artists: IUserData[], userId: string }> {
+    return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists?artist=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
   getArtistMedias() {

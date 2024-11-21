@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./videos-list.component.css']
 })
 export class VideosListComponent implements OnInit {
+
   constructor(private readonly _userService: UserService, private _store: Store) { }
   videos: IVideoList[] = []
   search: boolean = false
@@ -21,7 +22,7 @@ export class VideosListComponent implements OnInit {
         }
         if (this.search) {
         
-          this._userService.getVideoList(value).subscribe({
+          this._userService.getVideoList({query:value}).subscribe({
             next: (value) => {
               this.videos = value
             },
@@ -34,12 +35,18 @@ export class VideosListComponent implements OnInit {
       }
     })
     if (!this.search) {
-    
       this._userService.getVideoList().subscribe((data) => {
         this.videos = data
       })
     }
 
   }
-
+  loadMore() {
+    const nextPage = Math.ceil(this.videos.length / 10) + 1; 
+    this._userService.getVideoList({nextPage}).subscribe((data) => {
+      for (const value of data) {
+        this.videos.push(value)
+      }
+    })
+  }
 }

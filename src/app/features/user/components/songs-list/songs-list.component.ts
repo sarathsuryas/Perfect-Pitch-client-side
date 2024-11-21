@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { ISongsSameGenre } from 'src/app/core/interfaces/ISongsSameGenre';
+import { SharedService } from '../../services/shared/shared.service';
 
 @Component({
   selector: 'app-songs-list',
@@ -9,17 +10,34 @@ import { ISongsSameGenre } from 'src/app/core/interfaces/ISongsSameGenre';
   styleUrls: ['./songs-list.component.css']
 })
 export class SongsListComponent {
+performAction1() {
+throw new Error('Method not implemented.');
+}
+onActionMenuClick(_t16: ISongsSameGenre) {
+throw new Error('Method not implemented.');
+}
+openPlaylistDialog(arg0: string,arg1: string) {
+throw new Error('Method not implemented.');
+}
 
 id:string = ''  
 songs:ISongsSameGenre[] = [];
+currentSongIndex: number = 0;
+isPlaying: boolean = false;
+audio: HTMLAudioElement | null = null;
+currentTime: number = 0;
+duration: number = 0;
+index: number = 0
+songId:string = ''
+
 
 currentlyPlayingId: string | null = null;
-constructor(private _userService:UserService,private _route:ActivatedRoute) {
-  const audio = new Audio("https://perfect-pitch-user-profile.s3.ap-south-1.amazonaws.com/_id66ae13e5ace1f5eac8de2306Billie_Jean_7CTJcHjkq0E_140.mp3");
-audio.addEventListener('loadedmetadata',()=>{
-  const duration = audio.duration
-  console.log("duration",this.formatDuration(duration))
-})
+constructor(
+  private _userService:UserService,
+  private _route:ActivatedRoute,
+  private _sharedService:SharedService 
+) {
+  
 }
   
 ngOnInit(): void {
@@ -27,16 +45,23 @@ ngOnInit(): void {
     this._userService.getSameGenreSongs(this.id).subscribe({
       next:(value)=>{
       this.songs = value
-      console.log(value)
       },
       error:(err)=>{
          console.error(err)
       }
     })
+    this._sharedService.genreSong$.subscribe({
+      next:(value)=>{
+        this.songId = value.songId
+      }
+    })
   }
 
-  playSong(song: any): void {
-    
+  playSong(index: number): void {
+    this.currentSongIndex = index;
+    this.isPlaying = true;
+    this._sharedService.playGenreSong({genreId:this.songs[0].genreId,songId:this.songs[index].uuid,album:false, genre:true})
+    this._sharedService.changePlayerState(true)
   }
 
   formatDuration(seconds: number): string {

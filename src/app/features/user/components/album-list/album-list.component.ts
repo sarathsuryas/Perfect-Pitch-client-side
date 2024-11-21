@@ -20,7 +20,7 @@ export class AlbumListComponent implements OnInit {
           this.search = true
         }
         if (this.search) {
-          this._userService.getAlbums(value).subscribe((data) => {
+          this._userService.getAlbums({query:value}).subscribe((data) => {
             this.albumData = data
           })
         }
@@ -33,6 +33,15 @@ export class AlbumListComponent implements OnInit {
         this.albumData = data
       })
     }
+  }
+
+  loadMore() {
+    const nextPage = Math.ceil(this.albumData.length / 10) + 1; 
+    this._userService.getAlbums({nextPage}).subscribe((data) => {
+      for (const value of data) {
+        this.albumData.push(value)
+      }
+    })
   }
 
 }

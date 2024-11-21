@@ -1,16 +1,47 @@
-<div class="spotify-playlists">
-  <h2>Albums</h2>
+<div class="spotify-playlists bg-black text-white py-8 px-4">
+  <!-- Section Header -->
+  <h2 class="text-3xl font-bold mb-6 text-center">Albums</h2>
 
-  <div class="list grid grid-cols-1 gap-8 px-1 md:grid-cols-2 
-  lg:grid-cols-4 md:p-2 xl:p-4">
-    <div *ngFor="let value of albumData" class="item">
-         
-    <a routerLink="/home/album-songs/{{value.uuid}}">  <img src="{{value.thumbNailLink}}" /></a>
-      <div class="play">
-        <span class="fa fa-play"></span>
+  <!-- Albums Grid -->
+  <div class="list grid grid-cols-1 gap-8 px-2 md:grid-cols-2 lg:grid-cols-4">
+    <!-- Album Item -->
+    <div
+      *ngFor="let value of albumData"
+      class="item relative group flex flex-col items-center bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+    >
+      <!-- Album Thumbnail -->
+      <a
+        routerLink="/home/album-songs/{{value.uuid}}"
+        class="block relative w-full"
+      >
+        <img
+          src="{{value.thumbNailLink}}"
+          alt="{{value.title}}"
+          class="w-full h-[200px] object-cover rounded-t-lg"
+        />
+        <!-- Play Button Overlay -->
+        <div
+          class="play absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        >
+          <span class="fa fa-play text-white text-2xl"></span>
+        </div>
+      </a>
+
+      <!-- Album Info -->
+      <div class="p-4 w-full text-center">
+        <h4 class="text-lg font-semibold truncate">{{ value.title }}</h4>
+        <p class="text-sm text-gray-400 truncate">{{ value.artistId.fullName }}</p>
       </div>
-      <h4>{{value.title}}</h4>
-      <p>{{value.artistId.fullName}}</p>
     </div>
+  </div>
+
+  <!-- Load More Button -->
+  <div class="flex justify-center mt-8">
+    <button
+      (click)="loadMore()"
+      class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
+    >
+      Load More
+    </button>
   </div>
 </div>

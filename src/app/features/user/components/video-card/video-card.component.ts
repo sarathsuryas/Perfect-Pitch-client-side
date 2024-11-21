@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 
 @Component({
@@ -8,6 +8,7 @@ import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 })
 export class VideoCardComponent implements OnInit {
    @Input() videos:IVideoList[] = []
+   @Output() loadMoreVideos = new EventEmitter()
    index!:number
    constructor() {
    
@@ -15,5 +16,7 @@ export class VideoCardComponent implements OnInit {
    ngOnInit() {
    
   }
-
+  loadMore() {
+   this.loadMoreVideos.emit()
+  }
 }

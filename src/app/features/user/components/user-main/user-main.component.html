@@ -172,6 +172,6 @@
   </mat-sidenav>
   <mat-sidenav-content class="overflow-x-hidden">
     <router-outlet></router-outlet>
-    <app-ngx-audio></app-ngx-audio>
+    <app-ngx-audio *ngIf="isPlayer"></app-ngx-audio>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -31,7 +31,7 @@ currentUserId:string = ''
           this.search = true
         }
         if(this.search) {
-          this._userService.getArtists(value).subscribe({
+          this._userService.getArtists({query:value}).subscribe({
             next:(value)=>{
               this.artistData = value.artists
              this.currentUserId = value.userId
@@ -58,4 +58,14 @@ currentUserId:string = ''
     })
   }
   }
+  loadMore() {
+    const nextPage = Math.ceil(this.artistData.length / 10) + 1; 
+    this._userService.getArtists({nextPage}).subscribe((data) => {
+      for (const value of data.artists) {
+        this.artistData.push(value)
+      }
+    })
+  }
+
+
 }

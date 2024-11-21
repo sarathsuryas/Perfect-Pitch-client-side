@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { setAdminTokenCookie } from './store/admin/admin.action';
-import { getUserData, logOut, userSetTokenFromCookie } from './store/user/user.action';
+import { userSetTokenFromCookie } from './store/user/user.action';
 import { initFlowbite } from 'flowbite';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { selctIsBlocked } from './store/user/user.selector';
 import { UserService } from './features/user/services/user/user.service';
-import { removeSongId } from './store/playlist/playlist.action';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
 

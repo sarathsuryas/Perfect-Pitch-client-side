@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
@@ -18,15 +18,16 @@ interface Playlist {
 })
 export class PlaylistCardsComponent {
 
-  @Input() playlists:IUserPlaylists[] = []
 
+  @Input() playlists: IUserPlaylists[] = []
+  @Output() loadPlaylist = new EventEmitter()
   constructor(
     private _userService: UserService,
-    private _router:Router
+    private _router: Router
   ) { }
 
 
- 
+
 
 
   ngOnInit(): void {
@@ -35,10 +36,12 @@ export class PlaylistCardsComponent {
 
   onPlaylistClick(playlist: IUserPlaylists): void {
     console.log(`Playlist clicked: ${playlist.title}`);
-    
-    this._router.navigate([`home/view-playlist/${playlist._id}`])
-    
-  }
 
+    this._router.navigate([`home/view-playlist/${playlist._id}`])
+
+  }
+  loadMore() {
+    this.loadPlaylist.emit()
+  }
 
 }

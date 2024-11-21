@@ -23,7 +23,7 @@ export class MusicPlaylistComponent implements OnInit {
           this.search = true
         }
         if(this.search) {
-          this._userService.getUserPlalists(value).subscribe((data)=>{
+          this._userService.getUserPlalists({query:value}).subscribe((data)=>{
             this.playlists = data
           })
         }
@@ -39,6 +39,15 @@ export class MusicPlaylistComponent implements OnInit {
         }
       })
     }
+  }
+
+  loadMore() {
+    const nextPage = Math.ceil(this.playlists.length / 10) + 1; 
+    this._userService.getUserPlalists({nextPage}).subscribe((data) => {
+      for (const value of data) {
+        this.playlists.push(value)
+      }
+    })
   }
 
 }
