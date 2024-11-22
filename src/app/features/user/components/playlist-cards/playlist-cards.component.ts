@@ -17,18 +17,12 @@ interface Playlist {
   styleUrls: ['./playlist-cards.component.css']
 })
 export class PlaylistCardsComponent {
-
-
-  @Input() playlists: IUserPlaylists[] = []
+  @Input() playlists!: IUserPlaylists
   @Output() loadPlaylist = new EventEmitter()
   constructor(
     private _userService: UserService,
     private _router: Router
   ) { }
-
-
-
-
 
   ngOnInit(): void {
 

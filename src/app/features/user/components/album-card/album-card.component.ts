@@ -7,11 +7,7 @@ import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
   styleUrls: ['./album-card.component.css']
 })
 export class AlbumCardComponent {
-@Input() albumData:IAlbumData[] = []
-@Output() loadMoreAlbums = new EventEmitter()
-loadMore() {
- this.loadMoreAlbums.emit()
-} 
+@Input() albumData!:IAlbumData
 
 }
  

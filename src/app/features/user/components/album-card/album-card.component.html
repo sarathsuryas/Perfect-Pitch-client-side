@@ -1,22 +1,15 @@
-<div class="spotify-playlists bg-black text-white py-8 px-4">
-  <!-- Section Header -->
-  <h2 class="text-3xl font-bold mb-6 text-center">Albums</h2>
 
-  <!-- Albums Grid -->
-  <div class="list grid grid-cols-1 gap-8 px-2 md:grid-cols-2 lg:grid-cols-4">
-    <!-- Album Item -->
-    <div
-      *ngFor="let value of albumData"
+    <div 
       class="item relative group flex flex-col items-center bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
     >
       <!-- Album Thumbnail -->
       <a
-        routerLink="/home/album-songs/{{value.uuid}}"
+        routerLink="/home/album-songs/{{albumData.uuid}}"
         class="block relative w-full"
       >
         <img
-          src="{{value.thumbNailLink}}"
-          alt="{{value.title}}"
+          src="{{albumData.thumbNailLink}}"
+          alt="{{albumData.title}}"
           class="w-full h-[200px] object-cover rounded-t-lg"
         />
         <!-- Play Button Overlay -->
@@ -29,19 +22,8 @@
 
       <!-- Album Info -->
       <div class="p-4 w-full text-center">
-        <h4 class="text-lg font-semibold truncate">{{ value.title }}</h4>
-        <p class="text-sm text-gray-400 truncate">{{ value.artistId.fullName }}</p>
+        <h4 class="text-lg font-semibold truncate">{{ albumData.title }}</h4>
+        <p class="text-sm text-gray-400 truncate">{{ albumData.artistDetails.fullName }}</p>
       </div>
     </div>
-  </div>
-
-  <!-- Load More Button -->
-  <div class="flex justify-center mt-8">
-    <button
-      (click)="loadMore()"
-      class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
-    >
-      Load More
-    </button>
-  </div>
-</div>
+  

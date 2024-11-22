@@ -5,11 +5,14 @@ import { ToastModule } from 'primeng/toast';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { BrowserModule } from '@angular/platform-browser';
+import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    PagenotfoundComponent
+  ],
   imports: [
     CommonModule, 
     ToastModule,

@@ -1,9 +1,12 @@
 export interface IVideoList {
-  _id:string;
-  artist:string;
-  title:string;
-  description:string;
-  thumbnailLink:string;
-  visibility:string;
-  link:string;
+  _id: string
+  title: string
+  description: string
+  link: string
+  visibility: boolean
+  artistData: {
+    _id: string
+    fullName: string
+  }
+
 }

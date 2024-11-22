@@ -12,7 +12,7 @@ export const memberShipGuard: CanActivateFn = (route, state) => {
   store.select(selectIsPremiumUser).subscribe({
      next:(value)=>{
     if(!value) {
-     // router.navigate(['home/membership'])
+     router.navigate(['home/membership'])
       toast.add( {severity: 'warn', 
         summary: 'Warning',
         detail: 'You dont have an active membership',})

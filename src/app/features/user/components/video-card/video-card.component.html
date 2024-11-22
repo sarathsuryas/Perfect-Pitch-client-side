@@ -1,14 +1,10 @@
-<div id="trending-music-videos" class="grid gap-6 p-4 bg-black text-white">
-  <h1 class="text-3xl font-bold uppercase text-center mb-6">Music Videos</h1>
-  
-  <!-- Video Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- start -->
     <div
-      *ngFor="let v of videos; index as i"
       class="relative flex flex-col bg-gray-800 rounded-lg shadow-md overflow-hidden hover:scale-105 transition-transform duration-300"
     >
       <!-- Video Link -->
-      <a routerLink="/home/play-video/{{v._id}}">
+      <a routerLink="/home/play-video/{{video._id}}">
         <!-- Video Thumbnail -->
         <div class="relative">
           <video
@@ -17,7 +13,7 @@
             onmouseover="this.play()"
             onmouseout="this.pause();"
           >
-            <source src="{{v.link}}" type="video/mp4" />
+            <source src="{{video.link}}" type="video/mp4" />
           </video>
           <div
             class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-75"
@@ -26,21 +22,11 @@
 
         <!-- Video Info -->
         <div class="p-4">
-          <h3 class="text-lg font-semibold truncate">{{ v.title }}</h3>
-          <p class="text-sm text-slate-400 truncate">{{ v.description }}</p>
-          <span class="block mt-2 text-xs text-gray-500">{{ v.artist }}</span>
+          <h3 class="text-lg font-semibold truncate">{{ video.title }}</h3>
+          <p class="text-sm text-slate-400 truncate">{{ video.description }}</p>
+          <span class="block mt-2 text-xs text-gray-500">{{ video.artistData.fullName }}</span>
         </div>
       </a>
     </div>
-  </div>
-
-  <!-- Load More Button -->
-  <div class="flex justify-center mt-8">
-    <button
-      (click)="loadMore()"
-      class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
-    >
-      Load More
-    </button>
-  </div>
-</div>
+    <!-- end -->
+ 

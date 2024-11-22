@@ -46,6 +46,7 @@ import { ICreateLiveStreamDto } from 'src/app/core/dtos/ICreateLiveStream.dto';
 import { ILiveStreams } from 'src/app/core/interfaces/ILiveStreams';
 import { IChats } from 'src/app/core/interfaces/IChats';
 import { ILive } from 'src/app/core/interfaces/ILive';
+import { IHomePageData } from 'src/app/core/interfaces/IHomePageData';
 
 @Injectable({
   providedIn: 'root'
@@ -212,10 +213,12 @@ export class UserService {
   
 
   getAlbums(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IAlbumData[]> {
-
     return this._http.get<IAlbumData[]>(`${this.api}/get-albums?album=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
+  recomended(): Observable<IHomePageData> {
+    return this._http.get<IHomePageData>(`${this.api}/recomended`)
+  }
 
   getAlbumDetails(id: string): Observable<IAlbumResponse> {
     return this._http.get<IAlbumResponse>(`${this.api}/album-details?id=${id}`)
@@ -297,8 +300,11 @@ export class UserService {
 
  
 
-  getUserPlalists(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IUserPlaylists[]> {
-    return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlist?playlist=${data.query}&page=${data.nextPage}&perPage=6`)
+  getPlaylists(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/get-playlists?playlist=${data.query}&page=${data.nextPage}&perPage=6`)
+  }
+  getUserPlaylists(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlists?playlist=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
   addToPlaylsit(songId: string, playlistId: string): Observable<{ success: boolean, exist: boolean }> {

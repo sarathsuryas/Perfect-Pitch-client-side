@@ -35,6 +35,7 @@ import { ViewPlaylistComponent } from 'src/app/features/user/components/view-pla
 import { memberShipGuard } from '../user/guards/member-ship.guard';
 import { UserAuthGuard } from '../user/guards/user-auth.guard';
 import { UploadVideoComponent } from 'src/app/features/user/components/upload-video/upload-video.component';
+import { PagenotfoundComponent } from 'src/app/shared/components/pagenotfound/pagenotfound.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -71,7 +72,9 @@ const routes: Routes = [
       {path:'membership',component:MembershipComponent},
       {path:'payment-success',component:PaymentSuccessComponent},
       {path:'chat',component:LiveChatComponent},
-      {path:'upload-video',component:UploadVideoComponent}
+      {path:'upload-video',component:UploadVideoComponent,canActivate:[memberShipGuard]},
+      { path: '**', pathMatch: 'full',  
+        component: PagenotfoundComponent },
     ]
   }
 ];

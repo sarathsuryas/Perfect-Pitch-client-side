@@ -7,8 +7,7 @@ import { IVideoList } from 'src/app/core/interfaces/IVideoList';
   styleUrls: ['./video-card.component.css']
 })
 export class VideoCardComponent implements OnInit {
-   @Input() videos:IVideoList[] = []
-   @Output() loadMoreVideos = new EventEmitter()
+   @Input() video!:IVideoList
    index!:number
    constructor() {
    
@@ -17,6 +16,5 @@ export class VideoCardComponent implements OnInit {
    
   }
   loadMore() {
-   this.loadMoreVideos.emit()
   }
 }
