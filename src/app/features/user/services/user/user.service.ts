@@ -175,7 +175,7 @@ export class UserService {
     return this._http.post<{ videoId: string }>(`${this.api}/post-video-details`, data)
   }
 
-  getVideoList(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IVideoList[]> {
+  getVideoList(data: { query?: string, nextPage?: number } = { query: '', nextPage: 1 }): Observable<IVideoList[]> {
     return this._http.get<IVideoList[]>(`${this.api}/video-list?video=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
@@ -210,9 +210,9 @@ export class UserService {
     return this._http.post<{ uuid: string }>(`${this.api}/submit-album-details`, { files })
   }
 
-  
 
-  getAlbums(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IAlbumData[]> {
+
+  getAlbums(data: { query?: string, nextPage?: number } = { query: '', nextPage: 1 }): Observable<IAlbumData[]> {
     return this._http.get<IAlbumData[]>(`${this.api}/get-albums?album=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
@@ -298,12 +298,16 @@ export class UserService {
     return this._http.post<{ playlistId: string }>(`${this.api}/create-Playlist`, data)
   }
 
- 
 
-  getPlaylists(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IUserPlaylists[]> {
+
+  getPlaylists(data: { query?: string, nextPage?: number } = { query: '', nextPage: 1 }): Observable<IUserPlaylists[]> {
     return this._http.get<IUserPlaylists[]>(`${this.api}/get-playlists?playlist=${data.query}&page=${data.nextPage}&perPage=6`)
   }
-  getUserPlaylists(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<IUserPlaylists[]> {
+  getAllPlaylistUser(): Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/get-all-playlists-user`)
+  }
+
+  getUserPlaylists(data: { query?: string, nextPage?: number } = { query: '', nextPage: 1 }): Observable<IUserPlaylists[]> {
     return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlists?playlist=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
@@ -322,10 +326,10 @@ export class UserService {
   getSameGenreSongs(genreId: string): Observable<ISongsSameGenre[]> {
     return this._http.get<ISongsSameGenre[]>(`${this.api}/get-genre-songs?genreId=${genreId}`)
   }
-  
 
 
-  getArtists(data:{query?:string,nextPage?:number } = {query:'',nextPage:1} ): Observable<{ artists: IUserData[], userId: string }> {
+
+  getArtists(data: { query?: string, nextPage?: number } = { query: '', nextPage: 1 }): Observable<{ artists: IUserData[], userId: string }> {
     return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists?artist=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 

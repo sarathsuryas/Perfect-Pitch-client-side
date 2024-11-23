@@ -57,7 +57,7 @@
             {{ formatDuration(180) }} <!-- Placeholder duration -->
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-center text-sm"> <!-- Changed from text-right to text-center -->
-            <button (click)="onActionMenuClick(song)" class="focus:outline-none">
+            <button (click)="openPlaylistDialog(song._id,song.thumbNailLink);$event.stopPropagation()" class="focus:outline-none">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 18.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
               </svg>

@@ -2,6 +2,7 @@ import { AfterViewInit, Component } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { PaymentService } from '../../services/payment/payment.service';
 import { Store } from '@ngrx/store';
+import { getUserData } from 'src/app/store/user/user.action';
 
 @Component({
   selector: 'app-payment-success',
@@ -15,8 +16,9 @@ export class PaymentSuccessComponent  implements AfterViewInit {
     private route: ActivatedRoute,
     private _paymentService:PaymentService,
     private _router:Router,
+    private _store:Store
   ) {
-    
+   
   }
 
   ngOnInit() {
@@ -36,6 +38,7 @@ export class PaymentSuccessComponent  implements AfterViewInit {
 paymentSuccess(sessionId:string,memberShipId:string) {
   this._paymentService.paymentSuccess(sessionId,memberShipId).subscribe({
     next:(value)=>{
+      this._store.dispatch(getUserData())
       this.sessionId = ''
       localStorage.removeItem('memberShipId')
       this._router.navigate(['home/membership'])

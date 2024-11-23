@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center mb-8">
       <h1 #playlistHeader class="text-3xl font-bold text-center md:text-left">Playlists</h1>
       <div class="flex items-center space-x-2">
-        <span class="text-sm">Private</span>
+        <span class="text-sm">Yours</span>
         <button (click)="toggleFilter()"
           class="relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           [ngClass]="{'bg-blue-600': showPublic, 'bg-gray-200': !showPublic}">
@@ -13,7 +13,7 @@
             class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out"
             [ngClass]="{'translate-x-6': showPublic, 'translate-x-1': !showPublic}"></span>
         </button>
-        <span class="text-sm">Public</span>
+        <span class="text-sm">Feeds</span>
       </div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

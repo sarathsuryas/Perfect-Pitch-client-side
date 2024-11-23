@@ -1,45 +1,74 @@
 <div class="container mx-auto px-4 py-8 bg-black">
-  <h1 class="text-4xl font-bold mb-8 text-gray-800">{{ artistName }}</h1>
+  <h1 class="text-4xl font-bold mb-8 text-white">{{ artistName }}</h1>
 
   <!-- Albums -->
-  <section class="mb-12">
-    <!-- <app-album-card [albumData]="albumData"></app-album-card> -->
-  </section>
-
-  <!-- Songs -->
-  <!-- <section class="mb-12">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Popular Songs</h2>
-    <ul class="bg-white rounded-lg shadow-md divide-y divide-gray-200">
-      <li *ngFor="let song of songs" class="flex justify-between items-center p-4 hover:bg-gray-50">
-        <div>
-          <h3 class="font-medium text-gray-800">{{ song.title }}</h3>
-          <p class="text-sm text-gray-600">{{ albums[song.albumId - 1].title }}</p> 
-        </div>
-        <span class="text-sm text-gray-500">{{ song.duration }}</span>
-      </li>
-    </ul>
-  </section> -->
+  <div class="spotify-playlists bg-black text-white py-8 px-4">
+    <!-- Section Header -->
+    <h2 class="text-3xl font-bold mb-6 text-center">Albums</h2>
+  
+    <!-- Albums Grid -->
+    <div class="list grid grid-cols-1 gap-8 px-2 md:grid-cols-2 lg:grid-cols-4">
+    <app-album-card [albumData]="album" *ngFor="let album of albumData"  ></app-album-card>
+  
+  </div>
+  <!-- Load More Button -->
+  <div class="flex justify-center mt-8">
+    <button
+      (click)="loadMore()"
+      class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
+    >
+      Load More
+    </button>
+  </div>
+  </div> 
 
   <!-- Videos -->
-  <section class="mb-12">
-    <!-- <app-video-card [videos]="videos"></app-video-card> -->
+  <div id="trending-music-videos" class="grid gap-6 p-4 bg-black text-white">
+    <h1 class="text-3xl font-bold uppercase text-center mb-6">Music Videos</h1>
+  
+    <!-- Video Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  
+      <app-video-card [video]="v" *ngFor="let v of videos"></app-video-card>
+  
+  
+    </div>
+  
+    <!-- Load More Button -->
+    <div class="flex justify-center mt-8">
+      <button (click)="loadMore()"
+        class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200">
+        Load More
+      </button>
+    </div>
+  </div>
 
-  </section>
-
-  <!-- Live Performances -->
-  <!-- <section class="mb-12">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Live Performances</h2>
-    <ul class="bg-white rounded-lg shadow-md divide-y divide-gray-200">
-      <li *ngFor="let performance of livePerformances" class="p-4 hover:bg-gray-50">
-        <h3 class="font-medium text-gray-800">{{ performance.title }}</h3>
-        <p class="text-sm text-gray-600">{{ performance.date }} - {{ performance.venue }}</p>
-      </li>
-    </ul>
-  </section> -->
-
+  
   <!-- Playlists -->
-  <!-- <section class="mb-12">
-    <playlist-cards *ngIf="playlists.length" [playlists]="playlists"></playlist-cards>
-
-  </section> -->
+  <section class="text-white py-8">
+    <div class="container mx-auto px-4">
+      <!-- Playlists Heading -->
+      <h2 class="text-3xl font-bold text-center mb-6">Playlists</h2>
+  
+      <!-- Playlist Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <playlist-cards 
+          [playlists]="playlist" 
+          *ngFor="let playlist of playlists">
+        </playlist-cards>
+      </div>
+  
+      <!-- Load More Button -->
+      <div class="flex justify-center mt-8">
+        <button (click)="loadMore()"
+          class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-lg 
+                 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 
+                 focus:outline-none transition duration-200">
+          Load More
+        </button>
+      </div>
+    </div>
+  </section>
+  
+  
 </div>

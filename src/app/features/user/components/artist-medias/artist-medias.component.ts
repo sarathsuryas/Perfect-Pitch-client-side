@@ -47,13 +47,16 @@ interface Playlist {
   styleUrls: ['./artist-medias.component.css']
 })
 export class ArtistMediasComponent {
+
   albumData:IAlbumData[] = []
-  artistName = 'Taylor Swift';
+  artistName = '';
   artistId:string = ''
   videos: IVideoList[] = []
   playlists:IUserPlaylists[] = []
 
-
+  loadMore() {
+    
+  }
   
  
 
@@ -70,6 +73,7 @@ export class ArtistMediasComponent {
         this.videos = value.videos
         this.playlists = value.playlists
         this.albumData = value.albums
+        this.artistName = value.videos[0].artistData.fullName
       }
     })
 

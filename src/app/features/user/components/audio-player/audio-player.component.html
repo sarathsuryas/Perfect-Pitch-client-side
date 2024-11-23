@@ -33,7 +33,7 @@
           <div [class.text-green-500]="songId === song.uuid">{{ song.title }}</div>
           <div class="text-sm text-gray-400">{{ AlbumDetails.artistDetails.fullName }}</div>
         </div>
-        <button (click)="openPlaylistDialog(song._id,song.thumbNailLink)" class="dots text-sm text-gray-400"></button>
+        <button (click)="openPlaylistDialog(song._id,song.thumbNailLink);$event.stopPropagation()" class="dots text-sm text-gray-400"></button>
       </li>
     </ul>
 
@@ -49,7 +49,7 @@
           <div [class.text-green-500]="songId === song.uuid">{{ song.title }}</div>
           <div class="text-sm text-gray-400">{{ song.artistId.fullName }}</div>
         </div>
-        <button (click)="openPlaylistDialog(song._id,song.thumbNailLink)" class="dots text-sm text-gray-400"></button>
+        <button (click)="openPlaylistDialog(song._id,song.thumbNailLink);$event.stopPropagation()" class="dots text-sm text-gray-400"></button>
       </li>
     </ul>
 

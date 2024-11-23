@@ -54,15 +54,12 @@ export class UserProfileComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+       this.userData.fullName = result.fullName
         this._userService.editProfile(result)
       }
     });
   }
-  ngDoCheck(): void {
-    //    this._userService.userData().subscribe((data)=>{
-    //       this.userData = data 
-    // })
-  }
+ 
   oldPassword(): void {
     const dialogRef = this.dialog.open(OldPasswordComponent);
 

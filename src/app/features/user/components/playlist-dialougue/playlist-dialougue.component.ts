@@ -28,7 +28,7 @@ playlists:IUserPlaylists[] = []
   ) { }
 
   ngOnInit(): void {
-    this._userService.getPlaylists().subscribe({
+    this._userService.getAllPlaylistUser().subscribe({
       next:(data)=>{
       this.playlists = data
       },

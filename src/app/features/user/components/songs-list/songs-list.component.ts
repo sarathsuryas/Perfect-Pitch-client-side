@@ -3,6 +3,9 @@ import { UserService } from '../../services/user/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { ISongsSameGenre } from 'src/app/core/interfaces/ISongsSameGenre';
 import { SharedService } from '../../services/shared/shared.service';
+import { PlaylistDialogComponent } from '../playlist-dialougue/playlist-dialougue.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-songs-list',
@@ -10,15 +13,9 @@ import { SharedService } from '../../services/shared/shared.service';
   styleUrls: ['./songs-list.component.css']
 })
 export class SongsListComponent {
-performAction1() {
-throw new Error('Method not implemented.');
-}
-onActionMenuClick(_t16: ISongsSameGenre) {
-throw new Error('Method not implemented.');
-}
-openPlaylistDialog(arg0: string,arg1: string) {
-throw new Error('Method not implemented.');
-}
+
+
+
 
 id:string = ''  
 songs:ISongsSameGenre[] = [];
@@ -29,13 +26,16 @@ currentTime: number = 0;
 duration: number = 0;
 index: number = 0
 songId:string = ''
-
+horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+verticalPosition: MatSnackBarVerticalPosition = 'bottom';
 
 currentlyPlayingId: string | null = null;
 constructor(
   private _userService:UserService,
   private _route:ActivatedRoute,
-  private _sharedService:SharedService 
+  private _sharedService:SharedService,
+  private _dialog: MatDialog,
+  private _snackBar: MatSnackBar, 
 ) {
   
 }
@@ -63,6 +63,47 @@ ngOnInit(): void {
     this._sharedService.playGenreSong({genreId:this.songs[0].genreId,songId:this.songs[index].uuid,album:false, genre:true})
     this._sharedService.changePlayerState(true)
   }
+
+  onActionMenuClick(_t16: ISongsSameGenre) {
+
+  }
+  openPlaylistDialog(songId:string,thumbNailLink:string): void {
+    const dialogRef = this._dialog.open(PlaylistDialogComponent, {
+      width: '350px',
+      data: {
+        songId,thumbNailLink
+      },
+       
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        this._userService.addToPlaylsit(songId, result._value[0]._id).subscribe({
+          next: (data) => {
+            if (data.exist) {
+              this._snackBar.open("Song Already in Playlist", "Close", {
+                duration: 3000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              })
+            } else if (!data.exist) {
+              this._snackBar.open("Song Added to Playlist", "Close", {
+                duration: 3000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              })
+            }
+          }
+        })
+      },
+      error: (err) => {
+        console.error(err)
+      }
+    });
+    // console.log('Selected playlists:', result._value[0]._id,'songId', song._id);
+  }
+
+
 
   formatDuration(seconds: number): string {
     const minutes = Math.floor(seconds / 60);
