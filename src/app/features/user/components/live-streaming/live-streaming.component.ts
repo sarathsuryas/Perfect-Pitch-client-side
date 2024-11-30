@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Store } from '@ngrx/store';
 import { selectUserData } from 'src/app/store/user/user.selector';
+import { LiveStreamingService } from '../../services/live-streaming/live-streaming.service';
 
 @Component({
   selector: 'app-live-streaming',
@@ -26,8 +27,9 @@ export class LiveStreamingComponent implements OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private _socketService: SocketService,
-    private _userService: UserService,
-    private _store: Store
+    private _store: Store,
+    private _liveStreamingService:LiveStreamingService,
+    private _userService:UserService
   ) {
     this._store.select(selectUserData).subscribe({
       next: (value) => {
@@ -50,7 +52,7 @@ export class LiveStreamingComponent implements OnDestroy {
     this.route.paramMap.pipe(
       map(params => params.get('uuid')),
       tap(uuid => this.uuid = uuid as string),
-      switchMap(uuid => this._userService.getLiveVideoDetails(uuid as string)),
+      switchMap(uuid => this._liveStreamingService.getLiveVideoDetails(uuid as string)),
       tap((data) => {
         this.streamTitle = data.title
         this.streamerName = data.artistData.fullName

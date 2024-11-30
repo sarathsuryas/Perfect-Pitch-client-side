@@ -6,6 +6,8 @@ import { SharedService } from '../../services/shared/shared.service';
 import { PlaylistDialogComponent } from '../playlist-dialougue/playlist-dialougue.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { PlaylistService } from '../../services/playlist/playlist.service';
+import { GenreService } from '../../services/genre/genre.service';
 
 @Component({
   selector: 'app-songs-list',
@@ -36,13 +38,15 @@ constructor(
   private _sharedService:SharedService,
   private _dialog: MatDialog,
   private _snackBar: MatSnackBar, 
+  private _playlistService:PlaylistService,
+  private _genreService:GenreService
 ) {
   
 }
   
 ngOnInit(): void {
     this.id = this._route.snapshot.paramMap.get('id') as string
-    this._userService.getSameGenreSongs(this.id).subscribe({
+    this._genreService.getSameGenreSongs(this.id).subscribe({
       next:(value)=>{
       this.songs = value
       },
@@ -78,7 +82,7 @@ ngOnInit(): void {
 
     dialogRef.afterClosed().subscribe({
       next: (result) => {
-        this._userService.addToPlaylsit(songId, result._value[0]._id).subscribe({
+        this._playlistService.addToPlaylsit(songId, result._value[0]._id).subscribe({
           next: (data) => {
             if (data.exist) {
               this._snackBar.open("Song Already in Playlist", "Close", {

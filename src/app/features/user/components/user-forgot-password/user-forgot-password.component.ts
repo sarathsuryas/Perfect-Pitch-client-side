@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user/user.service';
 import { Router } from '@angular/router';
+import { UserAuthService } from '../../services/user-auth/user-auth.service';
 
 @Component({
   selector: 'app-user-forgot-password',
@@ -17,6 +18,7 @@ export class UserForgotPasswordComponent {
 
   constructor(
     private _userService:UserService,
+    private _userAuthService:UserAuthService,
     private _router: Router,
    ) {
 
@@ -35,7 +37,7 @@ export class UserForgotPasswordComponent {
    
     if (this.RequestResetForm.valid) {
       this.IsvalidForm = true;
-      this._userService.requestReset(this.RequestResetForm.value).subscribe(
+      this._userAuthService.requestReset(this.RequestResetForm.value).subscribe(
         data => {
     
           this.RequestResetForm.reset();

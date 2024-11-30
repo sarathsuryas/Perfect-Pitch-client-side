@@ -9,6 +9,7 @@ import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { Store } from '@ngrx/store';
 import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
 import { SharedService } from '../../services/shared/shared.service';
+import { PlaylistService } from '../../services/playlist/playlist.service';
 
 interface Song {
   id: string;
@@ -36,7 +37,7 @@ export class AudioPlayerComponent {
 
   constructor(
     private dialog: MatDialog,
-    private _userService: UserService,
+    private _playlistService: PlaylistService,
     private snackBar: MatSnackBar,
     private _store: Store<Song>,
     private _sharedService:SharedService
@@ -125,7 +126,7 @@ playlistPlay(index:number) {
 
     dialogRef.afterClosed().subscribe({
       next: (result) => {
-        this._userService.addToPlaylsit(songId, result._value[0]._id).subscribe({
+        this._playlistService.addToPlaylsit(songId, result._value[0]._id).subscribe({
           next: (data) => {
             if (data.exist) {
               this.snackBar.open("Song Already in Playlist", "Close", {

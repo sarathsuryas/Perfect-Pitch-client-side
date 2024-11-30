@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user/user.service';
-import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 import { IVideoDetails } from 'src/app/core/interfaces/IVideoDetails';
 import { ICurrentUser } from 'src/app/core/interfaces/ICurrentUser';
+import { ShortsService } from '../../services/shorts/shorts.service';
+
 
 @Component({
   selector: 'app-shorts',
@@ -12,9 +12,9 @@ import { ICurrentUser } from 'src/app/core/interfaces/ICurrentUser';
 export class ShortsComponent implements OnInit {
   shorts:IVideoDetails[] = []
   currentUser!:ICurrentUser
- constructor(private _userService:UserService) {}
+ constructor(private _shortsService:ShortsService) {}
   ngOnInit(): void {
-    this._userService.getShorts().subscribe({
+    this._shortsService.getShorts().subscribe({
       next:(data)=>{
         this.shorts = data.shorts
         this.currentUser = data.user

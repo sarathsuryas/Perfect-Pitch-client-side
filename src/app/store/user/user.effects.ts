@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { addUser, addUserFail, addUserSuccess, blockUser, blockUserFail, blockUserSuccess, editUser, editUserFail, editUserSuccess, getUsers, getUsersFail, getUsersSuccess } from "../admin/admin.action";
 import { AdminService } from "src/app/features/admin/services/admin.service";
 import { IUserData } from "src/app/core/interfaces/IUserData";
+import { UserAuthService } from "src/app/features/user/services/user-auth/user-auth.service";
 
 
 @Injectable({ providedIn: 'root' })
@@ -20,7 +21,8 @@ export class UserEffects {
     private _cookieService: CookieService,
     private _spinner: NgxSpinnerService,
     private _router: Router,
-    private _adminService:AdminService
+    private _adminService:AdminService,
+    private _userAuthService:UserAuthService
   ) {
    
   }
@@ -30,7 +32,7 @@ export class UserEffects {
       ofType(registerUser),
       tap(() => this._spinner.show()),
       exhaustMap(action =>
-        this._userService.userRegister(action.userData).pipe(
+        this._userAuthService.userRegister(action.userData).pipe(
           tap(data => this._cookieService.put('userData', JSON.stringify(data), { expires: '1h' })),
           tap((data) => {
             if (data) {
@@ -58,7 +60,7 @@ export class UserEffects {
       ofType(verifyOtp),
       tap(() =>this._spinner.show()),
       exhaustMap(action=>
-        this._userService.verifyOtp(action.userData,action.otp).pipe(
+        this._userAuthService.verifyOtp(action.userData,action.otp).pipe(
           tap(data=> localStorage.setItem('token',data.token)),
            map((userData:IUserData)=>verifyOtpSuccess({userData})),
            tap((data)=>{
@@ -87,7 +89,7 @@ export class UserEffects {
     ofType(loginUser),
     tap(() =>this._spinner.show()),
     exhaustMap(action=>
-      this._userService.userLogin(action.email,action.password).pipe(
+      this._userAuthService.userLogin(action.email,action.password).pipe(
         tap(data=> localStorage.setItem('token',data.token)),
         map((userData)=>loginUserSuccess({userData})),
         tap((data)=>{
@@ -116,7 +118,7 @@ $googleLogin = createEffect(()=>
     ofType(googleLoginUser),
     tap(() =>this._spinner.show()),
     exhaustMap((action)=>
-      this._userService.googleLogin(action.userData).pipe(
+      this._userAuthService.googleLogin(action.userData).pipe(
         tap(data=> localStorage.setItem('token',data.token)),
         map((data)=>googleLoginUserSuccess({userData:data})),
         tap((data)=>{

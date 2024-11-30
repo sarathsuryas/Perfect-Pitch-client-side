@@ -8,6 +8,10 @@ import { ISubmitSongDetailsDto } from 'src/app/core/dtos/ISubmitSongDetails.dto'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ISumbitAlbumDetails } from 'src/app/core/dtos/ISubmitAlbumDetails.dto';
 import { Router } from '@angular/router';
+import { GenreService } from '../../services/genre/genre.service';
+import { PresignedUrlService } from '../../services/presigned-url/presigned-url.service';
+import { S3Service } from '../../services/S3/s3.service';
+import { AlbumService } from '../../services/album/album.service';
 
 @Component({
   selector: 'app-single-audio-upload',
@@ -23,7 +27,8 @@ export class SingleAudioUploadComponent implements OnInit {
   presignedUrlsAndUniqueKey: { url: string, uniqueKey: string }[] = []
   uploadFilesArray: { url: string, contenttype: string, file: File }[] = []
   files: File[] = []
-  constructor(private fb: FormBuilder, private snackBar: MatSnackBar, private _userService: UserService,    private _spinner: NgxSpinnerService,private _router:Router
+  constructor(private fb: FormBuilder, private snackBar: MatSnackBar, private _userService: UserService,    private _spinner: NgxSpinnerService,private _router:Router,private _genreService:GenreService,
+    private _presignedUrlService:PresignedUrlService,private _s3Service:S3Service,private _albumService:AlbumService
   ) {
     this.singleForm = this.fb.group({
       singleName: ['', Validators.required],
@@ -34,7 +39,7 @@ export class SingleAudioUploadComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._userService.getGenres().subscribe({
+    this._genreService.getGenres().subscribe({
       next: (value) => {
         this.genres = value
       },
@@ -77,13 +82,13 @@ export class SingleAudioUploadComponent implements OnInit {
       this.files.push(thumbnail)
       this.detailsForSignedUrls.push({ name: trackFile.name, type: trackFile.type })
       this.detailsForSignedUrls.push({ name: thumbnail.name, type: thumbnail.type })
-      this._userService.generatePreSignedUrls(this.detailsForSignedUrls).subscribe({
+      this._presignedUrlService.generatePreSignedUrls(this.detailsForSignedUrls).subscribe({
         next: (value) => {
           this.presignedUrlsAndUniqueKey = value.presignedUrls
           for (let i = 0; i < value.presignedUrls.length; i++) {
             this.uploadFilesArray.push({ url: this.presignedUrlsAndUniqueKey[i].url, contenttype: this.detailsForSignedUrls[i].type, file: this.files[i] })
           }
-          this._userService.uploadMultipleFileToS3(this.uploadFilesArray).subscribe({
+          this._s3Service.uploadMultipleFileToS3(this.uploadFilesArray).subscribe({
             next: (value) => {
               const array = []
                array.push({ title: name, uniqueKey:this.presignedUrlsAndUniqueKey[0].uniqueKey, thumbNailUniqueKey:  this.presignedUrlsAndUniqueKey[1].uniqueKey })
@@ -95,7 +100,7 @@ export class SingleAudioUploadComponent implements OnInit {
                   songs: array
                 } 
                 
-              this._userService.submitAlbumDetails(obj).subscribe({
+              this._albumService.submitAlbumDetails(obj).subscribe({
                 next:(value)=>{
                   this.singleForm.reset()
                   this._router.navigate([`/home/album-songs/${value.uuid}`])

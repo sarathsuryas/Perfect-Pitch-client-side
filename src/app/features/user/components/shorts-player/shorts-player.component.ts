@@ -3,6 +3,8 @@ import { IVideoDetails } from 'src/app/core/interfaces/IVideoDetails';
 import { UserService } from '../../services/user/user.service';
 import { ICurrentUser } from 'src/app/core/interfaces/ICurrentUser';
 import { IVideoCommentDto } from 'src/app/core/dtos/IVideoComment.dto';
+import { VideoService } from '../../services/video/video.service';
+import { CommentsService } from '../../services/comments/comments.service';
 
 
 
@@ -22,7 +24,7 @@ export class ShortsPlayerComponent implements OnInit, OnChanges {
   isPlaying = false;
   isSubscribed!: boolean;
 
-  constructor(private readonly _userService: UserService) { }
+  constructor(private readonly _videoService:VideoService,private _userService:UserService,private _commentService:CommentsService) { }
 
   ngAfterViewInit() {
     const video = this.videoPlayer.nativeElement;
@@ -111,10 +113,10 @@ export class ShortsPlayerComponent implements OnInit, OnChanges {
       this.likeCount--
       this.liked = false
       const videoId = this.videoShorts[this.currentVideoIndex]._id
-      this._userService.likeVideo(videoId).subscribe()
+      this._videoService.likeVideo(videoId).subscribe()
     } else {
       const videoId = this.videoShorts[this.currentVideoIndex]._id
-      this._userService.likeVideo(videoId).subscribe()
+      this._videoService.likeVideo(videoId).subscribe()
       this.likeCount++
       this.liked = true
     }
@@ -125,7 +127,7 @@ export class ShortsPlayerComponent implements OnInit, OnChanges {
       videoId: this.videoShorts[this.currentVideoIndex]._id,
       comment: comment,
     }
-    this._userService.commentVideo(obj).subscribe((data) => {
+    this._commentService.commentVideo(obj).subscribe((data) => {
 
     })
   }

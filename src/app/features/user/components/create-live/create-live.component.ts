@@ -7,6 +7,8 @@ import { environment } from 'src/environment/environment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ICreateLiveStreamDto } from 'src/app/core/dtos/ICreateLiveStream.dto';
 import { IGenres } from 'src/app/core/interfaces/IGenres';
+import { LiveStreamingService } from '../../services/live-streaming/live-streaming.service';
+import { GenreService } from '../../services/genre/genre.service';
 
 @Component({
   selector: 'app-create-live',
@@ -23,7 +25,7 @@ export class CreateLiveComponent {
     public dialogRef: MatDialogRef<CreateLiveComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
-    private _userService:UserService
+   private _genreService:GenreService
   ) {
     this.streamForm = this.fb.group({
       title: ['', Validators.required],
@@ -34,7 +36,7 @@ export class CreateLiveComponent {
   }
 
   ngOnInit(): void {
-    this._userService.getGenres().subscribe({
+    this._genreService.getGenres().subscribe({
       next: (value) => {
         this.genres = value
       },

@@ -8,6 +8,8 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
 import { OldPasswordComponent } from '../old-password/old-password.component';
 import { MessageService } from 'primeng/api';
 import { v4 as uuidv4 } from 'uuid';
+import { PresignedUrlService } from '../../services/presigned-url/presigned-url.service';
+import { UserAuthService } from '../../services/user-auth/user-auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -27,8 +29,10 @@ export class UserProfileComponent implements OnInit {
  
   constructor(
     private _userService: UserService,
+    private _userAuthService:UserAuthService,
     private dialog: MatDialog,
     private _messageService: MessageService,
+    private _presignedUrlService:PresignedUrlService
   ) { 
 
   }
@@ -101,7 +105,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   logout() {
-    this._userService.logOut()
+    this._userAuthService.logOut()
   }
 
 
@@ -112,13 +116,13 @@ export class UserProfileComponent implements OnInit {
       const reader = new FileReader()
       reader.onload = () => {
         this.url = reader.result
-      }
+      } 
       reader.readAsDataURL(FILE.files[0]);
       this.fileObj = FILE.files[0];
       
     }
     const myId = uuidv4();
-    this._userService.getPresignedUrl( myId + this.fileObj.name , this.fileObj.type).subscribe((result) => {
+    this._presignedUrlService.getPresignedUrl( myId + this.fileObj.name , this.fileObj.type).subscribe((result) => {
       if (result.success) {
         const fileuploadurl = result.presignedUrl.url
         this.uniqueKey = result.presignedUrl.uniqueKey

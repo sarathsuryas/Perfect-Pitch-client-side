@@ -5,6 +5,7 @@ import { UserService } from '../../services/user/user.service';
 import { ICreatePlaylistDto } from 'src/app/core/dtos/createPlaylist.dto';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { Route, Router } from '@angular/router';
+import { PlaylistService } from '../../services/playlist/playlist.service';
 
 
 
@@ -23,12 +24,12 @@ playlists:IUserPlaylists[] = []
     public dialogRef: MatDialogRef<PlaylistDialogComponent>,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) private data:{thumbNailLink:string,songId:string},
-    private _userService:UserService,
-    private _router:Router
+    private _router:Router,
+    private _playlistService:PlaylistService
   ) { }
 
   ngOnInit(): void {
-    this._userService.getAllPlaylistUser().subscribe({
+    this._playlistService.getAllPlaylistUser().subscribe({
       next:(data)=>{
       this.playlists = data
       },
@@ -62,7 +63,7 @@ playlists:IUserPlaylists[] = []
          visibility: value.visibility,
          thumbNailLink: this.data.thumbNailLink
        } 
-       this._userService.createPlaylist(obj).subscribe({
+       this._playlistService.createPlaylist(obj).subscribe({
         next:(data)=>{
           if(data.playlistId) {
             this._router.navigate([`home/view-playlist/${data.playlistId}`])

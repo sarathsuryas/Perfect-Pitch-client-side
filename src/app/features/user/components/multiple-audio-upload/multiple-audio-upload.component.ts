@@ -8,6 +8,10 @@ import { IGenres } from 'src/app/core/interfaces/IGenres';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IAlbumDetails } from 'src/app/core/dtos/ISubmitSongDetails.dto';
+import { GenreService } from '../../services/genre/genre.service';
+import { PresignedUrlService } from '../../services/presigned-url/presigned-url.service';
+import { AlbumService } from '../../services/album/album.service';
+import { S3Service } from '../../services/S3/s3.service';
 
 
 @Component({
@@ -34,7 +38,11 @@ export class MultipleAudioUploadComponent implements OnInit {
     private snackBar: MatSnackBar,
     private _userService: UserService,
     private _spinner: NgxSpinnerService,
-    private _router: Router
+    private _router: Router,
+    private _genreService:GenreService,
+    private _presignedUrlService:PresignedUrlService,
+    private _albumService:AlbumService,
+    private _s3Service:S3Service
   ) {
     this.albumForm = this.fb.group({
       albumName: ['', Validators.required],
@@ -47,7 +55,7 @@ export class MultipleAudioUploadComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this._userService.getGenres().subscribe({
+    this._genreService.getGenres().subscribe({
       next: (value) => {
         this.genres = value
       },
@@ -131,13 +139,13 @@ export class MultipleAudioUploadComponent implements OnInit {
       for (const value of this.albumData.tracks) {
         this.detailsForPresignedUrls.push({ name: value.songThumbNail.name, type: value.songThumbNail.type, file: value.songThumbNail })
       }
-      this._userService.generatePreSignedUrls(this.detailsForPresignedUrls).subscribe({
+      this._presignedUrlService.generatePreSignedUrls(this.detailsForPresignedUrls).subscribe({
         next: (data) => {
           this.presignedUrls = data.presignedUrls
           for (let i = 0; i < this.presignedUrls.length; i++) {
             this.uploadFilesArray.push({ url: this.presignedUrls[i].url, contenttype: this.detailsForPresignedUrls[i].type, file: this.detailsForPresignedUrls[i].file })
           }
-          this._userService.uploadMultipleFileToS3(this.uploadFilesArray).subscribe({
+          this._s3Service.uploadMultipleFileToS3(this.uploadFilesArray).subscribe({
             next: (value) => {
               if (value) {
                 this.albumThumbNailUniqueKey = this.presignedUrls.shift()?.uniqueKey as string
@@ -154,7 +162,7 @@ export class MultipleAudioUploadComponent implements OnInit {
                   songs: array
                 }
                 
-                this._userService.submitAlbumDetails(obj).subscribe({
+                this._albumService.submitAlbumDetails(obj).subscribe({
                   next: (value) => {
                     this._spinner.hide()
                     this.albumForm.reset()

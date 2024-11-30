@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { ICommentReply } from 'src/app/core/interfaces/ICommentReply';
 import { UserService } from '../../services/user/user.service';
 import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
+import { CommentsService } from '../../services/comments/comments.service';
 
 @Component({
   selector: 'app-comment-replies',
@@ -20,7 +21,7 @@ export class CommentRepliesComponent implements OnChanges, OnInit {
   likeCount: number = 0;
   like!: boolean;
   replyToReplis: IReplyToReply[] = [];
-  constructor(private _userService: UserService) {
+  constructor(private _commentService:CommentsService) {
 
   }
   ngOnInit(): void {
@@ -37,18 +38,18 @@ export class CommentRepliesComponent implements OnChanges, OnInit {
   likeReply(replyId: string) {
     if (this.like) {
       this.likeCount--
-      this._userService.likeReply(replyId).subscribe()
+      this._commentService.likeReply(replyId).subscribe()
       this.like = false
     } else {
       this.likeCount++
-      this._userService.likeReply(replyId).subscribe()
+      this._commentService.likeReply(replyId).subscribe()
       this.like = true
     }
   }
 
   toggleReplyToReply() {
     this.showReplyToReplyInput = !this.showReplyToReplyInput
-    this._userService.getRepliesToReply(this.reply._id).subscribe({
+    this._commentService.getRepliesToReply(this.reply._id).subscribe({
       next: (value) => {
         this.replyToReplis = value
       },
@@ -71,11 +72,11 @@ export class CommentRepliesComponent implements OnChanges, OnInit {
     }
     this.replyToReplis.unshift(replyToReplay)
 
-    this._userService.replyToReply({ replyId: this.reply._id, userId: this.userId, replyToReply: this.replyToReply, likes: [] }).subscribe({
+    this._commentService.replyToReply({ replyId: this.reply._id, userId: this.userId, replyToReply: this.replyToReply, likes: [] }).subscribe({
       next: (value) => {
         if (value) {
           this.replyToReply = ''
-          this._userService.getRepliesToReply(this.reply._id).subscribe({
+          this._commentService.getRepliesToReply(this.reply._id).subscribe({
             next: (value) => {
               this.replyToReplis = value
             },

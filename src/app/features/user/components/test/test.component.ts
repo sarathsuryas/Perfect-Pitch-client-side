@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { PaymentService } from '../../services/payment/payment.service';
 import { environment } from 'src/environment/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';

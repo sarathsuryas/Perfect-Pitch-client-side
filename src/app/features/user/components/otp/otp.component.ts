@@ -10,6 +10,7 @@ import { verifyOtp } from 'src/app/store/user/user.action';
 import { userModel } from 'src/app/store/user/user.model';
 import { selectOtpVerificationFail, selectUserData, } from 'src/app/store/user/user.selector';
 import { UserState } from 'src/app/store/user/user.state';
+import { UserAuthService } from '../../services/user-auth/user-auth.service';
 
 @Component({
   selector: 'app-otp',
@@ -28,7 +29,7 @@ export class OtpComponent implements OnInit {
     private _store: Store<UserState>, private _router: Router,
     private _cookieService: CookieService,
     private readonly _messageService: MessageService,
-    private readonly _userService:UserService
+    private readonly _userAuthService:UserAuthService
   ) {
     _store.select(selectUserData).subscribe((data) => {
       if (!data) {
@@ -55,7 +56,7 @@ export class OtpComponent implements OnInit {
     if (!userData) {
      return this._messageService.add({ severity: 'error', summary: 'Time Out', detail: "Time Out" })
     }
-    this._userService.resendOtp(userData).subscribe((data)=>{
+    this._userAuthService.resendOtp(userData).subscribe((data)=>{
       this._cookieService.put('userData',data)
     })
     setTimeout(()=>{

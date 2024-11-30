@@ -3,6 +3,7 @@ import { UserService } from '../../services/user/user.service';
 import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 import { selectSearchQuery } from 'src/app/store/search/search.selector';
 import { Store } from '@ngrx/store';
+import { VideoService } from '../../services/video/video.service';
 
 @Component({
   selector: 'app-videos-list',
@@ -11,7 +12,11 @@ import { Store } from '@ngrx/store';
 })
 export class VideosListComponent implements OnInit {
 
-  constructor(private readonly _userService: UserService, private _store: Store) { }
+  constructor(
+    private readonly _userService: UserService,
+    private _store: Store,
+    private _videoService:VideoService
+  ) { }
   videos: IVideoList[] = []
   search: boolean = false
   ngOnInit(): void {
@@ -21,8 +26,8 @@ export class VideosListComponent implements OnInit {
           this.search = true
         }
         if (this.search) {
-        
-          this._userService.getVideoList({query:value}).subscribe({
+
+          this._videoService.getVideoList({ query: value }).subscribe({
             next: (value) => {
               this.videos = value
             },
@@ -35,15 +40,15 @@ export class VideosListComponent implements OnInit {
       }
     })
     if (!this.search) {
-      this._userService.getVideoList().subscribe((data) => {
+      this._videoService.getVideoList().subscribe((data) => {
         this.videos = data
       })
     }
 
   }
   loadMore() {
-    const nextPage = Math.ceil(this.videos.length / 10) + 1; 
-    this._userService.getVideoList({nextPage}).subscribe((data) => {
+    const nextPage = Math.ceil(this.videos.length / 10) + 1;
+    this._videoService.getVideoList({ nextPage }).subscribe((data) => {
       for (const value of data) {
         this.videos.push(value)
       }

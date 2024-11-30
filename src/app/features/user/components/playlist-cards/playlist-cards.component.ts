@@ -20,7 +20,6 @@ export class PlaylistCardsComponent {
   @Input() playlists!: IUserPlaylists
   @Output() loadPlaylist = new EventEmitter()
   constructor(
-    private _userService: UserService,
     private _router: Router
   ) { }
 

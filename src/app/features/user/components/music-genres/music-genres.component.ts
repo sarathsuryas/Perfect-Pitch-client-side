@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { IGenres } from 'src/app/core/interfaces/IGenres';
 import { Router } from '@angular/router';
+import { GenreService } from '../../services/genre/genre.service';
 interface Genre {
   id: number;
   name: string;
@@ -16,9 +17,9 @@ interface Genre {
 export class MusicGenresComponent implements OnInit {
   genres: IGenres[] = [];
 
-  constructor(private _userService:UserService,private _router:Router) {}
+  constructor(private _genreService:GenreService,private _router:Router) {}
   ngOnInit(): void {
-     this._userService.getGenres().subscribe({
+     this._genreService.getGenres().subscribe({
       next:(value)=>{
        this.genres = value
       },

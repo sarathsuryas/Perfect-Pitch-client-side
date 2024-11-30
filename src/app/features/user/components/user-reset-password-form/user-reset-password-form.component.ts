@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserAuthService } from '../../services/user-auth/user-auth.service';
 
 @Component({
   selector: 'app-user-reset-password-form',
@@ -21,6 +22,7 @@ export class UserResetPasswordFormComponent {
     private _router: Router,
     private _route: ActivatedRoute,
     private _fb: FormBuilder,
+    private _userAuthService:UserAuthService
   ) {
 
     this.CurrentState = 'Wait';
@@ -37,7 +39,7 @@ export class UserResetPasswordFormComponent {
   }
 
   VerifyToken() {
-    this._userService.ValidPasswordToken({ token: this.resetToken }).subscribe(
+    this._userAuthService.ValidPasswordToken({ token: this.resetToken }).subscribe(
       data => {
        this.UserId = data.token._adminId
         this.CurrentState = 'Verified';
@@ -80,7 +82,7 @@ export class UserResetPasswordFormComponent {
     if (this.ResponseResetForm.valid) {
       this.IsResetFormValid = true;
    
-      this._userService.newPassword(this.ResponseResetForm.controls['confirmPassword'].value,this.UserId).subscribe(
+      this._userAuthService.newPassword(this.ResponseResetForm.controls['confirmPassword'].value,this.UserId).subscribe(
         data => {
           this.ResponseResetForm.reset();
           this.successMessage = data.message;

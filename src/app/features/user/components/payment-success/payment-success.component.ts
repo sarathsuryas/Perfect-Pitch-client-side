@@ -1,8 +1,8 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { PaymentService } from '../../services/payment/payment.service';
 import { Store } from '@ngrx/store';
 import { getUserData } from 'src/app/store/user/user.action';
+import { MembershipService } from '../../services/membership/membership.service';
 
 @Component({
   selector: 'app-payment-success',
@@ -14,7 +14,7 @@ export class PaymentSuccessComponent  implements AfterViewInit {
   membershipId:string = ''
   constructor(
     private route: ActivatedRoute,
-    private _paymentService:PaymentService,
+    private _memberShipService:MembershipService,
     private _router:Router,
     private _store:Store
   ) {
@@ -36,7 +36,7 @@ export class PaymentSuccessComponent  implements AfterViewInit {
  
 
 paymentSuccess(sessionId:string,memberShipId:string) {
-  this._paymentService.paymentSuccess(sessionId,memberShipId).subscribe({
+  this._memberShipService.paymentSuccess(sessionId,memberShipId).subscribe({
     next:(value)=>{
       this._store.dispatch(getUserData())
       this.sessionId = ''

@@ -6,6 +6,7 @@ import { CreateLiveComponent } from '../create-live/create-live.component';
 import { DialogRef } from '@angular/cdk/dialog';
 import { MessageService } from 'primeng/api';
 import { SocketService } from '../../services/socket/socket.service';
+import { LiveStreamingService } from '../../services/live-streaming/live-streaming.service';
 
 @Component({
   selector: 'app-live-preview',
@@ -23,11 +24,11 @@ export class LivePreviewComponent {
 
 
   constructor(
-    private _userService: UserService,
     private fb: FormBuilder,
     private dialog: MatDialog,
     private _messageService: MessageService,
-    private _socketService: SocketService
+    private _socketService: SocketService,
+    private _liveStreamingService:LiveStreamingService
   ) {
   }
   
@@ -62,7 +63,7 @@ export class LivePreviewComponent {
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
       this._socketService.disconnect()
-      this._userService.stopStreaming(this.streamKey).subscribe()
+      this._liveStreamingService.stopStreaming(this.streamKey).subscribe()
       this.isCameraOn = false;
       this.success = false
       this.start = false
@@ -76,7 +77,7 @@ export class LivePreviewComponent {
       { width: '600px', height: '600px' })
     dialogRef.afterClosed().subscribe({
       next: (value) => {
-        this._userService.createLive(value).subscribe({
+        this._liveStreamingService.createLive(value).subscribe({
           next: (value) => {
             if (value.success) {
               this.success = value.success

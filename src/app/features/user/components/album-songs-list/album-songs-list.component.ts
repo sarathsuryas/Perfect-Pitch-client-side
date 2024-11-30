@@ -7,6 +7,7 @@ import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
 import { IAlbumResponse } from 'src/app/core/interfaces/IAlbumResponse';
 import { IAudioData } from 'src/app/core/interfaces/IAudioData';
 import { IAlbumDetails } from 'src/app/core/interfaces/IAlbumDetails';
+import { AlbumService } from '../../services/album/album.service';
 
 @Component({
   selector: 'app-album-songs-list',
@@ -18,9 +19,9 @@ export class AlbumSongsListComponent {
   id!: string 
   songs:IAudioData[] = []
   albumData!:IAlbumDetails 
-  constructor(private _userService:UserService,private route: ActivatedRoute,private dialog: MatDialog) {
+  constructor(private _albumService:AlbumService,private route: ActivatedRoute,private dialog: MatDialog) {
     this.id = this.route.snapshot.paramMap.get('id') as string
-     this.albumData$ = this._userService.getAlbumDetails(this.id)
+     this.albumData$ = this._albumService.getAlbumDetails(this.id)
      this.albumData$.subscribe((data)=>{
       this.albumData = data
       this.songs = data.songs

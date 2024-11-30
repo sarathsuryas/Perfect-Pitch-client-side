@@ -3,6 +3,7 @@ import { Track } from '@khajegan/ngx-audio-player';
 import { Store } from '@ngrx/store';
 import { UserService } from '../../services/user/user.service';
 import { SharedService } from '../../services/shared/shared.service';
+import { AudioService } from '../../services/audio/audio.service';
 @Component({
   selector: 'app-ngx-audio',
   templateUrl: './ngx-audio.component.html',
@@ -28,7 +29,7 @@ export class NgxAudioComponent {
   isVoiceControlActive: boolean = false;
   private isGenre: boolean = false
   player:boolean = false
-  constructor(private _store: Store, private _userService: UserService, private _sharedService: SharedService) { }
+  constructor(private _store: Store, private _audioService:AudioService, private _sharedService: SharedService) { }
 
   ngOnInit() {
     this.audio = new Audio() as HTMLAudioElement;
@@ -48,7 +49,7 @@ export class NgxAudioComponent {
         this.isAlbum = data.album
         this.isGenre = data.isGenre
         if (this.isAlbum && this.songId.length && !this.isGenre) {
-          this._userService.getSong(data.songId as string).subscribe({
+          this._audioService.getSong(data.songId as string).subscribe({
             next: (value) => {
               this.link = value.link
               this.songThumbnail = value.thumbNailLink
@@ -76,7 +77,7 @@ export class NgxAudioComponent {
           this.isAlbum = data.album
           this.isGenre = data.isGenre
           if (this.songId && !this.isAlbum && !this.isGenre) {
-            this._userService.getSong(data.songId as string)
+            this._audioService.getSong(data.songId as string)
               .subscribe({
                 next: (value) => {
                   this.link = value.link
@@ -103,7 +104,7 @@ export class NgxAudioComponent {
         this.isAlbum = data.album
         this.isGenre = data.genre
         if (this.songId.length && !this.isAlbum && this.isGenre) {
-          this._userService.getSong(data.songId as string).subscribe({
+          this._audioService.getSong(data.songId as string).subscribe({
             next: (value) => {
               this.link = value.link
               this.songThumbnail = value.thumbNailLink

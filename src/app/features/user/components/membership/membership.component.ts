@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { PaymentService } from '../../services/payment/payment.service';
 import { environment } from 'src/environment/environment';
 import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
 import { Store } from '@ngrx/store';
 import { setMembershipId } from 'src/app/store/memberShip/membership.action';
+import { MembershipService } from '../../services/membership/membership.service';
 
 interface Plan {
   id: number;
@@ -26,12 +26,12 @@ interface MembershipPlan {
   styleUrls: ['./membership.component.css']
 })
 export class MembershipComponent implements OnInit{
-   constructor(private paymentService: PaymentService,private _store:Store) {}
+   constructor(private _memberShipService:MembershipService,private _store:Store) {}
    plans:IMemberShip[] = [];
   
    userId:string = ''
   ngOnInit(): void {
-    this.paymentService.getMemberShip().subscribe({
+    this._memberShipService.getMemberShip().subscribe({
       next:(value)=>{
         this.plans = value.data
         this.userId = value.userId

@@ -5,6 +5,7 @@ import { UserService } from '../../services/user/user.service';
 import { ICommentReply } from 'src/app/core/interfaces/ICommentReply';
 import { Store } from '@ngrx/store';
 import { selectUserData } from 'src/app/store/user/user.selector';
+import {CommentsService} from 'src/app/features/user/services/comments/comments.service'
 interface Comment {
   replyText: string;
   id: number;
@@ -35,7 +36,7 @@ export class CommentSectionComponent implements OnChanges {
   showReplyInput: boolean = false
   liked!: boolean
   reply: string = ''
-  constructor(private _userService: UserService,private _store:Store) { 
+  constructor(private _commentService:CommentsService,private _store:Store) { 
     this._store.select(selectUserData).subscribe({
       next:(value)=>{
         this.userId = value?._id as string
@@ -62,7 +63,7 @@ export class CommentSectionComponent implements OnChanges {
     if (this.liked) {
       this.liked = false
       this.like--
-      this._userService.likeComment(this.comment._id).subscribe({
+      this._commentService.likeComment(this.comment._id).subscribe({
         next: (response) => {
           console.log(response)
         },
@@ -73,7 +74,7 @@ export class CommentSectionComponent implements OnChanges {
     } else {
       this.liked = true
       this.like++
-      this._userService.likeComment(this.comment._id).subscribe({
+      this._commentService.likeComment(this.comment._id).subscribe({
         next: (response) => {
           console.log(response)
         },
@@ -90,7 +91,7 @@ export class CommentSectionComponent implements OnChanges {
   toggleReplyInput(commentId: string) {
     this.showReplyInput = !this.showReplyInput
     this.commentId = commentId
-    this._userService.getReply(this.commentId).subscribe({
+    this._commentService.getReply(this.commentId).subscribe({
       next: (data) => {
         this.replies = data
       },
@@ -122,10 +123,10 @@ export class CommentSectionComponent implements OnChanges {
     }
     this.replies.unshift(reply)
 
-    this._userService.replyComment({ commentId: this.comment._id, reply: this.reply, userId: this.userId }).subscribe({
+    this._commentService.replyComment({ commentId: this.comment._id, reply: this.reply, userId: this.userId }).subscribe({
       next: (data) => {
         this.reply = ''
-        this._userService.getReply(this.commentId).subscribe({
+        this._commentService.getReply(this.commentId).subscribe({
           next: (data) => {
             this.replies = data
           },

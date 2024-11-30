@@ -54,7 +54,7 @@ import { CookieModule } from 'ngx-cookie';
     AdminRoutingModule,
     ReactiveFormsModule, 
     HttpClientModule,
-    FormsModule, 
+    FormsModule,  
     RouterModule,
     ButtonModule,
     ProgressSpinnerModule,

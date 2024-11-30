@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
-import { PaymentService } from '../../services/payment/payment.service';
 import { MessageService } from 'primeng/api';
 import { select, Store } from '@ngrx/store';
 import { selectUserData } from 'src/app/store/user/user.selector';
+import { MembershipService } from '../../services/membership/membership.service';
 
 @Component({
   selector: 'app-membership-cards',
@@ -15,8 +15,8 @@ export class MembershipCardsComponent {
 userId:string = ''
 currentPlan: string | null = null; 
 constructor(
-  private _paymentService:PaymentService,
-  private _store:Store 
+  private _store:Store,
+  private _memberShipService:MembershipService 
 ){
  this._store.select(selectUserData).subscribe({
   next:(value)=>{
@@ -29,7 +29,7 @@ constructor(
 }
 async redirectToCheckOut(planId:string,_id:string) {
   localStorage.setItem('memberShipId',_id)
-    await this._paymentService.redirectToCheckout(planId,this.userId)
+    await this._memberShipService.redirectToCheckout(planId,this.userId)
 }
 
 }

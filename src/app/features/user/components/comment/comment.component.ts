@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ICommentDetails } from 'src/app/core/interfaces/ICommentDetails';
 import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
 import { UserService } from '../../services/user/user.service';
+import { CommentsService } from '../../services/comments/comments.service';
 
 
 
@@ -24,7 +25,7 @@ export class CommentComponent implements OnInit{
     name: 'Current User',
     avatar: 'kldfdfsdpl'
   };
-  constructor(private readonly _userService:UserService) { }
+  constructor(private readonly _commentService:CommentsService) { }
   ngOnInit(): void {
     
    }
@@ -32,7 +33,7 @@ export class CommentComponent implements OnInit{
     console.log(this.userName)
 
     if(this.videoId) {
-      this._userService.getComments(this.videoId).subscribe({
+      this._commentService.getComments(this.videoId).subscribe({
         next:(data)=>{
           this.comments = data
         },

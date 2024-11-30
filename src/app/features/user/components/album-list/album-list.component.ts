@@ -3,6 +3,7 @@ import { UserService } from '../../services/user/user.service';
 import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
 import { Store } from '@ngrx/store';
 import { selectSearchQuery } from 'src/app/store/search/search.selector';
+import { AlbumService } from '../../services/album/album.service';
 
 @Component({
   selector: 'app-album-list',
@@ -12,7 +13,8 @@ import { selectSearchQuery } from 'src/app/store/search/search.selector';
 export class AlbumListComponent implements OnInit {
   albumData: IAlbumData[] = []
   search: boolean = false
-  constructor(private _userService: UserService, private _store: Store) { }
+  nextPage:number = 0
+  constructor(private _albumService: AlbumService, private _store: Store) { }
   ngOnInit(): void {
     this._store.select(selectSearchQuery).subscribe({
       next: (value) => {
@@ -20,7 +22,7 @@ export class AlbumListComponent implements OnInit {
           this.search = true
         }
         if (this.search) {
-          this._userService.getAlbums({query:value}).subscribe((data) => {
+          this._albumService.getAlbums({query:value}).subscribe((data) => {
             this.albumData = data
           })
         }
@@ -29,7 +31,7 @@ export class AlbumListComponent implements OnInit {
     })
 
     if (!this.search) {
-      this._userService.getAlbums().subscribe((data) => {
+      this._albumService.getAlbums().subscribe((data) => {
         this.albumData = data
       })
     }
@@ -37,7 +39,7 @@ export class AlbumListComponent implements OnInit {
 
   loadMore() {
     const nextPage = Math.ceil(this.albumData.length / 10) + 1; 
-    this._userService.getAlbums({nextPage}).subscribe((data) => {
+    this._albumService.getAlbums({nextPage}).subscribe((data) => {
       for (const value of data) {
         this.albumData.push(value)
       }

@@ -14,16 +14,17 @@ import { Store } from '@ngrx/store';
 import { removeToken } from 'src/app/store/user/user.action';
 import { selctIsBlocked } from 'src/app/store/user/user.selector';
 import { MessageService } from 'primeng/api';
+import { UserAuthService } from 'src/app/features/user/services/user-auth/user-auth.service';
 
 @Injectable()
 export class UserAuthInterceptor implements HttpInterceptor {
   private isBlocked: boolean = false
-  constructor(private readonly _userService: UserService, private readonly _cookieService: CookieService, private readonly _router: Router, private readonly _store: Store, private _messageService: MessageService) {
+  constructor(private readonly _userAuthService:UserAuthService, private readonly _cookieService: CookieService, private readonly _router: Router, private readonly _store: Store, private _messageService: MessageService) {
     this._store.select(selctIsBlocked).subscribe({
       next: (value) => {
         if (value) {
           _messageService.add({ severity: 'error', summary: 'Access Denied', detail: 'Your account is blocked.' });
-          this._userService.logOut()
+          this._userAuthService.logOut()
         }
       }
     })
@@ -50,7 +51,7 @@ export class UserAuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         console.log('errror handler inside dnsdk', error.status, '///')
         if (error.status === 401 && localStorage.getItem('token')) {
-          return this._userService.refreshToken().pipe(
+          return this._userAuthService.refreshToken().pipe(
             switchMap((newToken: string) => {
               console.log('newToken', newToken)
               localStorage.getItem('token')

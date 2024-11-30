@@ -6,6 +6,7 @@ import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { Store } from '@ngrx/store';
 import { selectUserData } from 'src/app/store/user/user.selector';
+import { RecommendedService } from '../../services/recommended/recommended.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class UserHomeComponent {
   public videos: IVideoList[] = []
   public playlists: IUserPlaylists[] = []
   public userId:string = ''
-  constructor(private _userService: UserService,private _store:Store) {
+  constructor(private _userService: UserService,private _store:Store,private _recommendedService:RecommendedService) {
   }
   ngOnInit() {
     this._store.select(selectUserData).subscribe({
@@ -27,7 +28,7 @@ export class UserHomeComponent {
         this.userId = value?._id as string
       }
     })
-    this._userService.recomended().subscribe({
+    this._recommendedService.recomended().subscribe({
       next: (data) => {
         this.albums = data.albums
         this.artists = data.artists

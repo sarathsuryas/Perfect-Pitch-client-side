@@ -3,6 +3,7 @@ import { UserService } from '../../services/user/user.service';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { Store } from '@ngrx/store';
 import { selectSearchQuery } from 'src/app/store/search/search.selector';
+import { PlaylistService } from '../../services/playlist/playlist.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class MusicPlaylistComponent implements OnInit {
   showPublic: boolean = true;
   @ViewChild('playlistHeader', { static: false }) headerElement!: ElementRef;
 
-  constructor(private _userService: UserService,private _store:Store) { }
+  constructor(private _playlistService:PlaylistService,private _store:Store) { }
 
   ngOnInit(): void {
    
@@ -27,14 +28,14 @@ export class MusicPlaylistComponent implements OnInit {
           this.search = true
         }
         if(this.search) {
-          this._userService.getPlaylists({query:value}).subscribe((data)=>{
+          this._playlistService.getPlaylists({query:value}).subscribe((data)=>{
             this.playlists = data
           })
         }
       }
     })  
     if(!this.search) {
-      this._userService.getPlaylists().subscribe({
+      this._playlistService.getPlaylists().subscribe({
         next: (data) => {
            this.playlists = data
         },
@@ -47,7 +48,7 @@ export class MusicPlaylistComponent implements OnInit {
 
   loadMore() {
     const nextPage = Math.ceil(this.playlists.length / 10) + 1; 
-    this._userService.getPlaylists({nextPage}).subscribe((data) => {
+    this._playlistService.getPlaylists({nextPage}).subscribe((data) => {
       for (const value of data) {
         this.playlists.push(value)
       }
@@ -59,7 +60,7 @@ export class MusicPlaylistComponent implements OnInit {
     this.showPublic = !this.showPublic;
     if(!this.showPublic) {
       this.headerElement.nativeElement.textContent = "Your Playlists"
-      this._userService.getUserPlaylists().subscribe({
+      this._playlistService.getUserPlaylists().subscribe({
         next: (data) => {
            this.playlists = data
         },
@@ -69,7 +70,7 @@ export class MusicPlaylistComponent implements OnInit {
       })
     } else {
        this.headerElement.nativeElement.textContent  = "Playlists"
-      this._userService.getPlaylists().subscribe({
+      this._playlistService.getPlaylists().subscribe({
         next: (data) => {
            this.playlists = data
         },

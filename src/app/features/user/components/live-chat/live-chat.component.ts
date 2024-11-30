@@ -5,6 +5,7 @@ import { selectUserData } from 'src/app/store/user/user.selector';
 import { SocketService } from '../../services/socket/socket.service';
 import { IMessageDto } from 'src/app/core/dtos/IMessage.dto';
 import { UserService } from '../../services/user/user.service';
+import { ChatService } from '../../services/chat/chat.service';
 interface ChatMessage {
   user: string;
   message: string;
@@ -21,7 +22,7 @@ export class LiveChatComponent implements OnInit,AfterViewChecked {
   messages: ChatMessage[] = [];
   newMessage: string = '';
  private userData!:userModel
-  constructor(private _store:Store,private _socketService:SocketService,private _userService:UserService) {
+  constructor(private _store:Store,private _socketService:SocketService,private _chatService:ChatService) {
     this._store.select(selectUserData).subscribe({
       next:(userData)=>{
         this.userData = userData as userModel
@@ -34,7 +35,7 @@ export class LiveChatComponent implements OnInit,AfterViewChecked {
 
   ngOnInit() {
     
-   this._userService.getChats(this.streamKey).subscribe({
+   this._chatService.getChats(this.streamKey).subscribe({
     next:(value)=>{
     for (let index = 0; index < value.length; index++) {
         this.messages.push({user:value[index].userData.fullName,message:value[index].message,timestamp:value[index].createdAt})

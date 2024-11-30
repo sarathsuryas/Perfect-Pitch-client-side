@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-bold mb-4 text-center">Live Stream Camera Control</h2>
 
     <div class="mb-4">
-      <video #videoElement [hidden]="!isCameraOn" class="w-full h-64 bg-black"></video>
+      <video #videoElement [hidden]="!isCameraOn" class="w-full h-64 bg-black" [muted]="'muted'"></video>
       <div *ngIf="!isCameraOn" class="w-full h-64 bg-gray-300 flex items-center justify-center">
         <p class="text-gray-600">Camera is off</p>
       </div>

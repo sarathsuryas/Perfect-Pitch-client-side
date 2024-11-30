@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
 import { UserService } from '../../services/user/user.service';
+import { CommentsService } from '../../services/comments/comments.service';
 
 @Component({
   selector: 'app-reply-to-reply',
@@ -17,7 +18,7 @@ export class ReplyToReplyComponent {
 
   likeCount: number = 0
   like!: boolean
-  constructor(private _userService: UserService) {
+  constructor(private _commentService:CommentsService) {
  
   }
   ngOnInit(): void {
@@ -34,11 +35,11 @@ export class ReplyToReplyComponent {
   likeReply(id: string) {
     if (this.like) {
       this.likeCount--
-      this._userService.likeReplyToReply(id).subscribe()
+      this._commentService.likeReplyToReply(id).subscribe()
       this.like = false
     } else {
       this.likeCount++
-      this._userService.likeReplyToReply(id).subscribe()
+      this._commentService.likeReplyToReply(id).subscribe()
       this.like = true
     }
   }

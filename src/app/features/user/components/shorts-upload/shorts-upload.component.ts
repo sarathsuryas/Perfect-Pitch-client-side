@@ -4,6 +4,8 @@ import { IUploadShortsDto } from 'src/app/core/dtos/uploadShorts.dto';
 import { ICustomResponse } from 'src/app/core/interfaces/ICustomResponse';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
+import { ShortsService } from '../../services/shorts/shorts.service';
+import { PresignedUrlService } from '../../services/presigned-url/presigned-url.service';
 
 @Component({
   selector: 'app-shorts-upload',
@@ -24,7 +26,11 @@ export class ShortsUploadComponent {
   url: string = ''
   uniqueKey: string = ''
   uploadProgress: number = 0
-  constructor(private _userService: UserService, private readonly _messageService: MessageService) { }
+  constructor(private _userService: UserService, 
+    private readonly _messageService: MessageService,
+    private readonly _shortsService:ShortsService,
+    private readonly _presignedUrlService:PresignedUrlService
+  ) { }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -58,7 +64,7 @@ export class ShortsUploadComponent {
       alert('Please enter a caption');
       return;
     }
-    const data = await this._userService.generatePresignedUrlMedia(this.caption, this.selectedFile.type) as ICustomResponse
+    const data = await this._presignedUrlService.generatePresignedUrlMedia(this.caption, this.selectedFile.type) as ICustomResponse
     this.url = data.presignedUrl.url
     this.uniqueKey = data.presignedUrl.uniqueKey
     this._userService.shortsUpload(this.url, this.selectedFile.type, this.selectedFile)
@@ -77,7 +83,7 @@ export class ShortsUploadComponent {
             console.log('Upload complete!', event.body);
             this._messageService.add({ severity: 'success', summary: 'success', detail: "shorts uploaded" })
             this.uploadProgress = 100;
-            this._userService.submitShortsDetails({ caption: this.caption, description: this.description, uniqueKey: this.uniqueKey }).subscribe({
+            this._shortsService.submitShortsDetails({ caption: this.caption, description: this.description, uniqueKey: this.uniqueKey }).subscribe({
               next: (data) => {
                 alert("success")
                 this.selectedFile = null;

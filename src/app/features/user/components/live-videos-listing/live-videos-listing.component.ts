@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserService } from '../../services/user/user.service';
 import { ILiveStreams } from 'src/app/core/interfaces/ILiveStreams';
+import { LiveStreamingService } from '../../services/live-streaming/live-streaming.service';
 interface MusicVideo {
   id: number;
   title: string;
@@ -21,9 +22,9 @@ export class LiveVideosListingComponent implements OnInit {
   selectedVideo: MusicVideo | null = null;
   videos: ILiveStreams[] = [];
 
-  constructor(private _userService: UserService) { }
+  constructor(private _liveStreamingService:LiveStreamingService) { }
   ngOnInit(): void {
-    this._userService.getStreamings().subscribe({
+    this._liveStreamingService.getStreamings().subscribe({
       next: (value) => {
         this.videos = value
       },

@@ -4,6 +4,8 @@ import { UserService } from '../../services/user/user.service';
 import { IVideoDetails } from 'src/app/core/interfaces/IVideoDetails';
 import { Store } from '@ngrx/store';
 import { IVideoCommentDto } from 'src/app/core/dtos/IVideoComment.dto';
+import { VideoService } from '../../services/video/video.service';
+import { CommentsService } from '../../services/comments/comments.service';
 
 
 
@@ -39,11 +41,16 @@ export class VideoPlayComponent implements OnInit {
   commentId:string = ''
   newLikeCommentId:string = ''
 
-  constructor(private _userService: UserService, private route: ActivatedRoute, private _store: Store) { }
+  constructor(private _userService: UserService,
+     private route: ActivatedRoute,
+      private _store: Store,
+      private _videoService:VideoService,
+      private _commentService:CommentsService
+    ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') as string
-    this._userService.getVideoDetails(this.id).subscribe((data) => {
+    this._videoService.getVideoDetails(this.id).subscribe((data) => {
       this.videoData = data.video
       this.currentVideoId = data.video._id
       this.videoSuggestions = data.suggestions
@@ -114,13 +121,13 @@ export class VideoPlayComponent implements OnInit {
       this.like = false
       const index = this.currentVideo.like.findIndex((v) => v === this.userId)
       this.currentVideo.like.splice(index, 1)
-      this._userService.likeVideo(data._id).subscribe()
+      this._videoService.likeVideo(data._id).subscribe()
     } else {
       const data = this.videoSuggestions[this.currentIndex] as IVideoDetails
       this.likeCount++
       this.like = true
       this.currentVideo.like.push(this.userId as never)
-      this._userService.likeVideo(data._id).subscribe()
+      this._videoService.likeVideo(data._id).subscribe()
     }
 
   }
@@ -158,7 +165,7 @@ export class VideoPlayComponent implements OnInit {
       videoId: this.currentVideoId,
       comment: comment,
     }
-    this._userService.commentVideo(obj).subscribe((data)=>{
+    this._commentService.commentVideo(obj).subscribe((data)=>{
       this.commentId = data.commentId
     })
   }
@@ -168,7 +175,7 @@ export class VideoPlayComponent implements OnInit {
   }
 
   likeComment(commentId:string) {
-    this._userService.likeComment(commentId).subscribe()
+    this._commentService.likeComment(commentId).subscribe()
   }   
    
 
