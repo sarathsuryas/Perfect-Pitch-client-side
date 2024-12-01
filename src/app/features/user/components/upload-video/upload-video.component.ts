@@ -89,7 +89,7 @@ export class UploadVideoComponent implements OnInit {
         const videoData = await this._presignedUrlService.generatePresignedUrlMedia(this.videoData.name, this.videoData.type) as ICustomResponse
         this.presignedUrlVideo = videoData.presignedUrl.url
         this.uniqueKeyVideo = videoData.presignedUrl.uniqueKey
-        const thumbNailData = await this._userService.generatePresignedUrlMediaThumbNail(this.thumbNailData.name, this.thumbNailData.type) as ICustomResponse
+        const thumbNailData = await this._presignedUrlService.generatePresignedUrlMediaThumbNail(this.thumbNailData.name, this.thumbNailData.type) as ICustomResponse
         this.presignedUrlThumbNail = thumbNailData.presignedUrl.url
         this.uniqueKeyThumbNail = thumbNailData.presignedUrl.uniqueKey
         const data = await this._userService.mediaUpload(this.presignedUrlVideo, this.videoData.type, this.videoData)

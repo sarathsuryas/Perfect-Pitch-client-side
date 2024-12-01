@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { PlyrComponent } from '@atom-platform/ngx-plyr';
 
 @Component({
   selector: 'app-video-player',
@@ -12,3 +11,4 @@ export class VideoPlayerComponent {
 }
   
 
+ 

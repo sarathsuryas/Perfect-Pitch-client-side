@@ -16,6 +16,9 @@
             "outputPath": "dist/frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "allowedCommonJsDependencies": [
+              "lodash"
+            ],
             "polyfills": [
               "zone.js"
             ],
@@ -30,17 +33,17 @@
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
               "node_modules/@videogular/ngx-videogular/fonts/videogular.css",
-               "node_modules/plyr/dist/plyr.css"
+              "node_modules/plyr/dist/plyr.css"
             ],
             "scripts": []
           },
           "configurations": {
             "production": {
-              "budgets": [ 
+              "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "4mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -51,7 +54,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false, 
+              "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,

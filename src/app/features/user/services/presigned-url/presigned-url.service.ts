@@ -21,5 +21,8 @@ export class PresignedUrlService {
   generatePresignedUrlMedia(fileName: string, contentType: string) {
     return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`, { fileName, contentType }).toPromise()
   }
+  generatePresignedUrlMediaThumbNail(fileName: string, contentType: string) {
+    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`, { fileName, contentType }).toPromise()
+  }
 
 }

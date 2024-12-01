@@ -33,9 +33,7 @@ export class UserService {
     return this._http.get<IUserData>(`${this.api}/get-user-data`)
   }
 
-  generatePresignedUrlMediaThumbNail(fileName: string, contentType: string) {
-    return this._http.post<ICustomResponse>(`${this.api}/generate-presigned-url`, { fileName, contentType }).toPromise()
-  }
+  
 
   profileImageUpload(fileuploadurl: string, contenttype: string, file: File): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': contenttype });

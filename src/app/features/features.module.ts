@@ -78,7 +78,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MusicGenresComponent } from './user/components/music-genres/music-genres.component';
 import { AddGenresComponent } from './admin/components/add-genres/add-genres.component';
 import { FirstLetterToUpperCasePipe } from '../core/pipes/first-letter-to-upper-case.pipe';
-import { PlyrModule } from '@atom-platform/ngx-plyr';
 import { GlobalAudioPlayerComponent } from './user/components/global-audio-player/global-audio-player.component';
 import { SongsListComponent } from './user/components/songs-list/songs-list.component';
 import { ArtistListingComponent } from './user/components/artist-listing/artist-listing.component';
@@ -237,7 +236,6 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     NgOtpInputModule, 
     MatCardModule,
     MatSnackBarModule,
-    PlyrModule,
     NgxAudioPlayerModule,
     WebcamModule, 
     MatGridListModule,
