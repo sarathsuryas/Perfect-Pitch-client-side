@@ -9,7 +9,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "prettier": "npx prettier --write ."
+    "prettier": "npx prettier --write .",
+    "generate-env": "node environment-generate.js"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +41,7 @@
     "@zegocloud/zego-uikit-prebuilt": "^2.12.0",
     "angular-paginator": "^11.0.0",
     "angular-svg-icon": "^16.1.0",
+    "dotenv": "^16.4.5",
     "flowbite": "^2.5.1",
     "howler": "^2.2.4",
     "jquery": "^3.7.1",
