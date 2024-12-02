@@ -44,7 +44,7 @@ jobs:
         run: npm install
 
       - name: Install Angular CLI Globally
-        run: npm install -g @angular/cli > /dev/null
+        run: npm install -g @angular/cli@16.2.14 > /dev/null
        
       - name: set enivoronment varibales
         run: node environment-generate.js
