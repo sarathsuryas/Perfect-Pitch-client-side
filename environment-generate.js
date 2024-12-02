@@ -1,5 +1,12 @@
 import * as fs from 'fs'
 import 'dotenv/config'
+import { writeFile, mkdir, existsSync } from 'fs';
+import { join } from 'path';
+import { promisify } from 'util';
+
+const writeFileAsync = promisify(writeFile);
+const mkdirAsync = promisify(mkdir);
+const dirPath = join('src', 'environment');
 
 function generateEnvironmentContent() {
   
@@ -17,10 +24,20 @@ function generateEnvironmentContent() {
   }
 };`
   }   
-  (function generateEnvironment() {     
-  const fileName = 'environment.prod.ts'; // you can this as hard coded name, or you can use your own unique name
+  (async function generateEnvironment() {     
+  const fileName = 'environment.prod.ts'; 
   const content = generateEnvironmentContent();
   console.log(content)
-  process.chdir(`src/environment`); // This is the directory where you created the environment file. you can use your own path, but for this I used the Angular default environment directory
-  fs.writeFile(fileName, content, (err) => { (err) ? console.log(err) : console.log('env is generated!') });
+
+  if (!existsSync(dirPath)) {
+    await mkdirAsync(dirPath, { recursive: true });
+    console.log(`Directory ${dirPath} created.`);
+  }
+
+  try {
+    await writeFileAsync(join(dirPath, fileName), content);
+    console.log('Environment file is generated!');
+  } catch (err) {
+    console.error(err);
+  }
   })(); 
