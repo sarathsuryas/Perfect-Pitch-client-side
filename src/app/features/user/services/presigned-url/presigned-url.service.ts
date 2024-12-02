@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ICustomResponse } from 'src/app/core/interfaces/ICustomResponse';
 import { IPreSignedUrls } from 'src/app/core/interfaces/IPresignedUrls';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 
 @Injectable({
   providedIn: 'root'

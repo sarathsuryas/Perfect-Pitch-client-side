@@ -4,7 +4,7 @@ import { Stripe } from '@stripe/stripe-js';
 import { MessageService } from 'primeng/api';
 import { firstValueFrom, Observable } from 'rxjs';
 import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 
 @Injectable({
   providedIn: 'root'

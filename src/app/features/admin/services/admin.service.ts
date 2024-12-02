@@ -10,7 +10,7 @@ import { IGenres } from 'src/app/core/interfaces/IGenres';
 import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
 import { ITokenData } from 'src/app/core/interfaces/ITokenData';
 import { userModel } from 'src/app/store/user/user.model';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 
 @Injectable({
   providedIn: 'root'

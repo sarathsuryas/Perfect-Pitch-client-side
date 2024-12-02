@@ -3,7 +3,7 @@ import { SocketService } from '../../services/socket/socket.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user/user.service';
 import { io,Socket } from 'socket.io-client';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ICreateLiveStreamDto } from 'src/app/core/dtos/ICreateLiveStream.dto';
 import { IGenres } from 'src/app/core/interfaces/IGenres';

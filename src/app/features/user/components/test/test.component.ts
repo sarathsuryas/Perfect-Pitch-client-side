@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

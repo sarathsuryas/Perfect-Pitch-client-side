@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ICreatePlaylistDto } from 'src/app/core/dtos/createPlaylist.dto';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 
 @Injectable({
   providedIn: 'root'

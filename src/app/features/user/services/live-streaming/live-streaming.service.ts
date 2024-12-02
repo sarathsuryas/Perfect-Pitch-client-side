@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ICreateLiveStreamDto } from 'src/app/core/dtos/ICreateLiveStream.dto';
 import { ILive } from 'src/app/core/interfaces/ILive';
 import { ILiveStreams } from 'src/app/core/interfaces/ILiveStreams';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 
 @Injectable({
   providedIn: 'root'

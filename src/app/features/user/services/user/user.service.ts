@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
 import { IUserData } from 'src/app/core/interfaces/IUserData';
 import { CookieService } from 'ngx-cookie';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 import { ITokenData } from 'src/app/core/interfaces/ITokenData';
 import { EditUserDto } from 'src/app/core/dtos/editUser.dto';
 import { IReturnEdit } from 'src/app/core/interfaces/IReturnEdit';

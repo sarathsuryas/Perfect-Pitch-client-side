@@ -8,7 +8,7 @@ import { ICommentReply } from 'src/app/core/interfaces/ICommentReply';
 import { ICommentResponse } from 'src/app/core/interfaces/ICommentResponse';
 import { IComment } from 'src/app/core/interfaces/IComments';
 import { IReplyToReply } from 'src/app/core/interfaces/IReplyToReply';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 
 @Injectable({
   providedIn: 'root'

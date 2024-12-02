@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { IVideoUploadDto } from 'src/app/core/dtos/IVideoUpload.dto';
 import { IResponseVideo } from 'src/app/core/interfaces/IResponseVideo';
 import { IVideoList } from 'src/app/core/interfaces/IVideoList';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 
 @Injectable({
   providedIn: 'root'

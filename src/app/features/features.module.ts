@@ -53,7 +53,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { GoogleSigninComponent } from './user/components/google-signin/google-signin.component';
 import { MatDialogModule } from '@angular/material/dialog';

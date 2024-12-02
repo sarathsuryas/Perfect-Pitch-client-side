@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environment/environment.prod';
 import { IMemberShip } from 'src/app/core/interfaces/IMemberShip';
 import { Store } from '@ngrx/store';
 import { setMembershipId } from 'src/app/store/memberShip/membership.action';
