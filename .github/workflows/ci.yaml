@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env: 
+       PRODUCTION = ${{ secrets.PRODUCTION }}
+       API_URL = ${{ secrets.API_URL }}
+       FEATURE_FLAG = ${{ secrets.FEATURE_FLAG }}
+       CLIENT_ID = ${{ secrets.CLIENT_ID }}
+       CLIENT_SECRET = ${{ secrets.CLIENT_SECRET }}
+       WHISPER_API_KEY = ${{ secrets.WHISPER_API_KEY }}
+       PUBLIC_KEY = ${{ secrets.PUBLIC_KEY }}
+       PLAN1 = ${{ secrets.PLAN1 }}
+       PLAN2 = ${{ secrets.PLAN2 }}
+    defaults:
+      run:
+        working-directory: ./
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Angular CLI Globally
+        run: npm install -g @angular/cli > /dev/null
+       
+      - name: set enivoronment varibales
+        run: node environment-generate.js
+
+      - name: Build Angular Production
+        run: ng build --configuration=production
+
+     
+      - name: Generate Test Coverage
+        run: npm run test:ci:cov
+
+      - name: Deploy to EC2 Instance
+        uses: easingthemes/ssh-deploy@v2.1.5
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SOURCE: "dist/angular-demo/"
+          REMOTE_HOST: "ec2-remote-host"
+          REMOTE_USER: "ubuntu"
+          TARGET: "/var/www/html/frontend/"
