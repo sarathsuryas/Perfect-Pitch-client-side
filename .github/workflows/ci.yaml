@@ -10,15 +10,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env: 
-       PRODUCTION = ${{ secrets.PRODUCTION }}
-       API_URL = ${{ secrets.API_URL }}
-       FEATURE_FLAG = ${{ secrets.FEATURE_FLAG }}
-       CLIENT_ID = ${{ secrets.CLIENT_ID }}
-       CLIENT_SECRET = ${{ secrets.CLIENT_SECRET }}
-       WHISPER_API_KEY = ${{ secrets.WHISPER_API_KEY }}
-       PUBLIC_KEY = ${{ secrets.PUBLIC_KEY }}
-       PLAN1 = ${{ secrets.PLAN1 }}
-       PLAN2 = ${{ secrets.PLAN2 }}
+      PRODUCTION: ${{ secrets.PRODUCTION }}
+      API_URL: ${{ secrets.API_URL }}
+      FEATURE_FLAG: ${{ secrets.FEATURE_FLAG }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      WHISPER_API_KEY: ${{ secrets.WHISPER_API_KEY }}
+      PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+      PLAN1: ${{ secrets.PLAN1 }}
+      PLAN2: ${{ secrets.PLAN2 }}
     defaults:
       run:
         working-directory: ./
@@ -44,15 +44,14 @@ jobs:
         run: npm install
 
       - name: Install Angular CLI Globally
-        run: npm install -g @angular/cli > /dev/null
-       
-      - name: set enivoronment varibales
+        run: npm install -g @angular/cli@16.2.14 > /dev/null
+        
+      - name: Set Environment Variables
         run: node environment-generate.js
 
       - name: Build Angular Production
         run: ng build --configuration=production
 
-     
       - name: Generate Test Coverage
         run: npm run test:ci:cov
 
