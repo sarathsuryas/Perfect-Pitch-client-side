@@ -7,8 +7,8 @@
       <mat-error *ngIf="playlistForm.get('title')?.hasError('required')">
         Title is required
       </mat-error>
-      <mat-error *ngIf="playlistForm.get('title')?.hasError('maxlength')">
-        Title cannot exceed 150 characters
+      <mat-error *ngIf="playlistForm.get('title')?.hasError('pattern')">
+        title is not valid
       </mat-error>
     </mat-form-field>
 

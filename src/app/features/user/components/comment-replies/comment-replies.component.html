@@ -1,7 +1,7 @@
 <div  *ngIf="reply" class="mt-9 space-y-4">
   <!-- reply of comment list -->
   <div  class="flex space-x-4">
-    <img [src]="reply.userId.profileImage" alt="userProfileImage" class="w-8 h-8 rounded-full">
+    <img [src]="reply.userId.profileImage || 'https://www.ihna.edu.au/blog/wp-content/uploads/2022/10/user-dummy.png'" alt="userProfileImage" class="w-8 h-8 rounded-full">
     <div>
       <div class="flex items-center space-x-2">
         <!-- reply author -->
@@ -23,7 +23,7 @@
         </button>
         <button (click)="toggleReplyToReply()" >reply</button>
         <div *ngIf="showReplyToReplyInput" class="mt-4 flex items-start space-x-4">
-          <img [src]="userProfileImage" alt="Current user" class="w-8 h-8 rounded-full">
+          <img [src]="userProfileImage ||'https://www.ihna.edu.au/blog/wp-content/uploads/2022/10/user-dummy.png'" alt="Current user" class="w-8 h-8 rounded-full">
           <div class="flex-grow">
             <input placeholder="Add a public reply..." [(ngModel)]="replyToReply"
               class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black">
@@ -34,7 +34,9 @@
                 Cancel
               </button>
               <!-- add reply -->
-              <button (click)="addReplyToReply()" class="px-4 py-2 bg-blue-500 text-white rounded-full disabled:opacity-50">
+              <button 
+              [disabled]="!replyToReply.trim()" 
+              (click)="addReplyToReply()" class="px-4 py-2 bg-blue-500 text-white rounded-full disabled:opacity-50">
                 Reply
               </button>
             </div>

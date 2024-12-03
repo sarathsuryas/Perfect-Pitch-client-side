@@ -11,6 +11,7 @@ import { userModel } from 'src/app/store/user/user.model';
 import { selectOtpVerificationFail, selectUserData, } from 'src/app/store/user/user.selector';
 import { UserState } from 'src/app/store/user/user.state';
 import { UserAuthService } from '../services/user-auth/user-auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-otp-page',
@@ -24,12 +25,12 @@ export class OtpPageComponent {
   color:string = 'red'
   TimerColor:string = 'silver'
   otp = ''
-
+ obs$!:Observable<string>
   constructor(private readonly _fb: FormBuilder,
     private _store: Store<UserState>, private _router: Router,
     private _cookieService: CookieService,
-    private readonly _messageService: MessageService,
-    private readonly _userAuthService:UserAuthService
+    private  _messageService: MessageService,
+    private  _userAuthService:UserAuthService,
   ) {
     _store.select(selectUserData).subscribe((data) => {
       if (!data) {
@@ -45,6 +46,7 @@ export class OtpPageComponent {
   }
   ngOnInit(): void {
     this.config = { leftTime: this.timeData, demand: true };
+    
   }
 
   start(_event:Event) {
@@ -56,15 +58,16 @@ export class OtpPageComponent {
     if (!userData) {
      return this._messageService.add({ severity: 'error', summary: 'Time Out', detail: "Time Out" })
     }
-    this._userAuthService.resendOtp(userData).subscribe({
+   this._userAuthService.resendOtp(userData).subscribe({
+    next:(data)=> {
       
-      next:(data)=> {
-        this._cookieService.put('userData',data)
-      },
-      error:(err)=>{
-        console.error(err)
-      }
-    })
+      this._cookieService.put('userData',data)
+    },
+    error:(err)=>{
+      console.error(err)
+    }
+  })
+    
     setTimeout(()=>{
        this.disable = false
        this.color = 'red' 
@@ -88,6 +91,7 @@ export class OtpPageComponent {
     if (!userData) {
       this._messageService.add({ severity: 'error', summary: 'Time Out', detail: "Time Out" })
     }
+    this._cookieService.remove('userData')
     this._store.dispatch(verifyOtp({ userData, otp }))
   }
 }

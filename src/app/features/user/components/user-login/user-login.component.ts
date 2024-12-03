@@ -25,7 +25,7 @@ declare global {
   styleUrls: ['./user-login.component.css']
 })
 export class UserLoginComponent implements OnInit {
-  
+
   loginForm!: FormGroup
   submitted = false;
   isLoggedin?: boolean = true
@@ -34,43 +34,47 @@ export class UserLoginComponent implements OnInit {
     private readonly _fb: FormBuilder,
     private readonly _store: Store<UserState>,
     private readonly _messageService: MessageService,
-    private readonly _router:Router,
-  ) { 
-    console.log(localStorage.getItem('token'),'token from the login page')
-   }
+    private readonly _router: Router,
+    private _cookieService: CookieService,
+  ) {
+    console.log(localStorage.getItem('token'), 'token from the login page')
+  }
   ngOnInit(): void {
     this.loginForm = this._fb.group({
-      email: ['',Validators.compose([Validators.required])],
-      password: ['',Validators.compose([Validators.required])]
+      email: ['', Validators.compose([Validators.required])],
+      password: ['', Validators.compose([Validators.required])]
     })
-  
-    this._store.select(selectIsAuthUser).subscribe(isAuthenticated=>{
-      if(isAuthenticated) {
+    const userData = this._cookieService.get('userData')
+    if (userData) {
+      this._router.navigate(['otp-verify'])
+    }
+    this._store.select(selectIsAuthUser).subscribe(isAuthenticated => {
+      if (isAuthenticated) {
         this.isLoggedin = false
-         this._router.navigate(['home/landing'])
+        this._router.navigate(['home/landing'])
       }
     })
-    
+
 
   }
 
- 
+
   submit() {
     this.submitted = true
-    if(this.loginForm.valid) {
-      const {email,password} = this.loginForm.value
-      this._store.dispatch(loginUser({email,password}))
-      this._store.select(selectLoginFail).subscribe((data)=>{
-        if(data) {
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value
+      this._store.dispatch(loginUser({ email, password }))
+      this._store.select(selectLoginFail).subscribe((data) => {
+        if (data) {
           this._messageService.add({ severity: 'error', summary: 'Error', detail: data })
         }
       })
     }
   }
 
-  
 
-  
- 
+
+
+
 
 }

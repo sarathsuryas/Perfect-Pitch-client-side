@@ -19,7 +19,7 @@ export class CreatePlaylistDialogComponent {
     private fb: FormBuilder
   ) {
     this.playlistForm = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(150)]],
+      title: ['', [Validators.required,Validators.pattern(/^(?!\s*$).+/)]],
       visibility: ['private', Validators.required]
     });
   }

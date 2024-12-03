@@ -6,7 +6,7 @@
     
     <!-- Add new comment -->
     <div class="flex items-start space-x-4 mb-8">
-      <img  src="{{userProfileImage}}" alt="Current user" class="w-10 h-10 rounded-full">
+      <img  [src]="userProfileImage || 'https://www.ihna.edu.au/blog/wp-content/uploads/2022/10/user-dummy.png'" alt="Current user" class="w-10 h-10 rounded-full">
       <div class="flex-grow">
         <input 
           [(ngModel)]="newCommentText" 

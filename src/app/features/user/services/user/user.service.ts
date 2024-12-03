@@ -123,7 +123,9 @@ export class UserService {
     return this._http.request(req)
   }
 
- 
+   resendOtp(userData: string): Observable<string> {
+    return this._http.post<string>(`http://localhost:5000/user-auth/resend-otp`, { userData })
+  }
 
   getArtists(page=1,itemsPerPage=8,query='') {
     return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists?artist=${query}&page=${page}&perPage=${itemsPerPage}`).pipe(delay(500))

@@ -59,7 +59,7 @@ playlists:IUserPlaylists[] = []
       next:(value)=>{
        const obj:ICreatePlaylistDto = {
          songId: this.data.songId,
-         title: value.title,
+         title: value.title.trim(),
          visibility: value.visibility,
          thumbNailLink: this.data.thumbNailLink
        } 
