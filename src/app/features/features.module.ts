@@ -112,9 +112,10 @@ import { NumberValidatorDirective } from '../shared/directives/number/number-val
 import { PasswordValidatorDirective } from '../shared/directives/password/password-validator.directive';
 import { NgOtpInputModule } from  'ng-otp-input';
 import { CountdownModule } from 'ngx-countdown';
-import { OtpComponent } from './user/components/otp/otp.component';
 import { LiveChatComponent } from './user/components/live-chat/live-chat.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { OtpPageComponent } from './user/otp-page/otp-page.component';
 
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
 
@@ -199,8 +200,8 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     AlphabetValidatorDirective,
     NumberValidatorDirective,
     PasswordValidatorDirective,
-    OtpComponent,
     LiveChatComponent,
+    OtpPageComponent,
   ],  
   imports: [
     CommonModule, 
@@ -242,8 +243,9 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     AngularSvgIconModule,
     LucideAngularModule.pick({ Home, Search, Library, PlusCircle, Heart, Mic2, PlayCircle }),
     SocketIoModule.forRoot(config),
-    MatMenuModule
-  ],
+    MatMenuModule,
+    InfiniteScrollModule
+  ],        
   providers:[ 
     {
       provide: 'SocialAuthServiceConfig',

@@ -35,7 +35,6 @@ export class UserLoginComponent implements OnInit {
     private readonly _store: Store<UserState>,
     private readonly _messageService: MessageService,
     private readonly _router:Router,
-    private readonly _cookieService:CookieService
   ) { 
     console.log(localStorage.getItem('token'),'token from the login page')
    }

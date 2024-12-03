@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, map, Observable } from 'rxjs';
+import { delay, forkJoin, map, Observable } from 'rxjs';
 import { userModel } from '../../../../store/user/user.model';
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
@@ -123,10 +123,11 @@ export class UserService {
     return this._http.request(req)
   }
 
-  getArtists(data: { query?: string, nextPage?: number } = { query: '', nextPage: 1 }): Observable<{ artists: IUserData[], userId: string }> {
-    return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists?artist=${data.query}&page=${data.nextPage}&perPage=8`)
-  }
+ 
 
+  getArtists(page=1,itemsPerPage=8,query='') {
+    return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists?artist=${query}&page=${page}&perPage=${itemsPerPage}`).pipe(delay(500))
+  }
   getArtistMedias() {
     return this._http.get(`${this.api}/get-medias`)
   }

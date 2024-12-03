@@ -1,4 +1,10 @@
-<div class="container mx-auto px-4 py-8 bg-gray-900">
+<div
+infiniteScroll
+[infiniteScrollDistance]="3"
+[infiniteScrollThrottle]="500"
+(scrolled)="onScroll()"
+[scrollWindow]="false"
+class="container mx-auto px-4 py-8 bg-gray-900 overflow-y-auto max-h-full">
   <!-- Page Header -->
   <h1 class="text-3xl font-bold mb-8 text-gray-200 text-center md:text-left">
     Popular Artists
@@ -18,12 +24,5 @@
   </div>
 
   <!-- Load More Button -->
-  <div class="flex justify-center mt-8">
-    <button
-      (click)="loadMore()"
-      class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
-    >
-      Load More
-    </button>
-  </div>
+  
 </div>

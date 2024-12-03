@@ -37,7 +37,11 @@ export class UserRegisterComponent {
 
 
   }
+  isPasswordVisible = false;
 
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
 
 
   onSubmit() {

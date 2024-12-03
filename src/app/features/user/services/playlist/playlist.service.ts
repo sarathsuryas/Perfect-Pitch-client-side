@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable,delay } from 'rxjs';
 import { ICreatePlaylistDto } from 'src/app/core/dtos/createPlaylist.dto';
 import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { environment } from 'src/environment/environment.prod';
@@ -19,12 +19,14 @@ export class PlaylistService {
     return this._http.get<IUserPlaylists[]>(`${this.api}/get-user-playlists?playlist=${data.query}&page=${data.nextPage}&perPage=6`)
   }
 
-  getAllPlaylistUser(): Observable<IUserPlaylists[]> {
-    return this._http.get<IUserPlaylists[]>(`${this.api}/get-all-playlists-user`)
+  getAllPlaylistUser(page=1,itemsPerPage=8,query=''): Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/get-all-playlists-user?playlist=${query}&page=${page}&perPage=${itemsPerPage}`)
   }  
 
-  getPlaylists(data: { query?: string, nextPage?: number } = { query: '', nextPage: 1 }): Observable<IUserPlaylists[]> {
-    return this._http.get<IUserPlaylists[]>(`${this.api}/get-playlists?playlist=${data.query}&page=${data.nextPage}&perPage=8`)
+
+
+  getPlaylists(page=1,itemsPerPage=8,query=''): Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/get-playlists?playlist=${query}&page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
   }
 
   addToPlaylsit(songId: string, playlistId: string): Observable<{ success: boolean, exist: boolean }> {

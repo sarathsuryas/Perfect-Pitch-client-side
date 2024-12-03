@@ -22,16 +22,22 @@ export class ArtistListingComponent {
 search:boolean = false
 artistData:IUserData[] = []  
 currentUserId:string = ''
+isLoading=false;
+currentPage=1;
+itemsPerPage=8;
+toggleLoading = ()=>this.isLoading=!this.isLoading;
+
   constructor(private _userService:UserService,private _store:Store) { }
   
   ngOnInit(): void {
+    this.loadData() 
     this._store.select(selectSearchQuery).subscribe({
       next:(value)=>{
         if(value){
           this.search = true
         }
         if(this.search) {
-          this._userService.getArtists({query:value}).subscribe({
+          this._userService.getArtists().subscribe({
             next:(value)=>{
               this.artistData = value.artists
              this.currentUserId = value.userId
@@ -46,26 +52,26 @@ currentUserId:string = ''
       }
     })  
 
-  if(!this.search) {
-    this._userService.getArtists().subscribe({
-      next:(value)=>{
-        this.artistData = value.artists
-       this.currentUserId = value.userId
-      },
-      error:(err)=>{
-        console.error(err)
-      }
+  }
+  
+  loadData() {
+    this._userService.getArtists().subscribe((data) => {
+       this.artistData = data.artists
     })
   }
-  }
-  loadMore() {
-    const nextPage = Math.ceil(this.artistData.length / 10) + 1; 
-    this._userService.getArtists({nextPage}).subscribe((data) => {
-      for (const value of data.artists) {
-        this.artistData.push(value)
-      }
+
+  appendData(){
+    this.toggleLoading();
+    this._userService.getArtists(this.currentPage,this.itemsPerPage).subscribe({
+     next:response=>this.artistData = [...this.artistData,...response.artists],
+     error:err=>console.log(err),
+     complete:()=>this.toggleLoading()
     })
-  }
+  }  
+  onScroll () {
+    this.currentPage++;
+    this.appendData();
+   }
 
 
 }

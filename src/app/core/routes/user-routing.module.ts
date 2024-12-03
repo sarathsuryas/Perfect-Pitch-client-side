@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserHomeComponent } from 'src/app/features/user/components/user-home/user-home.component';
 import { UserLoginComponent } from 'src/app/features/user/components/user-login/user-login.component';
 import { UserRegisterComponent } from 'src/app/features/user/components/user-register/user-register.component';
-import { OtpComponent } from 'src/app/features/user/components/otp/otp.component';
 import { AlbumListComponent } from 'src/app/features/user/components/album-list/album-list.component';
 import { AlbumSongsListComponent } from 'src/app/features/user/components/album-songs-list/album-songs-list.component';
 import { ArtistListingComponent } from 'src/app/features/user/components/artist-listing/artist-listing.component';
@@ -36,12 +35,13 @@ import { memberShipGuard } from '../user/guards/member-ship.guard';
 import { UserAuthGuard } from '../user/guards/user-auth.guard';
 import { UploadVideoComponent } from 'src/app/features/user/components/upload-video/upload-video.component';
 import { PagenotfoundComponent } from 'src/app/shared/components/pagenotfound/pagenotfound.component';
+import { OtpPageComponent } from 'src/app/features/user/otp-page/otp-page.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
   {path:'login',component:UserLoginComponent},
   {path:'register',component:UserRegisterComponent},
-  {path:'otp-verify',component:OtpComponent},
+  {path:'otp-verify',component:OtpPageComponent},
   {path:'test-nav',component:TestnavComponent},
   {path:'user-blocked',component:UserBlockedComponent},
   {path:'home',component:UserMainComponent, canActivate:[UserAuthGuard],

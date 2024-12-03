@@ -10,14 +10,14 @@ import { verifyOtp } from 'src/app/store/user/user.action';
 import { userModel } from 'src/app/store/user/user.model';
 import { selectOtpVerificationFail, selectUserData, } from 'src/app/store/user/user.selector';
 import { UserState } from 'src/app/store/user/user.state';
-import { UserAuthService } from '../../services/user-auth/user-auth.service';
+import { UserAuthService } from '../services/user-auth/user-auth.service';
 
 @Component({
-  selector: 'app-otp',
-  templateUrl:'./otp.component.html',
-  styleUrls: ['./otp.component.css']
+  selector: 'app-otp-page',
+  templateUrl: './otp-page.component.html',
+  styleUrls: ['./otp-page.component.css']
 })
-export class OtpComponent implements OnInit {
+export class OtpPageComponent {
   config!: CountdownConfig;
   timeData:number = 60
   disable:boolean = false
@@ -56,8 +56,14 @@ export class OtpComponent implements OnInit {
     if (!userData) {
      return this._messageService.add({ severity: 'error', summary: 'Time Out', detail: "Time Out" })
     }
-    this._userAuthService.resendOtp(userData).subscribe((data)=>{
-      this._cookieService.put('userData',data)
+    this._userAuthService.resendOtp(userData).subscribe({
+      
+      next:(data)=> {
+        this._cookieService.put('userData',data)
+      },
+      error:(err)=>{
+        console.error(err)
+      }
     })
     setTimeout(()=>{
        this.disable = false
@@ -84,6 +90,4 @@ export class OtpComponent implements OnInit {
     }
     this._store.dispatch(verifyOtp({ userData, otp }))
   }
-
 }
-

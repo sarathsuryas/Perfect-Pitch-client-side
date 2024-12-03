@@ -13,77 +13,95 @@ import { PlaylistService } from '../../services/playlist/playlist.service';
 })
 export class MusicPlaylistComponent implements OnInit {
   playlists: IUserPlaylists[] = []
-  search:boolean = false
+  search: boolean = false
   filteredPlaylists: any[] = [];
   showPublic: boolean = true;
   @ViewChild('playlistHeader', { static: false }) headerElement!: ElementRef;
+  isLoading = false;
+  currentPage = 1;
+  itemsPerPage = 8;
+  toggleLoading = () => this.isLoading = !this.isLoading;
+  userCurrentPage = 1
 
-  constructor(private _playlistService:PlaylistService,private _store:Store) { }
+
+  constructor(private _playlistService: PlaylistService, private _store: Store) { }
 
   ngOnInit(): void {
-   
+    this.loadMore();
     this._store.select(selectSearchQuery).subscribe({
-      next:(value)=>{
-        if(value){
+      next: (value) => {
+        if (value) {
           this.search = true
         }
-        if(this.search) {
-          this._playlistService.getPlaylists({query:value}).subscribe((data)=>{
+        if (this.search) {
+          this._playlistService.getPlaylists().subscribe((data) => {
             this.playlists = data
           })
         }
       }
-    })  
-    if(!this.search) {
-      this._playlistService.getPlaylists().subscribe({
-        next: (data) => {
-           this.playlists = data
-        },
-        error: (err) => {
-          console.error(err)
-        }
-      })
-    }
-  }
-
-  loadMore() {
-    const nextPage = Math.ceil(this.playlists.length / 10) + 1; 
-    this._playlistService.getPlaylists({nextPage}).subscribe((data) => {
-      for (const value of data) {
-        this.playlists.push(value)
-      }
     })
+   
   }
 
 
   toggleFilter() {
     this.showPublic = !this.showPublic;
-    if(!this.showPublic) {
+    if (!this.showPublic) {
       this.headerElement.nativeElement.textContent = "Your Playlists"
-      this._playlistService.getUserPlaylists().subscribe({
-        next: (data) => {
-           this.playlists = data
-        },
-        error: (err) => {
-          console.error(err)
-        }
-      })
+      this.userCurrentPage = 1
+       this.loadPrivatePlaylist()
     } else {
-       this.headerElement.nativeElement.textContent  = "Playlists"
-      this._playlistService.getPlaylists().subscribe({
-        next: (data) => {
-           this.playlists = data
-        },
-        error: (err) => {
-          console.error(err)
-        }
-      })
+      this.headerElement.nativeElement.textContent = "Playlists"
+      this.currentPage = 1
+       this.loadMore()
     }
-    
+
   }
 
-  
-    
+  loadMore() {
+    this.toggleLoading();
+    this._playlistService.getPlaylists(this.currentPage, this.itemsPerPage).subscribe({
+      next: data => this.playlists = data
+    })
+  }
+
+  loadPrivatePlaylist() {
+    this.toggleLoading();
+    this._playlistService.getAllPlaylistUser(this.userCurrentPage, this.itemsPerPage).subscribe({
+      next: data => this.playlists = data
+    })
+  }
+
+
+  appendData() {
+    this.toggleLoading();
+    this._playlistService.getPlaylists(this.currentPage, this.itemsPerPage).subscribe({
+      next: response => this.playlists = [...this.playlists, ...response],
+      error: err => console.log(err),
+      complete: () => this.toggleLoading()
+    })
+  }
+
+  appendPrivatePlaylist() {
+    this.toggleLoading();
+    this._playlistService.getAllPlaylistUser(this.userCurrentPage, this.itemsPerPage).subscribe({
+      next: response => this.playlists = [...this.playlists, ...response],
+      error: err => console.log(err),
+      complete: () => this.toggleLoading()
+    })
+  }
+
+  onScroll() {
+    if (this.showPublic) {
+      this.currentPage++;
+      this.appendData();
+    } else if (!this.showPublic) {
+      this.userCurrentPage++
+      this.appendPrivatePlaylist()
+    }
+  }
+
+
 
 
 }

@@ -27,6 +27,6 @@ export class S3Service {
     })
     return forkJoin(multipleRequest)
   }
-
-
-}
+                  
+}                  
+  

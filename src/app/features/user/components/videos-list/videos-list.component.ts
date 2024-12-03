@@ -11,15 +11,20 @@ import { VideoService } from '../../services/video/video.service';
   styleUrls: ['./videos-list.component.css']
 })
 export class VideosListComponent implements OnInit {
+  isLoading=false;
+   currentPage=1;
+   itemsPerPage=6;
+   toggleLoading = ()=>this.isLoading=!this.isLoading;
 
   constructor(
-    private readonly _userService: UserService,
     private _store: Store,
     private _videoService:VideoService
   ) { }
   videos: IVideoList[] = []
   search: boolean = false
   ngOnInit(): void {
+    this.loadMore();
+
     this._store.select(selectSearchQuery).subscribe({
       next: (value) => {
         if (value) {
@@ -27,7 +32,7 @@ export class VideosListComponent implements OnInit {
         }
         if (this.search) {
 
-          this._videoService.getVideoList({ query: value }).subscribe({
+          this._videoService.getVideoList().subscribe({
             next: (value) => {
               this.videos = value
             },
@@ -45,13 +50,35 @@ export class VideosListComponent implements OnInit {
       })
     }
 
-  }
+  }      
   loadMore() {
-    const nextPage = Math.ceil(this.videos.length / 10) + 1;
-    this._videoService.getVideoList({ nextPage }).subscribe((data) => {
-      for (const value of data) {
-        this.videos.push(value)
-      }
+    this.toggleLoading();
+    this._videoService.getVideoList(this.currentPage,this.itemsPerPage).subscribe({
+      next:data=> this.videos = data
     })
   }
+
+
+  appendData(){
+    this.toggleLoading();
+    this._videoService.getVideoList(this.currentPage,this.itemsPerPage).subscribe({
+     next:response=>this.videos = [...this.videos,...response],
+     error:err=>console.log(err),
+     complete:()=>this.toggleLoading()
+    })
+  }  
+  onScroll () {
+    this.currentPage++;
+    this.appendData();
+   }
+
+  
+
 }
+
+
+
+
+// for (const value of data) {
+//   this.videos.push(value)
+// }

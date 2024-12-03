@@ -6,7 +6,6 @@ import { AdminAuthGuard } from './core/admin/guards/admin-auth.guard';
 import { UserManagementComponent } from './features/admin/components/user-management/user-management.component';
 import { UserLoginComponent } from './features/user/components/user-login/user-login.component';
 import { UserRegisterComponent } from './features/user/components/user-register/user-register.component';
-import { OtpComponent } from './features/user/components/otp/otp.component';
 import { UserHomeComponent } from './features/user/components/user-home/user-home.component';
 import { UserMainComponent } from './features/user/components/user-main/user-main.component';
 import { UserAuthGuard } from './core/user/guards/user-auth.guard';
@@ -51,7 +50,6 @@ const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
   {path:'login',component:UserLoginComponent},
   {path:'register',component:UserRegisterComponent},
-  {path:'otp-verify',component:OtpComponent},
   {path:'test-nav',component:TestnavComponent},
   {path:'user-blocked',component:UserBlockedComponent},
   {path:'home',component:UserMainComponent, canActivate:[UserAuthGuard],

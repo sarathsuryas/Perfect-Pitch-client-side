@@ -14,15 +14,22 @@ export class AlbumListComponent implements OnInit {
   albumData: IAlbumData[] = []
   search: boolean = false
   nextPage:number = 0
+  isLoading=false;
+   currentPage=1;
+   itemsPerPage=8;
+   toggleLoading = ()=>this.isLoading=!this.isLoading;
+
   constructor(private _albumService: AlbumService, private _store: Store) { }
   ngOnInit(): void {
+    this.loadMore();
+
     this._store.select(selectSearchQuery).subscribe({
       next: (value) => {
         if (value) {
           this.search = true
         }
         if (this.search) {
-          this._albumService.getAlbums({query:value}).subscribe((data) => {
+          this._albumService.getAlbums().subscribe((data) => {
             this.albumData = data
           })
         }
@@ -37,13 +44,29 @@ export class AlbumListComponent implements OnInit {
     }
   }
 
+
+
   loadMore() {
-    const nextPage = Math.ceil(this.albumData.length / 10) + 1; 
-    this._albumService.getAlbums({nextPage}).subscribe((data) => {
-      for (const value of data) {
-        this.albumData.push(value)
-      }
+    this.toggleLoading();
+    this._albumService.getAlbums(this.currentPage,this.itemsPerPage).subscribe({
+      next:data=> this.albumData = data
     })
   }
+
+
+  appendData(){
+    this.toggleLoading();
+    this._albumService.getAlbums(this.currentPage,this.itemsPerPage).subscribe({
+     next:response=>this.albumData = [...this.albumData,...response],
+     error:err=>console.log(err),
+     complete:()=>this.toggleLoading()
+    })
+  }  
+  onScroll () {
+    this.currentPage++;
+    this.appendData();
+   }
+
+  
 
 }
