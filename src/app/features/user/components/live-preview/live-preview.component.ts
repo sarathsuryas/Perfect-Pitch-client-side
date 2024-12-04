@@ -102,7 +102,7 @@ export class LivePreviewComponent {
   }
   createPeer() {
     const peer = new RTCPeerConnection({
-     iceServers:turnConfig.ice_servers
+     iceServers:turnConfig.iceServers
     });
     peer.onnegotiationneeded = () => this.handleNegotiationNeededEvent(peer);
 

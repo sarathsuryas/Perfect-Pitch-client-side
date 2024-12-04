@@ -103,7 +103,7 @@ export class LiveStreamingComponent implements OnDestroy {
 
   createPeer() {
     const peer = new RTCPeerConnection({
-      iceServers:turnConfig.ice_servers
+      iceServers:turnConfig.iceServers
     })
     peer.ontrack = this.handleTrackEvent
     peer.onnegotiationneeded = () => this.handleNegotiationNeededEvent(peer);
