@@ -17,10 +17,12 @@ export class AlbumService {
     const files = JSON.stringify(data)
     return this._http.post<{ uuid: string }>(`${this.api}/submit-album-details`, { files })
   }
+  searchAlbums(query:string) {
+    return this._http.get<IAlbumData[]>(`${this.api}/search-albums?album=${query}`) 
+ }
 
-
-  getAlbums(page=1,itemsPerPage=8,query='') {
-    return this._http.get<IAlbumData[]>(`${this.api}/get-albums?album=${query}&page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
+  getAlbums(page=1,itemsPerPage=8) {
+    return this._http.get<IAlbumData[]>(`${this.api}/get-albums?page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
  }
  
   

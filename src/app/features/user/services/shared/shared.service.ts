@@ -12,13 +12,19 @@ export class SharedService {
   private albumSong = new Subject<{ albumId?: string, songId: string, artistName?: string, album: boolean, isGenre: boolean }>()
   private playlistSong = new Subject<{ playlistId?: string, songId: string, artistName?: string, songs: string[], album: boolean ,isGenre:boolean }>()
   private genreSong = new Subject<{ genreId?: string, songId: string, album: boolean, genre: boolean }>()
+  private searchAlbum = new Subject<string>() 
+  private searchVideo = new Subject<string>() 
+  private searchPlaylist = new Subject<string>() 
+  private searchArtist = new Subject<string>() 
 
   data$ = this.playerIsActive.asObservable()
   albumSong$ = this.albumSong.asObservable()
   playlistSong$ = this.playlistSong.asObservable()
   genreSong$ = this.genreSong.asObservable()
-
- 
+  searchArtist$ = this.searchArtist.asObservable()
+  searchAlbum$ = this.searchAlbum.asObservable()
+  searchVideo$ = this.searchVideo.asObservable()
+  searchPlaylist$ = this.searchPlaylist.asObservable()
   
   changePlayerState(status: boolean) {
     this.playerIsActive.next(status)
@@ -36,5 +42,17 @@ export class SharedService {
   playGenreSong(data: { genreId?: string, songId: string, album: boolean, genre: boolean }) {
     this.genreSong.next(data)
   }
+searchAl(query:string) {
+  this.searchAlbum.next(query)
+}
+searchV(query:string) {
+ this.searchVideo.next(query)
+}
+searchP(query:string) {
+this.searchPlaylist.next(query)
+}
+searchAr(query:string) {
+  this.searchArtist.next(query)
+}
 
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
   templateUrl: './otp-page.component.html',
   styleUrls: ['./otp-page.component.css']
 })
-export class OtpPageComponent {
+export class OtpPageComponent implements OnDestroy{
   config!: CountdownConfig;
   timeData:number = 60
   disable:boolean = false
@@ -44,6 +44,7 @@ export class OtpPageComponent {
 
 
   }
+  
   ngOnInit(): void {
     this.config = { leftTime: this.timeData, demand: true };
     
@@ -94,4 +95,8 @@ export class OtpPageComponent {
     this._cookieService.remove('userData')
     this._store.dispatch(verifyOtp({ userData, otp }))
   }
+  ngOnDestroy(): void {
+   
+  }
+
 }

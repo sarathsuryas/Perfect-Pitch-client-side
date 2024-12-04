@@ -1,5 +1,5 @@
 <div  class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
-  <img (click)="artistMedias()" [src]="artist.profileImage" [alt]="artist.fullName" class="w-full h-64 object-cover">
+  <img (click)="artistMedias()" [src]="artist.profileImage || 'https://www.ihna.edu.au/blog/wp-content/uploads/2022/10/user-dummy.png'" [alt]="artist.fullName" class="w-full h-64 object-cover">
   <div class="p-4">
     <h2 class="text-xl font-semibold mb-2">{{ artist.fullName}}</h2>
     <div class="flex justify-between items-center">

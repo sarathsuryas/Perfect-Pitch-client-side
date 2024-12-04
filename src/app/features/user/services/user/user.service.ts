@@ -130,6 +130,10 @@ export class UserService {
   getArtists(page=1,itemsPerPage=8,query='') {
     return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/get-artists?artist=${query}&page=${page}&perPage=${itemsPerPage}`).pipe(delay(500))
   }
+  searchArtists(query:string) {
+    return this._http.get<{ artists: IUserData[], userId: string }>(`${this.api}/search-artists?artist=${query}`)
+  }
+
   getArtistMedias() {
     return this._http.get(`${this.api}/get-medias`)
   }

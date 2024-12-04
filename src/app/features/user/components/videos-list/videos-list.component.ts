@@ -4,6 +4,7 @@ import { IVideoList } from 'src/app/core/interfaces/IVideoList';
 import { selectSearchQuery } from 'src/app/store/search/search.selector';
 import { Store } from '@ngrx/store';
 import { VideoService } from '../../services/video/video.service';
+import { SharedService } from '../../services/shared/shared.service';
 
 @Component({
   selector: 'app-videos-list',
@@ -15,24 +16,26 @@ export class VideosListComponent implements OnInit {
    currentPage=1;
    itemsPerPage=6;
    toggleLoading = ()=>this.isLoading=!this.isLoading;
-
+   query:string =''
   constructor(
     private _store: Store,
-    private _videoService:VideoService
+    private _videoService:VideoService,
+    private _sharedService:SharedService
   ) { }
   videos: IVideoList[] = []
   search: boolean = false
   ngOnInit(): void {
     this.loadMore();
 
-    this._store.select(selectSearchQuery).subscribe({
+    this._sharedService.searchVideo$.subscribe({
       next: (value) => {
-        if (value) {
+        if (value) { 
           this.search = true
         }
         if (this.search) {
+          this.query = value
 
-          this._videoService.getVideoList().subscribe({
+          this._videoService.searchVideo(this.query).subscribe({
             next: (value) => {
               this.videos = value
             },
@@ -42,13 +45,15 @@ export class VideosListComponent implements OnInit {
           })
 
         }
+        if (this.search && this.query==='') {
+          this.search = false
+          this.currentPage=1;
+          this.loadMore();
+        }
+
       }
     })
-    if (!this.search) {
-      this._videoService.getVideoList().subscribe((data) => {
-        this.videos = data
-      })
-    }
+   
 
   }      
   loadMore() {

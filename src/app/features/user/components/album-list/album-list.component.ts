@@ -4,6 +4,7 @@ import { IAlbumData } from 'src/app/core/interfaces/IAlbumData';
 import { Store } from '@ngrx/store';
 import { selectSearchQuery } from 'src/app/store/search/search.selector';
 import { AlbumService } from '../../services/album/album.service';
+import { SharedService } from '../../services/shared/shared.service';
 
 @Component({
   selector: 'app-album-list',
@@ -17,31 +18,35 @@ export class AlbumListComponent implements OnInit {
   isLoading=false;
    currentPage=1;
    itemsPerPage=8;
+   query:string = ''
    toggleLoading = ()=>this.isLoading=!this.isLoading;
 
-  constructor(private _albumService: AlbumService, private _store: Store) { }
+  constructor(private _albumService: AlbumService, private _store: Store,private _sharedService:SharedService) { }
   ngOnInit(): void {
     this.loadMore();
 
-    this._store.select(selectSearchQuery).subscribe({
+    this._sharedService.searchAlbum$.subscribe({
       next: (value) => {
         if (value) {
           this.search = true
         }
         if (this.search) {
-          this._albumService.getAlbums().subscribe((data) => {
+         this.query = value
+          this._albumService.searchAlbums(value).subscribe((data) => {
             this.albumData = data
           })
         }
+        if (this.search && this.query==='') {
+          this.search = false
+          this.currentPage=1;
+          this.loadMore();
+        }
 
       }
+     
     })
-
-    if (!this.search) {
-      this._albumService.getAlbums().subscribe((data) => {
-        this.albumData = data
-      })
-    }
+    
+    
   }
 
 

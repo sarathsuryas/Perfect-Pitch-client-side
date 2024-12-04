@@ -16,13 +16,14 @@ export class VideoService {
   submitVideoDetails(data: IVideoUploadDto): Observable<{ videoId: string }> {
     return this._http.post<{ videoId: string }>(`${this.api}/post-video-details`, data)
   }
-  // getVideoList(data: { query?: string, nextPage?: number } = { query: '', nextPage: 1 }): Observable<IVideoList[]> {
-  //  
-  // }
-getVideoList(page=1,itemsPerPage=6,query='') {
-   return this._http.get<IVideoList[]>(`${this.api}/video-list?video=${query}&page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
+ 
+getVideoList(page=1,itemsPerPage=6) {
+   return this._http.get<IVideoList[]>(`${this.api}/video-list?page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
 }
 
+searchVideo(query:string) {
+  return this._http.get<IVideoList[]>(`${this.api}/search-video?video=${query}`)
+}
 
   getVideoDetails(id: string): Observable<IResponseVideo> {
     return this._http.get<IResponseVideo>(`${this.api}/get-video-page-details?id=${id}`)

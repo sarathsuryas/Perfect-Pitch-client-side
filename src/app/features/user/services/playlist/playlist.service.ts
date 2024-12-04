@@ -29,6 +29,10 @@ export class PlaylistService {
     return this._http.get<IUserPlaylists[]>(`${this.api}/get-playlists?playlist=${query}&page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
   }
 
+  searchPlaylists(query:string): Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/search-playlists?playlist=${query}`) 
+  }
+
   addToPlaylsit(songId: string, playlistId: string): Observable<{ success: boolean, exist: boolean }> {
     return this._http.put<{ success: boolean, exist: boolean }>(`${this.api}/add-to-playlist`, { songId, playlistId })
   }  

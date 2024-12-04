@@ -83,19 +83,23 @@ export class UserMainComponent implements OnInit {
 
     this.searchSubject
       .pipe(
-        debounceTime(300),
+        debounceTime(1000),
         distinctUntilChanged(),
         takeUntil(this.destroy$)
       )
       .subscribe(query => {
-        this._store.dispatch(search({ query }));
+      
         if (this.selectedFilter === 'album') {
+          this._sharedService.searchAl(query)
           this._router.navigate([`home/albums`]);
         } else if (this.selectedFilter === 'playlist') {
+          this._sharedService.searchP(query)
           this._router.navigate([`home/music-playlist`])
         } else if (this.selectedFilter === 'artist') {
+          this._sharedService.searchAr(query)
           this._router.navigate(['home/artist-list'])
         } else if (this.selectedFilter === 'video') {
+          this._sharedService.searchV(query)
           this._router.navigate(['home/music-videos'])
         }
       });

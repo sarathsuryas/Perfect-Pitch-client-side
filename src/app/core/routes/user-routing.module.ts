@@ -36,6 +36,7 @@ import { UserAuthGuard } from '../user/guards/user-auth.guard';
 import { UploadVideoComponent } from 'src/app/features/user/components/upload-video/upload-video.component';
 import { PagenotfoundComponent } from 'src/app/shared/components/pagenotfound/pagenotfound.component';
 import { OtpPageComponent } from 'src/app/features/user/otp-page/otp-page.component';
+import { SearchAlbumsComponent } from 'src/app/features/user/search-albums/search-albums.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -72,6 +73,7 @@ const routes: Routes = [
       {path:'membership',component:MembershipComponent},
       {path:'payment-success',component:PaymentSuccessComponent},
       {path:'chat',component:LiveChatComponent},
+      {path:'search-albums',component:SearchAlbumsComponent},
       {path:'upload-video',component:UploadVideoComponent,canActivate:[memberShipGuard]},
       { path: '**', pathMatch: 'full',  
         component: PagenotfoundComponent },

@@ -4,6 +4,7 @@ import { IUserPlaylists } from 'src/app/core/interfaces/IUserPlaylist';
 import { Store } from '@ngrx/store';
 import { selectSearchQuery } from 'src/app/store/search/search.selector';
 import { PlaylistService } from '../../services/playlist/playlist.service';
+import { SharedService } from '../../services/shared/shared.service';
 
 
 @Component({
@@ -22,21 +23,26 @@ export class MusicPlaylistComponent implements OnInit {
   itemsPerPage = 8;
   toggleLoading = () => this.isLoading = !this.isLoading;
   userCurrentPage = 1
+  query:string =''
 
+  constructor(private _playlistService: PlaylistService, private _store: Store,private _sharedService:SharedService) { }
 
-  constructor(private _playlistService: PlaylistService, private _store: Store) { }
-
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.loadMore();
-    this._store.select(selectSearchQuery).subscribe({
+    this._sharedService.searchPlaylist$.subscribe({
       next: (value) => {
         if (value) {
           this.search = true
         }
         if (this.search) {
-          this._playlistService.getPlaylists().subscribe((data) => {
+          this.query = value
+          this._playlistService.searchPlaylists(value).subscribe((data) => {
             this.playlists = data
           })
+        }  if (this.search && this.query==='') {
+          this.search = false
+          this.currentPage=1;
+          this.loadMore();
         }
       }
     })

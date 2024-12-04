@@ -116,6 +116,10 @@ import { LiveChatComponent } from './user/components/live-chat/live-chat.compone
 import { MatMenuModule } from '@angular/material/menu';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { OtpPageComponent } from './user/otp-page/otp-page.component';
+import { SearchAlbumsComponent } from './user/search-albums/search-albums.component';
+import { SearchPlaylistsComponent } from './user/search-playlists/search-playlists.component';
+import { SearchArtistsComponent } from './user/search-artists/search-artists.component';
+import { SearchVideosComponent } from './user/search-videos/search-videos.component';
 
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
 
@@ -202,6 +206,10 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     PasswordValidatorDirective,
     LiveChatComponent,
     OtpPageComponent,
+    SearchAlbumsComponent,
+    SearchPlaylistsComponent,
+    SearchArtistsComponent,
+    SearchVideosComponent,
   ],  
   imports: [
     CommonModule, 
