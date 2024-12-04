@@ -120,6 +120,9 @@ import { SearchAlbumsComponent } from './user/search-albums/search-albums.compon
 import { SearchPlaylistsComponent } from './user/search-playlists/search-playlists.component';
 import { SearchArtistsComponent } from './user/search-artists/search-artists.component';
 import { SearchVideosComponent } from './user/search-videos/search-videos.component';
+import { IndividualAlbumsComponent } from './user/individual-albums/individual-albums.component';
+import { IndividualVideosComponent } from './user/individual-videos/individual-videos.component';
+import { IndividualPlaylistsComponent } from './user/individual-playlists/individual-playlists.component';
 
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
 
@@ -210,6 +213,9 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     SearchPlaylistsComponent,
     SearchArtistsComponent,
     SearchVideosComponent,
+    IndividualAlbumsComponent,
+    IndividualVideosComponent,
+    IndividualPlaylistsComponent,
   ],  
   imports: [
     CommonModule, 

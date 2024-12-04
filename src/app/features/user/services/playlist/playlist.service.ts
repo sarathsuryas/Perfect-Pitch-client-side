@@ -29,6 +29,10 @@ export class PlaylistService {
     return this._http.get<IUserPlaylists[]>(`${this.api}/get-playlists?playlist=${query}&page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
   }
 
+  getIndividualPlaylists(page=1,itemsPerPage=8,artistId:string): Observable<IUserPlaylists[]> {
+    return this._http.get<IUserPlaylists[]>(`${this.api}/get-Individual-playlists?artistId=${artistId}&page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
+  }
+
   searchPlaylists(query:string): Observable<IUserPlaylists[]> {
     return this._http.get<IUserPlaylists[]>(`${this.api}/search-playlists?playlist=${query}`) 
   }

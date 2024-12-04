@@ -20,6 +20,10 @@ export class VideoService {
 getVideoList(page=1,itemsPerPage=6) {
    return this._http.get<IVideoList[]>(`${this.api}/video-list?page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
 }
+getIndividualVideos(page=1,itemsPerPage=6,artistId:string) {
+  return this._http.get<IVideoList[]>(`${this.api}/individual-videos?page=${page}&perPage=${itemsPerPage}&artistId=${artistId}`).pipe(delay(500)) 
+}
+
 
 searchVideo(query:string) {
   return this._http.get<IVideoList[]>(`${this.api}/search-video?video=${query}`)

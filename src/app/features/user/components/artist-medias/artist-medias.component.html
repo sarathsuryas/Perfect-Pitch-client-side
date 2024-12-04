@@ -12,7 +12,16 @@
   
   </div>
   <!-- Load More Button -->
-  
+  <div  class="flex justify-center mt-8">
+    <button 
+      [disabled]="albumData.length < 4"
+      [ngStyle]="{'background-color':albumData.length < 4? 'gray':'blue'}"
+      (click)="loadMoreAlbums()"
+      class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
+    >
+      Load More
+    </button>
+  </div>
   </div> 
 
   <!-- Videos -->
@@ -29,7 +38,11 @@
   
     <!-- Load More Button -->
     <div class="flex justify-center mt-8">
-      <button (click)="loadMore()"
+      <button
+       [disabled]="videos.length < 4"
+       [ngStyle]="{'background-color':videos.length < 4? 'gray':'blue'}"
+
+      (click)="loadMoreVideos()"
         class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200">
         Load More
       </button>
@@ -53,7 +66,10 @@
   
       <!-- Load More Button -->
       <div class="flex justify-center mt-8">
-        <button (click)="loadMore()"
+        <button 
+         [disabled]="playlists.length < 4"
+         [ngStyle]="{'background-color':playlists.length < 4? 'gray':'blue'}"
+        (click)="loadMorePlaylists()"
           class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-lg 
                  hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 
                  focus:outline-none transition duration-200">

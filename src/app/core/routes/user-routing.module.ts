@@ -37,6 +37,9 @@ import { UploadVideoComponent } from 'src/app/features/user/components/upload-vi
 import { PagenotfoundComponent } from 'src/app/shared/components/pagenotfound/pagenotfound.component';
 import { OtpPageComponent } from 'src/app/features/user/otp-page/otp-page.component';
 import { SearchAlbumsComponent } from 'src/app/features/user/search-albums/search-albums.component';
+import { IndividualAlbumsComponent } from 'src/app/features/user/individual-albums/individual-albums.component';
+import { IndividualVideosComponent } from 'src/app/features/user/individual-videos/individual-videos.component';
+import { IndividualPlaylistsComponent } from 'src/app/features/user/individual-playlists/individual-playlists.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -75,6 +78,9 @@ const routes: Routes = [
       {path:'chat',component:LiveChatComponent},
       {path:'search-albums',component:SearchAlbumsComponent},
       {path:'upload-video',component:UploadVideoComponent,canActivate:[memberShipGuard]},
+      {path:'more-albums/:id',component:IndividualAlbumsComponent},
+      {path:'more-videos/:id',component:IndividualVideosComponent},
+      {path:'more-playlists/:id',component:IndividualPlaylistsComponent},
       { path: '**', pathMatch: 'full',  
         component: PagenotfoundComponent },
     ]

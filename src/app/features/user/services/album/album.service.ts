@@ -25,6 +25,9 @@ export class AlbumService {
     return this._http.get<IAlbumData[]>(`${this.api}/get-albums?page=${page}&perPage=${itemsPerPage}`).pipe(delay(500)) 
  }
  
+ getIndividualAlbums(page=1,itemsPerPage=8,artistId:string) {
+  return this._http.get<IAlbumData[]>(`${this.api}/get-individual-albums?page=${page}&perPage=${itemsPerPage}&artistId=${artistId}`).pipe(delay(500)) 
+}
   
   getAlbumDetails(id: string): Observable<IAlbumResponse> {
     return this._http.get<IAlbumResponse>(`${this.api}/album-details?id=${id}`)

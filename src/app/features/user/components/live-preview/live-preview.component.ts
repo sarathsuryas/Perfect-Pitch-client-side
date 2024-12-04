@@ -7,6 +7,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { MessageService } from 'primeng/api';
 import { SocketService } from '../../services/socket/socket.service';
 import { LiveStreamingService } from '../../services/live-streaming/live-streaming.service';
+import { turnConfig } from 'src/app/core/turnConfig';
 
 @Component({
   selector: 'app-live-preview',
@@ -101,11 +102,7 @@ export class LivePreviewComponent {
   }
   createPeer() {
     const peer = new RTCPeerConnection({
-      iceServers: [
-        {
-          urls: "stun:stun.stunprotocol.org"
-        }
-      ]
+     iceServers:turnConfig.ice_servers
     });
     peer.onnegotiationneeded = () => this.handleNegotiationNeededEvent(peer);
 

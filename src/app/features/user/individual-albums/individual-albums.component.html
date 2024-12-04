@@ -1,0 +1,18 @@
+
+<div
+infiniteScroll
+[infiniteScrollDistance]="3"
+[infiniteScrollThrottle]="500"
+(scrolled)="onScroll()"
+[scrollWindow]="false"
+class="spotify-playlists bg-black text-white py-8 px-4  overflow-y-auto max-h-full">
+  <!-- Section Header -->
+  <h2 class="text-3xl font-bold mb-6 text-center">Albums</h2>
+
+  <div class="list grid grid-cols-1 gap-8 px-2 md:grid-cols-2 lg:grid-cols-4">
+  <app-album-card [albumData]="album" *ngFor="let album of albumData"  ></app-album-card>
+
+</div>
+<!-- Load More Button -->
+
+</div>
