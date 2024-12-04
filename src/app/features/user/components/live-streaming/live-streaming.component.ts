@@ -6,6 +6,7 @@ import { UserService } from '../../services/user/user.service';
 import { Store } from '@ngrx/store';
 import { selectUserData } from 'src/app/store/user/user.selector';
 import { LiveStreamingService } from '../../services/live-streaming/live-streaming.service';
+import { turnConfig } from 'src/app/core/turnConfig';
 
 @Component({
   selector: 'app-live-streaming',
@@ -102,11 +103,7 @@ export class LiveStreamingComponent implements OnDestroy {
 
   createPeer() {
     const peer = new RTCPeerConnection({
-      iceServers: [
-        {
-          urls: "stun:stun.stunprotocol.org"
-        }
-      ]
+      iceServers:turnConfig.ice_servers
     })
     peer.ontrack = this.handleTrackEvent
     peer.onnegotiationneeded = () => this.handleNegotiationNeededEvent(peer);
