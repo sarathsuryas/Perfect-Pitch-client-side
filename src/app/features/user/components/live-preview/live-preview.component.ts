@@ -7,7 +7,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { MessageService } from 'primeng/api';
 import { SocketService } from '../../services/socket/socket.service';
 import { LiveStreamingService } from '../../services/live-streaming/live-streaming.service';
-import { turnConfig } from 'src/app/core/turnConfig';
+import { iceConfiguration } from 'src/app/core/turnConfig';
 
 @Component({
   selector: 'app-live-preview',
@@ -101,9 +101,7 @@ export class LivePreviewComponent {
     this.stream?.getTracks().forEach(track => peer.addTrack(track, this.stream as MediaStream));
   }
   createPeer() {
-    const peer = new RTCPeerConnection({
-     iceServers:turnConfig.iceServers
-    });
+    const peer = new RTCPeerConnection(iceConfiguration);
     peer.onnegotiationneeded = () => this.handleNegotiationNeededEvent(peer);
 
     return peer;
