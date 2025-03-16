@@ -45,6 +45,8 @@ import { LiveVideoPageComponent } from './features/user/components/live-video-pa
 import { UserBlockedComponent } from './features/user/components/user-blocked/user-blocked.component';
 import { LivePreviewComponent } from './features/user/components/live-preview/live-preview.component';
 import { LiveChatComponent } from './features/user/components/live-chat/live-chat.component';
+import { BroadcasterComponent } from './test/broadcaster/broadcaster.component';
+import { ViewerComponent } from './test/viewer/viewer.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -52,6 +54,7 @@ const routes: Routes = [
   {path:'register',component:UserRegisterComponent},
   {path:'test-nav',component:TestnavComponent},
   {path:'user-blocked',component:UserBlockedComponent},
+  
   {path:'home',component:UserMainComponent, canActivate:[UserAuthGuard],
     children:[
       {path:'user-profile',component:UserProfileComponent},

@@ -40,6 +40,8 @@ import { SearchAlbumsComponent } from 'src/app/features/user/search-albums/searc
 import { IndividualAlbumsComponent } from 'src/app/features/user/individual-albums/individual-albums.component';
 import { IndividualVideosComponent } from 'src/app/features/user/individual-videos/individual-videos.component';
 import { IndividualPlaylistsComponent } from 'src/app/features/user/individual-playlists/individual-playlists.component';
+import { BroadcasterComponent } from 'src/app/test/broadcaster/broadcaster.component';
+import { ViewerComponent } from 'src/app/test/viewer/viewer.component';
 
 const routes: Routes = [
   { path:'',redirectTo:'login' , pathMatch: 'full'},
@@ -48,6 +50,8 @@ const routes: Routes = [
   {path:'otp-verify',component:OtpPageComponent},
   {path:'test-nav',component:TestnavComponent},
   {path:'user-blocked',component:UserBlockedComponent},
+  {path:'broadcast',component:BroadcasterComponent},
+  {path:'view',component:ViewerComponent},
   {path:'home',component:UserMainComponent, canActivate:[UserAuthGuard],
     children:[
       {path:'user-profile',component:UserProfileComponent},

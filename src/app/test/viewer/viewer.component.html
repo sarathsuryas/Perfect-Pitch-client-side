@@ -1,0 +1,14 @@
+<!-- viewer.component.html -->
+<h1>WebRTC Viewer</h1>
+<div class="container">
+  <video #remoteVideo autoplay playsinline></video>
+  <div class="controls">
+    <button (click)="refreshConnection()">Refresh Connection</button>
+  </div>
+  <div class="status" [ngClass]="statusClass">
+    {{ statusMessage }}
+  </div>
+  <div class="debug-info">
+    <div *ngFor="let message of debugMessages">{{ message }}</div>
+  </div>
+</div>

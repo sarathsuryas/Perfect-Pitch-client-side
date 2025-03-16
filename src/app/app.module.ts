@@ -37,12 +37,16 @@ import { membershipReducer } from './store/memberShip/membership.reducer';
 import { searchReducer } from './store/search/search.reducer';
 import { ToastModule } from 'primeng/toast';
 import { CookieModule } from 'ngx-cookie';
+import { ViewerComponent } from './test/viewer/viewer.component';
+import { BroadcasterComponent } from './test/broadcaster/broadcaster.component';
   
 
 @NgModule({
   declarations: [
     AppComponent,
     AddUserComponent,
+    ViewerComponent,
+    BroadcasterComponent,
   ],
   imports: [ 
     BrowserModule,
