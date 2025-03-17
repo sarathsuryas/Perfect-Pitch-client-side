@@ -20,7 +20,7 @@ export class ViewerComponent {
   debugMessages: string[] = [];
 
   constructor() {
-    this.socket = io('https://perfet-pitch-service.site');
+    this.socket = io('http://localhost:4200');
   }
 
   ngOnInit() {
