@@ -74,7 +74,7 @@ const routes: Routes = [
       {path:'artist-list',component:ArtistListingComponent},
       {path:'artist-medias/:id',component:ArtistMediasComponent},
       {path:'ngx',component:NgxAudioComponent},
-      {path:'create-live',component:LivePreviewComponent,canActivate:[memberShipGuard]},
+      {path:'create-live',component:LivePreviewComponent},
       {path:'live',component:LiveVideosListingComponent},
       {path:'live-video/:uuid',component:LiveStreamingComponent},
       {path:'membership',component:MembershipComponent},

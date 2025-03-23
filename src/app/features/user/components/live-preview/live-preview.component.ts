@@ -20,7 +20,6 @@ export class LivePreviewComponent {
   success: boolean = false
   streamKey: string = ''
   public start: boolean = false
-  socket: Socket;
   localStream: MediaStream | undefined | null;
   peerConnection: RTCPeerConnection | undefined;
   isBroadcasting = false;
@@ -32,60 +31,36 @@ export class LivePreviewComponent {
 
 
   constructor(
-    private fb: FormBuilder,
     private dialog: MatDialog,
-    private _messageService: MessageService,
     private _socketService: SocketService,
     private _liveStreamingService:LiveStreamingService
   ) {
-    this.socket = io('https://perfet-pitch-service.site');
   }
   
 
 
   ngOnInit(): void {
-    this.socket.on('connect', () => {
-      console.log('Connected to server');
+    this._socketService.onStartBroadcast().subscribe(() => {
+     this.setupPeerConnection()
     });
-    
-    this.socket.on('broadcaster_exists', () => {
-      this.updateStatus('Another broadcaster is already active. Please try again later.', 'offline');
-      this.stopBroadcasting();
-    });
-    this.socket.on('broadcaster_answer', (description) => {
-      if (this.peerConnection) {
-        this.peerConnection.setRemoteDescription(description)
-          .catch(error => {
-            console.error('Error setting remote description:', error);
-          });
+    this._socketService.broadcasterAnswer$.subscribe({
+      next:(answer)=>{
+        this.peerConnection?.setRemoteDescription(answer)
+      },
+      error:(err)=>{
+        console.error("error from the setRemoteDescription",err)
       }
-    });
-    
-    this.socket.on('broadcaster_ice_candidate', (candidate) => {
-      if (this.peerConnection) {
-        this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
-          .catch(error => {
-            console.error('Error adding ICE candidate:', error);
-          });
+    })
+    this._socketService.iceCandidate$.subscribe({
+      next:(candidate)=>{
+        this.peerConnection?.addIceCandidate(new RTCIceCandidate(candidate))
+      },
+      error:(err)=>{
+        console.error("error from add Ice candidate",err)
       }
-    });
-    
-    // Handle page unload
-    window.addEventListener('beforeunload', () => {
-      this.cleanupResources();
-    });
-
+    })
   }
-  cleanupResources() {
-    if (this.isBroadcasting) {
-      this.socket.emit('disconnect');
-    }
-    
-    if (this.localStream) {
-      this.localStream.getTracks().forEach(track => track.stop());
-    }
-  }
-
+ 
   async toggleCamera(): Promise<void> {
     if (this.isCameraOn) {
       this.stopCamera();
@@ -104,94 +79,26 @@ export class LivePreviewComponent {
       }
     }
   }
-
+ ///
   startBroadcasting() {
     if (!this.localStream) {
-      this.updateStatus('Please start your camera first', 'offline');
+      alert("no local stream")
       return;
     }
-    
-    this.socket.emit('broadcaster');
-    this.setupPeerConnection();
     this.success = true
     this.start = true
     this.isBroadcasting = true;
     this.isCameraOn = true;
+    this._socketService.startBroadcast()    
   }
 
-  setupPeerConnection() {
-    const configuration = {
-      iceServers: [
-        {
-          urls: "stun:stun.relay.metered.ca:80",
-        },
-        {
-          urls: "turn:global.relay.metered.ca:80",
-          username: "836c17083ecba16b626af6f7",
-          credential: "j/Du96pT1PjJXgP/",
-        },
-        {
-          urls: "turn:global.relay.metered.ca:80?transport=tcp",
-          username: "836c17083ecba16b626af6f7",
-          credential: "j/Du96pT1PjJXgP/",
-        },
-        {
-          urls: "turn:global.relay.metered.ca:443",
-          username: "836c17083ecba16b626af6f7",
-          credential: "j/Du96pT1PjJXgP/",
-        },
-        {
-          urls: "turns:global.relay.metered.ca:443?transport=tcp",
-          username: "836c17083ecba16b626af6f7",
-          credential: "j/Du96pT1PjJXgP/",
-        },
-    ]
-    };
-    
-    this.peerConnection = new RTCPeerConnection(configuration);
-    
-    // Add all tracks from local stream to the peer connection
-    if (this.localStream) {
-      this.localStream.getTracks().forEach(track => {
-        if (this.peerConnection && this.localStream) {
-          this.peerConnection.addTrack(track, this.localStream);
-        }
-      });
-    }
-    
-    // ICE candidate handling
-    if (this.peerConnection) {
-      this.peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
-          this.socket.emit('broadcaster_ice_candidate', event.candidate);
-        }
-      };
-      
-      // Create offer
-      this.peerConnection.createOffer()
-        .then(offer => {
-          if (this.peerConnection) {
-            return this.peerConnection.setLocalDescription(offer);
-          }
-          return Promise.reject('Peer connection not available');
-        })
-        .then(() => {
-          if (this.peerConnection && this.peerConnection.localDescription) {
-            this.socket.emit('broadcaster_offer', this.peerConnection.localDescription);
-            this.updateStatus('Broadcasting started. Waiting for viewers...', 'online');
-          }
-        })
-        .catch(error => {
-          console.error('Error creating offer:', error);
-          this.updateStatus(`Error starting broadcast: ${error.message}`, 'offline');
-        });
-    }
-  }
-
+  
+  // 
   stopCamera(): void {
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());
       this.localStream = null;
+      this._socketService.stopBroadcast(this.streamKey)
       this._socketService.disconnect()
       this._liveStreamingService.stopStreaming(this.streamKey).subscribe()
       this.isCameraOn = false;
@@ -199,9 +106,8 @@ export class LivePreviewComponent {
     }
   }
 
-
+  ///
   createLiveStream(): void {
-    this._socketService.connect()
     const dialogRef = this.dialog.open(CreateLiveComponent,
       { width: '600px', height: '600px' })
     dialogRef.afterClosed().subscribe({
@@ -211,6 +117,7 @@ export class LivePreviewComponent {
             if (value.success) {
               this.success = value.success
               this.streamKey = value.streamId
+              this._socketService.connect()
             }
           }
         })
@@ -221,6 +128,74 @@ export class LivePreviewComponent {
     })
   }
 
+   setupPeerConnection() {
+    const configuration = {
+        iceServers: [
+            {
+                urls: "stun:stun.relay.metered.ca:80",
+            },
+            {
+                urls: "turn:global.relay.metered.ca:80",
+                username: "836c17083ecba16b626af6f7",
+                credential: "j/Du96pT1PjJXgP/",
+            },
+            {
+                urls: "turn:global.relay.metered.ca:80?transport=tcp",
+                username: "836c17083ecba16b626af6f7",
+                credential: "j/Du96pT1PjJXgP/",
+            },
+            {
+                urls: "turn:global.relay.metered.ca:443",
+                username: "836c17083ecba16b626af6f7",
+                credential: "j/Du96pT1PjJXgP/",
+            },
+            {
+                urls: "turns:global.relay.metered.ca:443?transport=tcp",
+                username: "836c17083ecba16b626af6f7",
+                credential: "j/Du96pT1PjJXgP/",
+            },
+        ],
+    };
+
+    this.peerConnection = new RTCPeerConnection(configuration);
+    // Attach the debugging event listeners immediately
+    this.peerConnection.onconnectionstatechange = () => {
+        console.log(`Broadcaster connection state: ${this.peerConnection?.connectionState}`);
+        if (this.peerConnection?.connectionState === 'connected') {
+            console.log('Broadcaster fully connected!');
+        }
+    };
+
+    this.peerConnection.oniceconnectionstatechange = () => {
+        console.log(`Broadcaster ICE connection state: ${this.peerConnection?.iceConnectionState}`);
+    };
+
+
+    // Add all tracks from local stream to the peer connection
+    this.localStream?.getTracks().forEach(track => {
+        this.peerConnection?.addTrack(track, this.localStream as MediaStream);
+    });
+
+    // ICE candidate handling
+    this.peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          this._socketService.sendIceCandidate(event.candidate,this.streamKey)
+            // socket.emit('broadcaster_ice_candidate', { candidate: event.candidate, roomId: roomId });
+        }
+    };
+
+    // Create offer
+    this.peerConnection.createOffer()
+        .then(offer => {
+            return this.peerConnection?.setLocalDescription(offer)
+        })
+        .then(() => {
+          this._socketService.broadcasterOffer( this.peerConnection?.localDescription as RTCSessionDescription,this.streamKey)
+        })
+        .catch(error => {
+            console.error('Error creating offer:', error);
+        });
+}
 
 
 
@@ -236,19 +211,6 @@ export class LivePreviewComponent {
     this.stopCamera();
   }
 
-  stopBroadcasting() {
-    if (this.peerConnection) {
-      this.peerConnection.close();
-      this.peerConnection = undefined;
-    }
-    
-    this.isBroadcasting = false;
-    this.updateStatus('Broadcasting stopped', 'offline');
-  }
 
-  updateStatus(message: string, className: string) {
-    this.statusMessage = `Status: ${message}`;
-    this.statusClass = className;
-  }
 
 }

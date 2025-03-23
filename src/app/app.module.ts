@@ -39,7 +39,10 @@ import { ToastModule } from 'primeng/toast';
 import { CookieModule } from 'ngx-cookie';
 import { ViewerComponent } from './test/viewer/viewer.component';
 import { BroadcasterComponent } from './test/broadcaster/broadcaster.component';
-  
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { environment } from 'src/environment/environment.prod';
+
+const config: SocketIoConfig = { url: environment.apiUrl, options: {} };  
 
 @NgModule({
   declarations: [
@@ -76,7 +79,8 @@ import { BroadcasterComponent } from './test/broadcaster/broadcaster.component';
     StoreModule.forFeature('search',searchReducer),
     EffectsModule.forRoot([UserEffects, AdminEffects]),
     GoogleSigninButtonModule, 
-    CookieModule.withOptions() 
+    CookieModule.withOptions(),
+    SocketIoModule.forRoot(config), 
   ],
   providers: [
     provideHttpClient(withFetch())
