@@ -261,6 +261,7 @@ export class LiveStreamingComponent implements OnDestroy {
     console.log('Sending message:', message);
   }
   ngOnDestroy(): void {
+    
     // this._socketService.disconnect()
   }
 

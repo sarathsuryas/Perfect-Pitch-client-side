@@ -34,7 +34,7 @@ export class LiveChatComponent implements OnInit,AfterViewChecked {
   }
 
   ngOnInit() {
-    
+    this._socketService.joinRoom(this.streamKey)
    this._chatService.getChats(this.streamKey).subscribe({
     next:(value)=>{
     for (let index = 0; index < value.length; index++) {
