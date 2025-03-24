@@ -64,29 +64,30 @@ export class LiveStreamingComponent implements OnDestroy {
   ngOnInit(): void {
 
 
-    // this.route.paramMap.pipe(
-    //   map(params => params.get('uuid')),
-    //   tap(uuid => this.uuid = uuid as string),
-    //   switchMap(uuid => this._liveStreamingService.getLiveVideoDetails(uuid as string)),
-    //   tap((data) => {
-    //     this.streamTitle = data.title
-    //     this.streamerName = data.artistData.fullName
-    //     this.artistImage = data.artistData.profileImage
-    //     // const peer = this.createPeer()
-    //     // peer.addTransceiver("video", { direction: "recvonly" });
-    //     // peer.addTransceiver("audio", { direction: "recvonly" });
+    this.route.paramMap.pipe(
+      map(params => params.get('uuid')),
+      tap(uuid => this.uuid = uuid as string),
+      switchMap(uuid => this._liveStreamingService.getLiveVideoDetails(uuid as string)),
+      tap((data) => {
+        this.streamTitle = data.title
+        this.streamerName = data.artistData.fullName
+        this.artistImage = data.artistData.profileImage
+        // const peer = this.createPeer()
+        // peer.addTransceiver("video", { direction: "recvonly" });
+        // peer.addTransceiver("audio", { direction: "recvonly" });
+        this.socket.emit("viewer_request", this.uuid); 
+        this.socket.on('viewer_offer',(description)=>{
+          this.setupPeerConnection(description)
+        })
         
-    //   })
-    // ).subscribe({
-    //   error: (err) => {
-    //     console.log(err)
-    //   }
-    // })
-  this.uuid  = prompt() as string
-  this.socket.emit("viewer_request", this.uuid); 
-  this.socket.on('viewer_offer',(description)=>{
-    this.setupPeerConnection(description)
-  })
+      })
+    ).subscribe({
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  // this.uuid  = prompt() as string
+
   this.socket.on("viewer_ice_candidate", (candidate) => {
     if (this.peerConnection) {
         console.log("Received ICE candidate from server");

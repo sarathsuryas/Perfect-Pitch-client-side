@@ -103,6 +103,7 @@ export class LivePreviewComponent {
       this._liveStreamingService.stopStreaming(this.streamKey).subscribe()
       this.isCameraOn = false;
       this.start = false
+      this.success = false
       this.socket.emit('stop_broadcast', this.streamKey)
       if (this.peerConnection) {
         this.peerConnection.close();
