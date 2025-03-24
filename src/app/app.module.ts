@@ -42,7 +42,7 @@ import { BroadcasterComponent } from './test/broadcaster/broadcaster.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environment/environment.prod';
 
-const config: SocketIoConfig = { url: environment.apiUrl, options: {} };  
+// const config: SocketIoConfig = { url: environment.apiUrl, options: {} };  
 
 @NgModule({
   declarations: [
@@ -80,7 +80,6 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     EffectsModule.forRoot([UserEffects, AdminEffects]),
     GoogleSigninButtonModule, 
     CookieModule.withOptions(),
-    SocketIoModule.forRoot(config), 
   ],
   providers: [
     provideHttpClient(withFetch())

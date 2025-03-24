@@ -9,6 +9,7 @@ import { SocketService } from '../../services/socket/socket.service';
 import { LiveStreamingService } from '../../services/live-streaming/live-streaming.service';
 import { iceConfiguration } from 'src/app/core/turnConfig';
 import { io, Socket } from 'socket.io-client';
+import { environment } from 'src/environment/environment.prod';
 
 @Component({
   selector: 'app-live-preview',
@@ -23,7 +24,7 @@ export class LivePreviewComponent {
   localStream: MediaStream | undefined | null;
   peerConnection: RTCPeerConnection | undefined;
   isBroadcasting = false;
-  
+  socket:Socket
   statusMessage = 'Status: Not Broadcasting';
   statusClass = 'offline';
   @ViewChild('videoElement', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
@@ -32,33 +33,32 @@ export class LivePreviewComponent {
 
   constructor(
     private dialog: MatDialog,
-    private _socketService: SocketService,
     private _liveStreamingService:LiveStreamingService
   ) {
+    this.socket = io(environment.apiUrl)
   }
   
 
 
   ngOnInit(): void {
-    this._socketService.onStartBroadcast().subscribe(() => {
+    this.socket.on("start_broadcast",()=>{
      this.setupPeerConnection()
-    });
-    this._socketService.broadcasterAnswer$.subscribe({
-      next:(answer)=>{
-        this.peerConnection?.setRemoteDescription(answer)
-      },
-      error:(err)=>{
-        console.error("error from the setRemoteDescription",err)
-      }
     })
-    this._socketService.iceCandidate$.subscribe({
-      next:(candidate)=>{
-        this.peerConnection?.addIceCandidate(new RTCIceCandidate(candidate))
-      },
-      error:(err)=>{
-        console.error("error from add Ice candidate",err)
-      }
+    this.socket.on('broadcaster_answer',(description)=>{
+      this.peerConnection?.setRemoteDescription(description)
+      .catch(error => {
+          console.error('Error setting remote description:', error);
+      });
     })
+    this.socket.on('broadcaster_ice_candidate', (candidate) => {
+      if (this.peerConnection) {
+          //    console.log('candidate from answer',candidate)
+          this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
+              .catch(error => {
+                  console.error('Error adding ICE candidate:', error);
+              });
+      }
+  });
   }
  
   async toggleCamera(): Promise<void> {
@@ -89,7 +89,6 @@ export class LivePreviewComponent {
     this.start = true
     this.isBroadcasting = true;
     this.isCameraOn = true;
-    this._socketService.startBroadcast()    
   }
 
   
@@ -98,37 +97,46 @@ export class LivePreviewComponent {
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());
       this.localStream = null;
-      this._socketService.stopBroadcast(this.streamKey)
-      this._socketService.disconnect()
-      this._liveStreamingService.stopStreaming(this.streamKey).subscribe()
+      // this._socketService.stopBroadcast(this.streamKey)
+      // this._socketService.disconnect()
+      // this._liveStreamingService.stopStreaming(this.streamKey).subscribe()
       this.isCameraOn = false;
       this.start = false
+      this.socket.emit('stop_broadcast', this.streamKey)
+      if (this.peerConnection) {
+        this.peerConnection.close();
+    }
+
     }
   }
 
   ///
   createLiveStream(): void {
-    const dialogRef = this.dialog.open(CreateLiveComponent,
-      { width: '600px', height: '600px' })
-    dialogRef.afterClosed().subscribe({
-      next: (value) => {
-        this._liveStreamingService.createLive(value).subscribe({
-          next: (value) => {
-            if (value.success) {
-              this.success = value.success
-              this.streamKey = value.streamId
-              this._socketService.connect()
-            }
-          }
-        })
-      },
-      error: (err) => {
-        console.error(err)
-      }
-    })
+
+    this.streamKey = prompt("enter stream key") as string
+    // const dialogRef = this.dialog.open(CreateLiveComponent,
+    //   { width: '600px', height: '600px' })
+    // dialogRef.afterClosed().subscribe({
+    //   next: (value) => {
+    //     this._liveStreamingService.createLive(value).subscribe({
+    //       next: (value) => {
+    //         if (value.success) {
+    //           this.success = value.success
+    //           this.streamKey = value.streamId
+    //           this._socketService.connect()
+    //         }
+    //       }
+    //     })
+    //   },
+    //   error: (err) => {
+    //     console.error(err)
+    //   }
+    // })
+     this.socket.emit("start_broadcast")
+     this.socket.emit('disconnect')
   }
 
-   setupPeerConnection() {
+  setupPeerConnection() {
     const configuration = {
         iceServers: [
             {
@@ -179,8 +187,7 @@ export class LivePreviewComponent {
     // ICE candidate handling
     this.peerConnection.onicecandidate = (event) => {
         if (event.candidate) {
-          this._socketService.sendIceCandidate(event.candidate,this.streamKey)
-            // socket.emit('broadcaster_ice_candidate', { candidate: event.candidate, roomId: roomId });
+            this.socket.emit('broadcaster_ice_candidate', { candidate: event.candidate, streamKey:this.streamKey });
         }
     };
 
@@ -190,7 +197,7 @@ export class LivePreviewComponent {
             return this.peerConnection?.setLocalDescription(offer)
         })
         .then(() => {
-          this._socketService.broadcasterOffer( this.peerConnection?.localDescription as RTCSessionDescription,this.streamKey)
+            this.socket.emit('broadcaster_offer', { offer: this.peerConnection?.localDescription, streamKey:this.streamKey });
         })
         .catch(error => {
             console.error('Error creating offer:', error);
@@ -199,15 +206,14 @@ export class LivePreviewComponent {
 
 
 
-
   
 
   ngOnDestroy(): void 
   {
-    this._socketService.disconnect()
-    if(this.streamKey){
-      this._socketService.removeFromRoom(this.streamKey)
-    }
+    // this._socketService.disconnect()
+    // if(this.streamKey){
+    //   this._socketService.removeFromRoom(this.streamKey)
+    // }
     this.stopCamera();
   }
 

@@ -8,6 +8,7 @@ import { selectUserData } from 'src/app/store/user/user.selector';
 import { LiveStreamingService } from '../../services/live-streaming/live-streaming.service';
 import { iceConfiguration } from 'src/app/core/turnConfig';
 import { io, Socket } from 'socket.io-client';
+import { environment } from 'src/environment/environment.prod';
 
 @Component({
   selector: 'app-live-streaming',
@@ -25,7 +26,8 @@ export class LiveStreamingComponent implements OnDestroy {
   subscribers: string[] = []
   userId: string = ''
   public artistImage!:string
-  @ViewChild('remoteVideo') remoteVideo!: ElementRef<HTMLVideoElement>;
+  socket:Socket
+  // @ViewChild('remoteVideo') remoteVideo!: ElementRef<HTMLVideoElement>;
 
   peerConnection: RTCPeerConnection | undefined;
   retryCount = 0;
@@ -36,24 +38,25 @@ export class LiveStreamingComponent implements OnDestroy {
   @ViewChild('live') live!: ElementRef<HTMLVideoElement>;
   constructor(
     private route: ActivatedRoute,
-    private _socketService: SocketService,
     private _store: Store,
     private _liveStreamingService:LiveStreamingService,
     private _userService:UserService
   ) {
 
-    this._store.select(selectUserData).subscribe({
-      next: (value) => {
-        this.subscribers = [...value?.subscribers as string[]] 
-        this.subscriberCount = this.subscribers.length
-        this.userId = value?._id as string
-        if(this.subscribers.includes(this.userId)) {
-          this.isSubscribed = true
-        } else {
-          this.isSubscribed = false
-        }
-      }
-    })
+    // this._store.select(selectUserData).subscribe({
+    //   next: (value) => {
+    //     this.subscribers = [...value?.subscribers as string[]] 
+    //     this.subscriberCount = this.subscribers.length
+    //     this.userId = value?._id as string
+    //     if(this.subscribers.includes(this.userId)) {
+    //       this.isSubscribed = true
+    //     } else {
+    //       this.isSubscribed = false
+    //     }
+    //   }
+    // })
+    this.socket = io(environment.apiUrl)
+    
   }
 
 
@@ -61,44 +64,41 @@ export class LiveStreamingComponent implements OnDestroy {
   ngOnInit(): void {
 
 
-    this.route.paramMap.pipe(
-      map(params => params.get('uuid')),
-      tap(uuid => this.uuid = uuid as string),
-      switchMap(uuid => this._liveStreamingService.getLiveVideoDetails(uuid as string)),
-      tap((data) => {
-        this.streamTitle = data.title
-        this.streamerName = data.artistData.fullName
-        this.artistImage = data.artistData.profileImage
-        this._socketService.connect()
-        this._socketService.viewerRequest(this.uuid)
-        // const peer = this.createPeer()
-        // peer.addTransceiver("video", { direction: "recvonly" });
-        // peer.addTransceiver("audio", { direction: "recvonly" });
-        this._socketService.viewerOffer$.subscribe({
-          next:(offer)=>{
-            this.setupPeerConnection(offer)
-          },
-          error:(err)=>{
-            console.error(err)
-          }
-        })
-        this._socketService.viewerIceCandidate$.subscribe({
-          next:(candidate)=>{
-            if (this.peerConnection) {
-              console.log("Received ICE candidate from server");
-              this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
-          }
-          },
-          error:(err)=>{
-            console.error(err)
-          }
-        })
-      })
-    ).subscribe({
-      error: (err) => {
-        console.log(err)
-      }
-    })
+    // this.route.paramMap.pipe(
+    //   map(params => params.get('uuid')),
+    //   tap(uuid => this.uuid = uuid as string),
+    //   switchMap(uuid => this._liveStreamingService.getLiveVideoDetails(uuid as string)),
+    //   tap((data) => {
+    //     this.streamTitle = data.title
+    //     this.streamerName = data.artistData.fullName
+    //     this.artistImage = data.artistData.profileImage
+    //     // const peer = this.createPeer()
+    //     // peer.addTransceiver("video", { direction: "recvonly" });
+    //     // peer.addTransceiver("audio", { direction: "recvonly" });
+        
+    //   })
+    // ).subscribe({
+    //   error: (err) => {
+    //     console.log(err)
+    //   }
+    // })
+  this.uuid  = prompt() as string
+  this.socket.emit("viewer_request", this.uuid); 
+  this.socket.on('viewer_offer',(description)=>{
+    this.setupPeerConnection(description)
+  })
+  this.socket.on("viewer_ice_candidate", (candidate) => {
+    if (this.peerConnection) {
+        console.log("Received ICE candidate from server");
+        this.peerConnection
+            .addIceCandidate(new RTCIceCandidate(candidate))
+            .catch((error) => {
+                console.error("Error adding ICE candidate:", error);
+            });
+    }
+});
+
+
   }
 //
   toggleSubscribe() {
@@ -130,6 +130,7 @@ export class LiveStreamingComponent implements OnDestroy {
       });
   }
 
+
   setupPeerConnection(offer:RTCSessionDescriptionInit) {
     const configuration = {
         iceServers: [
@@ -158,22 +159,23 @@ export class LiveStreamingComponent implements OnDestroy {
             },
         ],
     };
-
-
+  
+ const remoteVideo = document.getElementById('video') as HTMLVideoElement
     this.peerConnection = new RTCPeerConnection(configuration);
 
     // Handle incoming tracks
     this.peerConnection.ontrack = (event) => {
         console.log(`Received track: ${event.track.kind}`);
 
-        if (!this.remoteVideo.nativeElement.srcObject) {
+        if (!remoteVideo.srcObject) {
             console.log("Setting new stream to video element");
-            this.remoteVideo.nativeElement.srcObject = new MediaStream();
+            remoteVideo.srcObject = new MediaStream();
         }
-
+      
         // Add this track to the existing stream
-        const mediaStream = this.remoteVideo.nativeElement.srcObject as MediaStream;
-           mediaStream.addTrack(event.track);
+        const mediaStream = remoteVideo.srcObject as MediaStream;
+
+        mediaStream.addTrack(event.track)
         console.log(
             `Video now has ${mediaStream.getTracks().length
             } tracks: ${mediaStream
@@ -188,7 +190,7 @@ export class LiveStreamingComponent implements OnDestroy {
     // ICE candidate handling
     this.peerConnection.onicecandidate = (event) => {
         if (event.candidate) {
-          this._socketService.viewerIceCandidate(event.candidate)
+            this.socket.emit("viewer_ice_candidate", event.candidate);
         }
     };
 
@@ -215,7 +217,7 @@ export class LiveStreamingComponent implements OnDestroy {
                 console.log(
                     `Connection failed. Retry attempt ${this.retryCount}/${this.MAX_RETRIES}`
                 );
-                setTimeout(requestBroadcast, 2000);
+                // setTimeout(requestBroadcast, 2000);
             }
         }
     };
@@ -240,7 +242,7 @@ export class LiveStreamingComponent implements OnDestroy {
         })
         .then(() => {
             console.log("Local description set, sending answer to server");
-            this._socketService.viewerAnswer(this.peerConnection?.localDescription as RTCSessionDescriptionInit)
+            this.socket.emit("viewer_answer", this.peerConnection?.localDescription);
         })
         .catch((error) => {
             console.error("Error setting up peer connection:", error);
@@ -250,24 +252,16 @@ export class LiveStreamingComponent implements OnDestroy {
 }
 
 
+ 
+
   
 
   sendMessage(message: string): void {
     console.log('Sending message:', message);
   }
   ngOnDestroy(): void {
-    this._socketService.disconnect()
+    // this._socketService.disconnect()
   }
-  
 
-  
-
-  
-
-  
-
-}
-function requestBroadcast(): void {
-  throw new Error('Function not implemented.');
 }
 
