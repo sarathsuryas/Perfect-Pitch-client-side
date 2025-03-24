@@ -89,6 +89,8 @@ export class LivePreviewComponent {
     this.start = true
     this.isBroadcasting = true;
     this.isCameraOn = true;
+    this.socket.emit("start_broadcast")
+
   }
 
   
@@ -97,9 +99,8 @@ export class LivePreviewComponent {
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());
       this.localStream = null;
-      // this._socketService.stopBroadcast(this.streamKey)
-      // this._socketService.disconnect()
-      // this._liveStreamingService.stopStreaming(this.streamKey).subscribe()
+      
+      this._liveStreamingService.stopStreaming(this.streamKey).subscribe()
       this.isCameraOn = false;
       this.start = false
       this.socket.emit('stop_broadcast', this.streamKey)
@@ -123,7 +124,6 @@ export class LivePreviewComponent {
               this.success = value.success
               this.streamKey = value.streamId
               console.log('streamkey,///',this.streamKey)
-              this.socket.emit("start_broadcast")
 
             }
           }
