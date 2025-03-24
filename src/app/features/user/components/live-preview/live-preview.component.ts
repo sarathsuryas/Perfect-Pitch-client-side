@@ -113,27 +113,27 @@ export class LivePreviewComponent {
   ///
   createLiveStream(): void {
 
-    this.streamKey = prompt("enter stream key") as string
-    // const dialogRef = this.dialog.open(CreateLiveComponent,
-    //   { width: '600px', height: '600px' })
-    // dialogRef.afterClosed().subscribe({
-    //   next: (value) => {
-    //     this._liveStreamingService.createLive(value).subscribe({
-    //       next: (value) => {
-    //         if (value.success) {
-    //           this.success = value.success
-    //           this.streamKey = value.streamId
-    //           this._socketService.connect()
-    //         }
-    //       }
-    //     })
-    //   },
-    //   error: (err) => {
-    //     console.error(err)
-    //   }
-    // })
-     this.socket.emit("start_broadcast")
-     this.socket.emit('disconnect')
+    const dialogRef = this.dialog.open(CreateLiveComponent,
+      { width: '600px', height: '600px' })
+    dialogRef.afterClosed().subscribe({
+      next: (value) => {
+        this._liveStreamingService.createLive(value).subscribe({
+          next: (value) => {
+            if (value.success) {
+              this.success = value.success
+              this.streamKey = value.streamId
+              console.log('streamkey,///',this.streamKey)
+              this.socket.emit("start_broadcast")
+
+            }
+          }
+        })
+      },
+      error: (err) => {
+        console.error(err)
+      }
+    })
+      // this.socket.emit('disconnect')
   }
 
   setupPeerConnection() {
