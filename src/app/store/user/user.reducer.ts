@@ -153,7 +153,8 @@ on(blockUserFail,(state,{error})=>({
  })),
  on(logOut,(state)=>({
   ...state,
-  token:null
+  token:null,
+  user:null
  })),
  on(setUserData,(state,action)=>({
   ...state,

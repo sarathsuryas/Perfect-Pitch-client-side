@@ -32,7 +32,8 @@ export class UserProfileComponent implements OnInit {
     private _userAuthService:UserAuthService,
     private dialog: MatDialog,
     private _messageService: MessageService,
-    private _presignedUrlService:PresignedUrlService
+    private _presignedUrlService:PresignedUrlService,
+    
   ) { 
 
   }

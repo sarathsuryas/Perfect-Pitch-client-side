@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { IGoogleLoginDto } from 'src/app/core/dtos/IGoogleLogin.dto';
 import { googleLoginUser } from 'src/app/store/user/user.action';
 import { UserState } from 'src/app/store/user/user.state';
+import { UserAuthService } from '../../services/user-auth/user-auth.service';
 
 declare global {
   interface Window {
@@ -20,22 +21,24 @@ export class GoogleSigninComponent implements OnInit {
   
   @Output() loginWithGoogle: EventEmitter<any> = new EventEmitter<any>();
   authSubscription!: Subscription;
+  private googleLoginWrapper!: HTMLElement;
 
   constructor( 
     private readonly _authService: SocialAuthService,
     private readonly _store: Store<UserState>,
+    private readonly _sub:UserAuthService
   ) {  }
   createFakeGoogleWrapper = () => {
-    const googleLoginWrapper = document.createElement('div');
-    googleLoginWrapper.style.display = 'none';
-    googleLoginWrapper.classList.add('custom-google-button');
-    document.body.appendChild(googleLoginWrapper);
-    window.google.accounts.id.renderButton(googleLoginWrapper, {
+     this.googleLoginWrapper = document.createElement('div');
+    this.googleLoginWrapper.style.display = 'none';
+    this.googleLoginWrapper.classList.add('custom-google-button');
+    document.body.appendChild(this.googleLoginWrapper);
+    window.google.accounts.id.renderButton(this.googleLoginWrapper, {
       type: 'icon',
       width: '200',
     });
 
-    const googleLoginWrapperButton = googleLoginWrapper.querySelector(
+    const googleLoginWrapperButton = this.googleLoginWrapper.querySelector(
       'div[role=button]'
     ) as HTMLElement;
 
@@ -50,7 +53,11 @@ export class GoogleSigninComponent implements OnInit {
   ngOnInit(): void {
     this.authSubscription = this._authService.authState.subscribe({
       next:(user:IGoogleLoginDto)=>{
-         this._store.dispatch(googleLoginUser({userData:user}))
+        /// issue with this line
+         if(!localStorage.getItem('g-login')) {
+           this._store.dispatch(googleLoginUser({userData:user}))
+           localStorage.setItem('g-login','set')
+         }
       },
       error:(error)=>{
         console.error(error)
@@ -67,8 +74,7 @@ export class GoogleSigninComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.authSubscription.unsubscribe();
-    
+    this.authSubscription.unsubscribe();    
   }
 
 

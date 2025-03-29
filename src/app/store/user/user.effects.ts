@@ -95,7 +95,7 @@ export class UserEffects {
         tap((data)=>{
            if(data) {
               this._spinner.hide()
-              this._router.navigateByUrl('/home')
+              this._router.navigate(['home/landing'])
            }
           }),
         catchError(error=>of(loginUserFail(error)).pipe(
@@ -123,8 +123,8 @@ $googleLogin = createEffect(()=>
         map((data)=>googleLoginUserSuccess({userData:data})),
         tap((data)=>{
           if(data) {
+            this._router.navigate(['/home/landing'])
             this._spinner.hide()
-            this._router.navigateByUrl('home')
           }
          }),
         catchError((error)=>of(googleLoginFail(error)).pipe(

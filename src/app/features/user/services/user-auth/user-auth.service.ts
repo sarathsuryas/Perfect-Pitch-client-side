@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { IGoogleLoginDto } from 'src/app/core/dtos/IGoogleLogin.dto';
 import { RegisterUserDto } from 'src/app/core/dtos/registerUserDto';
 import { ITokenData } from 'src/app/core/interfaces/ITokenData';
@@ -17,6 +17,8 @@ import { environment } from 'src/environment/environment.prod';
 export class UserAuthService {
   private api = `${environment.apiUrl}/user-auth`
   constructor(private _http:HttpClient,private _store:Store,private _router:Router) { }
+   behaviorSubject = new BehaviorSubject<boolean>(false);
+
   userRegister(userData: RegisterUserDto): Observable<userModel> {
     return this._http.post<userModel>(`${this.api}/register`, userData)
   }
@@ -54,6 +56,10 @@ export class UserAuthService {
     localStorage.removeItem('token')
     this._store.dispatch(logOut())
     this._router.navigate([''])
+    setTimeout(()=>{
+
+      localStorage.removeItem('g-login')
+    },1000)
   } 
 
 }

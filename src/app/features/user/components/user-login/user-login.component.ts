@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -13,6 +13,7 @@ import {
 import { Subject, Subscription } from 'rxjs';
 import { GoogleSigninComponent } from '../google-signin/google-signin.component';
 import { CookieService } from 'ngx-cookie';
+import { UserAuthService } from '../../services/user-auth/user-auth.service';
 
 declare global {
   interface Window {
@@ -24,7 +25,8 @@ declare global {
   templateUrl: './user-login.component.html',
   styleUrls: ['./user-login.component.css']
 })
-export class UserLoginComponent implements OnInit {
+export class UserLoginComponent implements OnInit,OnDestroy {
+  @ViewChild('container', { read: ViewContainerRef, static: true }) container!: ViewContainerRef;
 
   loginForm!: FormGroup
   submitted = false;
@@ -37,7 +39,7 @@ export class UserLoginComponent implements OnInit {
     private readonly _router: Router,
     private _cookieService: CookieService,
   ) {
-    console.log(localStorage.getItem('token'), 'token from the login page')
+    // console.log(localStorage.getItem('token'), 'token from the login page')
   }
   ngOnInit(): void {
     this.loginForm = this._fb.group({
@@ -54,10 +56,13 @@ export class UserLoginComponent implements OnInit {
         this._router.navigate(['home/landing'])
       }
     })
-
-
+    
+    
   }
-
+  
+  ngOnDestroy(): void {
+    
+  }
 
   submit() {
     this.submitted = true
