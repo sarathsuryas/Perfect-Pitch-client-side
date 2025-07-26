@@ -126,7 +126,7 @@ import { IndividualPlaylistsComponent } from './user/individual-playlists/indivi
 
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
 
-
+ 
 
 @NgModule({
   declarations: [

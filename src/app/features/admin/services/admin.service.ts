@@ -56,8 +56,8 @@ export class AdminService {
   this._cookieService.remove('adminToken')
  }
 
- addGenres(genre:string,newId:number,color:string) {
-   return this._http.post(`${this.api}/add-genres`,{genre,newId,color})
+ addGenres(genre:string,newId:number,color:string):Observable<{success:boolean}> {
+   return this._http.post<{success:boolean}>(`${this.api}/add-genres`,{genre,newId,color})
  }
 
 getGenres():Observable<IGenres[]> {

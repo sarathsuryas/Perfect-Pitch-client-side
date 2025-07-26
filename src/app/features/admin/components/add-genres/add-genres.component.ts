@@ -2,12 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/features/user/services/user/user.service';
 import { AdminService } from '../../services/admin.service';
 import { IGenres } from 'src/app/core/interfaces/IGenres';
+import { MessageService } from 'primeng/api';
 
-interface Genre {
-  _id: number;
-  Genre: string;
-  color: string;
-}
+
 
 @Component({
   selector: 'app-add-genres',
@@ -16,7 +13,7 @@ interface Genre {
 })
 export class AddGenresComponent implements OnInit{
 
-  constructor(private _adminService:AdminService) {}
+  constructor(private _adminService:AdminService, private readonly _messageService: MessageService) {}
      
    
   genres: IGenres[] = [
@@ -30,14 +27,19 @@ export class AddGenresComponent implements OnInit{
     if (this.newGenreName.trim()) {
       const newId = Math.max(...this.genres.map(g => g.newId), 0) + 1;
       const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
-      this.genres.push({
-        newId: newId,
-        Genre: this.newGenreName.trim(),
-        color: randomColor
-      });
+     
       this._adminService.addGenres(this.newGenreName,newId,randomColor).subscribe({
         next:(value)=>{
-           this.newGenreName = '';
+          if(!value.success) {
+            this._messageService.add({ severity: 'error', summary: 'Error', detail:'genre exist' })
+          } else {
+            this.genres.push({
+              newId: newId,
+              Genre: this.newGenreName.trim(),
+              color: randomColor
+            });
+            this.newGenreName = '';
+           }
         },
         error:(err)=>{
           console.error(err)

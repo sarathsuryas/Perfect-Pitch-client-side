@@ -55,7 +55,7 @@ import { environment } from 'src/environment/environment.prod';
     BrowserModule,
     CoreModule,
     FeaturesModule,
-    SharedModule,
+    SharedModule, 
     BrowserAnimationsModule, 
     UserRoutingModule,
     AdminRoutingModule,
