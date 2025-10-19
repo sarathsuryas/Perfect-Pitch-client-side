@@ -26,7 +26,7 @@ export class NgxAudioComponent {
   songId: string = ''
   isLiked: boolean = false;
   isAlbum: boolean = false
-  isVoiceControlActive: boolean = false;
+  isVoiceControlActive: boolean = false ;
   private isGenre: boolean = false
   player:boolean = false
   constructor(private _store: Store, private _audioService:AudioService, private _sharedService: SharedService) { }
@@ -183,10 +183,14 @@ export class NgxAudioComponent {
   }
 
 
-  toggleVoiceControl() {
-    this.isVoiceControlActive = !this.isVoiceControlActive;
-    console.log(this.isVoiceControlActive ? 'Voice control activated' : 'Voice control deactivated');
+ toggleVoiceControl() {
+  this.isVoiceControlActive = !this.isVoiceControlActive;
+
+  if (this.audio) {
+    this.audio.muted = this.isVoiceControlActive;
+    console.log(this.isVoiceControlActive ? 'Audio muted' : 'Audio unmuted');
   }
+}
 
   formatTime(time: number): string {
     const minutes = Math.floor(time / 60);

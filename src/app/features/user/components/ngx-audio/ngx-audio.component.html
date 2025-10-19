@@ -1,4 +1,4 @@
-<div *ngIf="songId"  class="bg-gray-900 p-3 sticky bottom-0 left-0 w-full">
+<div *ngIf="songId" class="bg-gray-900 p-3 sticky bottom-0 left-0 w-full">
   <div class="flex items-center justify-between">
     <!-- Left: Song details -->
     <div class="flex items-center space-x-3">
@@ -8,7 +8,7 @@
         <p class="text-gray-400 text-xs">{{ artistName }} - {{ albumName }}</p>
       </div>
     </div>
-    
+
     <!-- Center: Playback controls -->
     <div class="flex items-center space-x-6">
       <button (click)="playPrevious()" class="text-gray-400 hover:text-white transition-colors">
@@ -16,12 +16,17 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
         </svg>
       </button>
-      <button (click)="togglePlayPause()" class="bg-green-500 text-white rounded-full p-3 hover:bg-green-600 transition-transform duration-200">
-        <svg *ngIf="!isPlaying" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+      <button (click)="togglePlayPause()"
+        class="bg-green-500 text-white rounded-full p-3 hover:bg-green-600 transition-transform duration-200">
+        <svg *ngIf="!isPlaying" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
         </svg>
-        <svg *ngIf="isPlaying" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg *ngIf="isPlaying" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
       <button (click)="playNext()" class="text-gray-400 hover:text-white transition-colors">
@@ -30,14 +35,25 @@
         </svg>
       </button>
     </div>
-    
+
     <!-- Right: Additional controls -->
     <div class="flex items-center space-x-4">
       <button (click)="toggleVoiceControl()" class="text-gray-400 hover:text-white transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke="currentColor" fill="none">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+        <!-- Unmuted Icon -->
+        <svg *ngIf="!isVoiceControlActive" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24"
+          stroke="currentColor" fill="none">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+        </svg>
+
+        <!-- Muted Icon -->
+        <svg *ngIf="isVoiceControlActive" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24"
+          stroke="currentColor" fill="none">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 9l6 6m0-6l-6 6M14 5v14l-6-6H4V11h4l6-6z" />
         </svg>
       </button>
+
       <button (click)="closePlayer()" class="text-gray-400 hover:text-white transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke="currentColor" fill="none">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -45,18 +61,12 @@
       </button>
     </div>
   </div>
-  
+
   <!-- Progress bar -->
   <div class="w-full flex items-center mt-2">
     <span class="text-xs text-gray-400">{{ formatTime(currentTime) }}</span>
-    <input 
-      type="range" 
-      [min]="0" 
-      [max]="duration" 
-      [value]="currentTime" 
-      (input)="onSeek($event)"
-      class="w-full mx-2 accent-green-500"
-    >
+    <input type="range" [min]="0" [max]="duration" [value]="currentTime" (input)="onSeek($event)"
+      class="w-full mx-2 accent-green-500">
     <span class="text-xs text-gray-400">{{ formatTime(duration) }}</span>
   </div>
 </div>

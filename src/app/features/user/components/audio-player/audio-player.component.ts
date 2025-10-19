@@ -77,6 +77,7 @@ export class AudioPlayerComponent {
 
 
   playSong(index: number) {
+ 
     this.currentSongIndex = index;
     this.isPlaying = true;
     this._sharedService.playAlbumSong({albumId:this.AlbumDetails.uuid,songId:this.songs[index].uuid,artistName:this.AlbumDetails.artistDetails.fullName,album:true,isGenre:false})
