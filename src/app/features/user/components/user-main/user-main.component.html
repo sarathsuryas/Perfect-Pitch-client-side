@@ -162,15 +162,15 @@
           <span *ngIf="!isCollapsed">Live</span>
         </span>
       </a>
-      <a routerLink="shorts" mat-list-item>
+      <!-- <a routerLink="shorts" mat-list-item>
         <span class="entry">
           <mat-icon>play_circle</mat-icon>
           <span *ngIf="!isCollapsed">Shorts</span>
         </span>
-      </a>
+      </a> -->
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content class="overflow-x-hidden">
+  <mat-sidenav-content class="overflow-x-hidden bg-black">
     <router-outlet></router-outlet>
     <app-ngx-audio *ngIf="isPlayer"></app-ngx-audio>
   </mat-sidenav-content>
