@@ -2,7 +2,7 @@
   <h1 class="text-4xl font-bold mb-8 text-white">{{ artistName }}</h1>
 
   <!-- Albums -->
-  <div class="spotify-playlists bg-black text-white py-8 px-4">
+  <div *ngIf="albumData.length" class="spotify-playlists bg-black text-white py-8 px-4">
     <!-- Section Header -->
     <h2 class="text-3xl font-bold mb-6 text-center">Albums</h2>
   
@@ -25,7 +25,7 @@
   </div> 
 
   <!-- Videos -->
-  <div id="trending-music-videos" class="grid gap-6 p-4 bg-black text-white">
+  <div *ngIf="videos.length" id="trending-music-videos" class="grid gap-6 p-4 bg-black text-white">
     <h1 class="text-3xl font-bold uppercase text-center mb-6">Music Videos</h1>
   
     <!-- Video Grid -->
@@ -51,7 +51,7 @@
 
   
   <!-- Playlists -->
-  <section class="text-white py-8">
+  <section *ngIf="playlists.length" class="text-white py-8">
     <div class="container mx-auto px-4">
       <!-- Playlists Heading -->
       <h2 class="text-3xl font-bold text-center mb-6">Playlists</h2>
