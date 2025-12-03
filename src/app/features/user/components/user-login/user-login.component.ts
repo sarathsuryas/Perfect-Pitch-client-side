@@ -39,7 +39,7 @@ export class UserLoginComponent implements OnInit,OnDestroy {
     private readonly _router: Router,
     private _cookieService: CookieService,
   ) {
-    // console.log(localStorage.getItem('token'), 'token from the login page')
+    
   }
   ngOnInit(): void {
     this.loginForm = this._fb.group({
